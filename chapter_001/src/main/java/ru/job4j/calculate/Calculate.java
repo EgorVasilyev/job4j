@@ -1,12 +1,6 @@
-package ru.job4j;
+package ru.job4j.calculate;
 
-/**
- * Calculate.
- *
- * @author Egor Vasilyev (deseng_pgs@mail.ru)
- * @version $Id$
- * @since 0.1
- */
+
 public class Calculate {
     /**
      * Main.
