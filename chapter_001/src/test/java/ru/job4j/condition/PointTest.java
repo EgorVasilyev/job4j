@@ -1,7 +1,6 @@
 package ru.job4j.condition;
 
 import org.junit.Test;
-import ru.job4j.converter.Converter;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
