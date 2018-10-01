@@ -11,8 +11,8 @@ public class Calculator {
      * @param second Второе число.
      * Получаем результат сложения.
      */
-    public void add(double first, double second){
-        this.result=first+second;
+    public void add(double first, double second) {
+        this.result = first + second;
     }
     /**
      * Метод вычитания чисел.
@@ -20,8 +20,8 @@ public class Calculator {
      * @param second Второе число.
      * Получаем результат вычитания.
      */
-    public void subtract(double first, double second){
-        this.result=first-second;
+    public void subtract(double first, double second) {
+        this.result = first - second;
     }
     /**
      * Метод деления чисел.
@@ -29,8 +29,8 @@ public class Calculator {
      * @param second Второе число.
      * Получаем результат деления.
      */
-    public void div(double first, double second){
-        this.result=first/second;
+    public void div(double first, double second) {
+        this.result = first / second;
     }
     /**
      * Метод умножения чисел.
@@ -38,14 +38,14 @@ public class Calculator {
      * @param second Второе число.
      * Получаем результат умножения.
      */
-    public void multiple(double first, double second){
-        this.result=first*second;
+    public void multiple(double first, double second) {
+        this.result = first * second;
     }
     /**
      * Метод возврата результата.
      * @return результат действия.
      */
-    public double getResult(){
+    public double getResult() {
         return this.result;
     }
 }

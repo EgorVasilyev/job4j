@@ -13,8 +13,8 @@ public class Max {
      * @param second Второе число.
      * @return Максимальное значение.
      */
-    public int max(int first, int second){
-        return (first>second?first:second);
+    public int max(int first, int second) {
+        return (first > second ? first : second);
     }
     /**
      * Находит максимальное значение из трех чисел.
@@ -23,8 +23,7 @@ public class Max {
      * @param third Третье число.
      * @return Максимальное значение.
      */
-    public int maxThree(int first, int second, int third){
-        int temp = this.max(first, second);
-        return temp = this.max(temp, third);
+    public int maxThree(int first, int second, int third) {
+        return this.max(this.max(first, second), third);
     }
 }

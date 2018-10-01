@@ -6,11 +6,11 @@ public class Counter {
      @param finish Конечное значение.
      @return Сумма.
      */
-    public int add(int start, int finish){
-        int sum=0;
-        for(int x=start; x<=finish; x++){
-            if (x%2==0){
-                sum+=x;
+    public int add(int start, int finish) {
+        int sum = 0;
+        for (int x = start; x <= finish; x++) {
+            if (x % 2 == 0) {
+                sum += x;
             }
         }
         return sum;

@@ -29,8 +29,8 @@ public class Triangle {
     public double period(double ab, double ac, double bc) {
         return (ab + ac + bc) / 2;
     }
-    public double max(double first, double second){
-        return (first>second?first:second);
+    public double max(double first, double second) {
+        return (first > second ? first : second);
     }
     /**
      * Метод проверяет можно ли построить треугольник по заданным точкам.
@@ -49,8 +49,8 @@ public class Triangle {
      */
     private boolean exist(double ab, double ac, double bc) {
         double temp = this.max(ab, ac);
-        double maxStorona=this.max(temp, bc);
-        return (ab+ac+bc)!=2*maxStorona;
+        double maxStorona = this.max(temp, bc);
+        return (ab + ac + bc) != 2 * maxStorona;
     }
     /**
      * Метод должен вычислить площадь треугольника.
@@ -64,7 +64,7 @@ public class Triangle {
         double bc = this.b.distanceTo(this.c);
         double p = this.period(ab, ac, bc);
         if (this.exist(ab, ac, bc)) {
-            rsl = Math.sqrt(p*(p-ab)*(p-ac)*(p-bc));
+            rsl = Math.sqrt(p * (p - ab) * (p - ac) * (p - bc));
         }
         return rsl;
     }
