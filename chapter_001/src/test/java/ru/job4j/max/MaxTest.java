@@ -16,4 +16,10 @@ public class MaxTest {
         int result = maxim.max(-10, 223);
         assertThat(result, is(223));
     }
+    @Test
+    public void whenThirdMoreThenSecondAndMoreThenFirst() {
+        Max maximThree = new Max();
+        int result = maximThree.maxThree(-10, 22, 60);
+        assertThat(result, is(60));
+    }
 }
