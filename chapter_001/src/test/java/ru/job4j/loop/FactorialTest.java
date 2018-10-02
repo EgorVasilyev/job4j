@@ -16,7 +16,7 @@ public class FactorialTest {
         Factorial fac = new Factorial();
         assertThat(
                 fac.calc(6),
-                is("Факториал числа " + 6 + " равен " + 720)
+                is(720)
         );
     }
     @Test
@@ -24,15 +24,7 @@ public class FactorialTest {
         Factorial fac = new Factorial();
         assertThat(
                 fac.calc(0),
-                is("Факториал числа " + 0 + " равен " + 1)
-        );
-    }
-    @Test
-    public void whenLessThenNullThenNo() {
-        Factorial fac = new Factorial();
-        assertThat(
-                fac.calc(-5),
-                is("Невозможно вычислить факториал из " + -5 + "<0")
+                is(1)
         );
     }
 }

@@ -10,17 +10,13 @@ public class Factorial {
      @param number Число.
      @return Факториал.
      */
-    public String calc(int number) {
+    public int calc(int number) {
         int rslt = 1;
         if (number >= 0) {
-            if (number > 0) {
-                for (int x = 1; x <= number; x++) {
-                    rslt *= x;
-                }
+            for (int x = 1; x <= number; x++) {
+                rslt *= x;
             }
-            return "Факториал числа " + number + " равен " + rslt;
-        } else {
-            return "Невозможно вычислить факториал из " + number + "<0";
         }
+        return rslt;
     }
 }
