@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
- * @version 1
+ * @version 3
  * @since 06/10/2018
  */
 public class MatrixCheckTest {
@@ -14,10 +14,10 @@ public class MatrixCheckTest {
     public void when4on4true() {
         MatrixCheck matrix = new MatrixCheck();
         boolean[][] array =
-                {{true, false, false, true},
-                        {false, true, true, false},
-                        {false, true, true, false},
-                        {true, false, false, true}};
+                {{true, false, false, false},
+                        {false, true, false, false},
+                        {false, false, true, false},
+                        {false, false, false, true}};
         boolean result = matrix.check(array);
         assertThat(result, is(true));
     }

@@ -1,7 +1,7 @@
 package ru.job4j.array;
 /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
- * @version 2
+ * @version 3
  * @since 06/10/2018
  */
 public class MatrixCheck {
@@ -17,9 +17,16 @@ public class MatrixCheck {
                 result = false;
                 break;
             }
-            if (array[0][0] != array[i][array.length - 1 - i]) {
-                result = false;
-                break;
+            if (array.length % 2 == 0) {
+                if (array[0][array.length - 1] != array[i][array.length - 1 - i]) {
+                    result = false;
+                    break;
+                }
+            } else {
+                if (array[0][0] != array[i][array.length - 1 - i]) {
+                    result = false;
+                    break;
+                }
             }
         }
         return result;
