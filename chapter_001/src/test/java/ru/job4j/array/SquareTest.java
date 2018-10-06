@@ -4,6 +4,11 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+/**
+ * @author Egor Vasilyev (deseng_pgs@mail.ru)
+ * @version $Id$
+ * @since 0.1
+ */
 public class SquareTest {
     @Test
     public void whenBound3Then149() {
