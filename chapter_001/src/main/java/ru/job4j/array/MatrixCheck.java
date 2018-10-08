@@ -17,18 +17,11 @@ public class MatrixCheck {
                 result = false;
                 break;
             }
-            if (array.length % 2 == 0) {
-                if (array[0][array.length - 1] != array[i][array.length - 1 - i]) {
-                    result = false;
-                    break;
-                }
-            } else {
-                if (array[0][0] != array[i][array.length - 1 - i]) {
-                    result = false;
-                    break;
-                }
+
+            if (array[0][array.length - 1] != array[i][array.length - 1 - i]) {
+                result = false;
+                break;
             }
-        }
-        return result;
+        }return result;
     }
 }
