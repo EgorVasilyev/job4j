@@ -22,6 +22,6 @@ public class MatrixCheck {
                 result = false;
                 break;
             }
-        }return result;
+        } return result;
     }
 }
