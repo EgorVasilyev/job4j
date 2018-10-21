@@ -1,6 +1,6 @@
 package ru.job4j.tracker;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 import ru.job4j.models.Item;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -9,16 +9,16 @@ public class TrackerTest {
     @Test
     public void whenAddNewItemThenTrackerHasSameItem() {
         Tracker tracker = new Tracker();
-        Item item = new Item("test1", "testDescription", "testComment", 123L);
+        Item item = new Item("test1", "testDescription");
         tracker.add(item);
         assertThat(tracker.findAll()[0], is(item));
     }
     @Test
     public void whenFindByNameTest1TwiceThenTrackerReturnArrayHavingTwoItemsWithNameTest1() {
         Tracker tracker = new Tracker();
-        Item item1 = new Item("test1", "testDescription", "testComment", 123L);
-        Item item2 = new Item("test1", "testDescription2", "testComment2", 123L);
-        Item item3 = new Item("test3", "testDescription3", "testComment3", 123L);
+        Item item1 = new Item("test1", "testDescription");
+        Item item2 = new Item("test1", "testDescription2");
+        Item item3 = new Item("test3", "testDescription3");
         tracker.add(item1);
         tracker.add(item2);
         tracker.add(item3);
@@ -31,9 +31,9 @@ public class TrackerTest {
     @Test
     public void whenFindByIdThenItem2() {
         Tracker tracker = new Tracker();
-        Item item1 = new Item("test1", "testDescription", "testComment", 123L);
-        Item item2 = new Item("test2", "testDescription2", "testComment2", 123L);
-        Item item3 = new Item("test3", "testDescription3", "testComment3", 123L);
+        Item item1 = new Item("test1", "testDescription");
+        Item item2 = new Item("test2", "testDescription2");
+        Item item3 = new Item("test3", "testDescription3");
         tracker.add(item1);
         tracker.add(item2);
         tracker.add(item3);
@@ -42,9 +42,9 @@ public class TrackerTest {
     @Test
     public void whenReplaceNameThenReturnNewName() {
         Tracker tracker = new Tracker();
-        Item previous = new Item("test1", "testDescription", "testComment", 123L);
+        Item previous = new Item("test1", "testDescription");
         tracker.add(previous);
-        Item next = new Item("test2", "testDescription2", "testComment", 1234L);
+        Item next = new Item("test2", "testDescription2");
         tracker.replace(previous.getId(), next);
         assertThat(tracker.findById(previous.getId()).getName(), is("test2"));
         assertThat(next, is(tracker.findAll()[0]));
@@ -52,7 +52,7 @@ public class TrackerTest {
     @Test
     public void whenDeleteFindByIdGiveNull() {
         Tracker tracker = new Tracker();
-        Item item1 = new Item("test1", "testDescription", "testComment", 123L);
+        Item item1 = new Item("test1", "testDescription");
         tracker.add(item1);
         tracker.delete(item1.getId());
         Item result = tracker.findById(item1.getId());
@@ -62,9 +62,9 @@ public class TrackerTest {
     @Test
     public void whenFindAllThenThisItems() {
         Tracker tracker = new Tracker();
-        Item item1 = new Item("test1", "testDescription", "testComment", 123L);
+        Item item1 = new Item("test1", "testDescription");
         tracker.add(item1);
-        Item item2 = new Item("test2", "testDescription", "testComment", 123L);
+        Item item2 = new Item("test2", "testDescription");
         tracker.add(item2);
         assertThat(tracker.findAll()[0], is(item1));
         assertThat(tracker.findAll()[1], is(item2));

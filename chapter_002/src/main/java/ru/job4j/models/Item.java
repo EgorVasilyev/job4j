@@ -4,24 +4,19 @@ public class Item {
     private String id;
     public String name;
     public  String  description;
-    public  String  comment;
     public long create;
     public Item() {
     }
-    public Item(String name, String description, String comment, long create) {
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
-        this.comment = comment;
-        this.create = create;
     }
+
     public String getName() {
         return this.name;
     }
     public String getDescription() {
         return this.description;
-    }
-    public String getComment() {
-        return this.comment;
     }
     public long getCreate() {
         return this.create;
