@@ -5,7 +5,7 @@ import ru.job4j.start.*;
 import java.sql.SQLOutput;
 
 /**
- * @version 1
+ * @version 2
  * @since 22/10/2018
  */
 public class StartUI {
@@ -55,7 +55,8 @@ public class StartUI {
 
     /**
      * Конструтор инициализирующий поля.
-     * @param input ввод данных.
+     *
+     * @param input   ввод данных.
      * @param tracker хранилище заявок.
      */
     public StartUI(Input input, Tracker tracker) {
@@ -106,28 +107,15 @@ public class StartUI {
      */
     private void findAllItems() {
         Item[] result = this.tracker.findAll();
-        int count1 = 0;
-        for (int index = 0; index != result.length; index++) {
-            count1++;
-        }
+        int count1 = result.length;
         if (count1 != 0) {
             String count2 = Integer.toString(count1);
             String count3 = count2.substring(count2.length() - 1);
             int countOfItems = Integer.parseInt(count3);
-
-            String zayavka;
-            if (countOfItems == 1) {
-                zayavka = " заявка ";
-            } else if (countOfItems > 0 && countOfItems < 5 && (count1 < 5 || count1 > 14)) {
-                zayavka = " заявки ";
-            } else {
-                zayavka = " заявок ";
-            }
+            String zayavka = getString(count1, countOfItems);
             System.out.println("------------ Найдено: " + count1 + zayavka + "-----------");
             for (int index = 0; index != result.length; index++) {
-                System.out.println("-Заявка c ID: " + result[index].getId());
-                System.out.println("-Имя: " + result[index].getName());
-                System.out.println("-Описание: " + result[index].getDescription());
+                System.out.println(result[index].toString());
                 System.out.println(" ");
             }
             System.out.println("------------------------------------------");
@@ -143,38 +131,11 @@ public class StartUI {
         System.out.println("------------ Изменение заявки --------------");
         String id = this.input.ask("Введите ID изменяемой заявки :");
         if (this.tracker.findById(id) != null) {
-            System.out.println("Изменить имя заявки?");
-            String yesNo = this.input.ask("1-да, 2-нет");
-            while (!yesNo.equals("1") && !yesNo.equals("2")) {
-                System.out.println("Введите корректное значение:");
-                yesNo = this.input.ask("1-да, 2-нет");
-            }
-            String name;
-            if (yesNo.equals("1")) {
-                name = this.input.ask("Введите новое имя заявки :");
-            } else {
-                name = this.tracker.findById(id).getName();
-            }
-            System.out.println("Изменить описание заявки?");
-            String noYes = this.input.ask("1-да, 2-нет");
-
-            while (!noYes.equals("1") && !noYes.equals("2")) {
-                System.out.println("Введите корректное значение:");
-                noYes = this.input.ask("1-да, 2-нет");
-            }
-            String desc;
-            if (noYes.equals("1")) {
-                desc = this.input.ask("Введите новое описание заявки :");
-            } else {
-                desc = this.tracker.findById(id).getDescription();
-            }
+            String name = this.input.ask("Введите новое имя заявки :");
+            String desc = this.input.ask("Введите новое описание заявки :");
             Item item = new Item(name, desc);
             this.tracker.replace(id, item);
-            if (yesNo.equals("2") && noYes.equals("2")) {
-                System.out.println("------------ Заявка с getId : " + item.getId() + " не изменена. -----------");
-            } else {
-                System.out.println("------------ Заявка с getId : " + item.getId() + " изменена. -----------");
-            }
+            System.out.println("------------ Заявка с getId : " + item.getId() + " изменена. -----------");
         } else {
             System.out.println("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
         }
@@ -201,11 +162,11 @@ public class StartUI {
     private void findItemById() {
         System.out.println("------------ Поиск заявки по ID --------------");
         String id = this.input.ask("Введите ID искомой заявки :");
-        if (this.tracker.findById(id) != null) {
+        Item foundItem = this.tracker.findById(id);
+        if (foundItem != null) {
             System.out.println("------------ Заявка с getId : " + id + " найдена. -----------");
-            System.out.println("-Имя: " + this.tracker.findById(id).getName());
-            System.out.println("-Описание: " + this.tracker.findById(id).getDescription());
-            System.out.println("---------------------------------------");
+            System.out.println(foundItem.toString());
+            System.out.println("-------------------------------------------------------------");
         } else {
             System.out.println("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
         }
@@ -220,32 +181,21 @@ public class StartUI {
 
         Item[] result = this.tracker.findByName(name);
 
-        int count1 = 0;
-        for (int index = 0; index != result.length; index++) {
-            count1++;
-        }
+        int count1 = result.length;
         if (count1 != 0) {
             String count2 = Integer.toString(count1);
             String count3 = count2.substring(count2.length() - 1);
             int countOfItems = Integer.parseInt(count3);
+            String zayavka = getString(count1, countOfItems);
 
-            String zayavka;
-            if (countOfItems == 1) {
-                zayavka = " заявка ";
-            } else if (countOfItems > 0 && countOfItems < 5 && (count1 < 5 || count1 > 14)) {
-                zayavka = " заявки ";
-            } else {
-                zayavka = " заявок ";
-            }
             System.out.println("------------ Найдено: " + count1 + zayavka + "с имененем " + name + "-----------");
             for (int index = 0; index != result.length; index++) {
-                System.out.println("-Заявка c ID: " + result[index].getId());
-                System.out.println("-Описание: " + result[index].getDescription());
+                System.out.println(result[index].toString());
                 System.out.println(" ");
             }
-            System.out.println("---------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
         } else {
-            System.out.println("------------ К сожалению, заявка с именем " + name + " не найдена. -----------");
+            System.out.println("------------ К сожалению, заявка с именем " + name + " не найдена. -------------");
         }
     }
 
@@ -261,9 +211,25 @@ public class StartUI {
     }
 
     /**
+     * Метод возвращает слово "заявка" с нужным суффикосом.
+     */
+    private String getString(int count1, int countOfItems) {
+        String zayavka;
+        if (countOfItems == 1) {
+            zayavka = " заявка ";
+        } else if (countOfItems > 0 && countOfItems < 5 && (count1 < 5 || count1 > 14)) {
+            zayavka = " заявки ";
+        } else {
+            zayavka = " заявок ";
+        }
+        return zayavka;
+    }
+
+    /**
      * Запуск программы.
      */
     public static void main(String[] args) {
         new StartUI(new ConsoleInput(), new Tracker()).init();
     }
+
 }

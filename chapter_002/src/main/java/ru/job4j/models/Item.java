@@ -27,4 +27,12 @@ public class Item {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String toString() {
+        String idString = "-ID: " + id;
+        String nameString = "-Имя: " + name;
+        String descString = "-Описание: " + description;
+
+        return idString + "\n" + nameString + "\n" + descString;
+    }
 }
