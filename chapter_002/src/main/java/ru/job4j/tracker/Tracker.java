@@ -82,7 +82,7 @@ public class Tracker {
      * Метод удаляет заявку по коду
      * @param id код удаляемой заявки.
      */
-    public void delete(String id) {
+    public boolean delete(String id) {
         boolean removal = false;
         for (int index = 0; index != this.position; index++) {
             if (this.items[index] != null && this.items[index].getId().equals(id)) {
@@ -93,6 +93,7 @@ public class Tracker {
         if (removal) {
             position--;
         }
+        return removal;
     }
 
     /**
