@@ -33,6 +33,8 @@ public class Item {
         String nameString = "-Имя: " + name;
         String descString = "-Описание: " + description;
 
-        return idString + "\n" + nameString + "\n" + descString;
+        return idString + System.lineSeparator()
+                + nameString + System.lineSeparator()
+                + descString;
     }
 }

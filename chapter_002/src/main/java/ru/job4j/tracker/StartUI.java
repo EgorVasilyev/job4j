@@ -198,6 +198,9 @@ public class StartUI {
         }
     }
 
+    /**
+     * Отображение текста меню.
+     */
     private void showMenu() {
         System.out.println("Меню.");
         System.out.println("0. Add new Item");
