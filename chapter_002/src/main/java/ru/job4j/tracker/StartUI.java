@@ -3,6 +3,8 @@ import ru.job4j.models.*;
 import ru.job4j.start.*;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version 2
@@ -67,28 +69,20 @@ public class StartUI {
     /**
      * Основой цикл программы.
      */
-    public void init() {
-        boolean exit = false;
-        while (!exit) {
-            this.showMenu();
-            String answer = this.input.ask("Введите пункт меню : ");
-            if (ADD.equals(answer)) {
-                this.createItem();
-            } else if (SHOW.equals(answer)) {
-                this.findAllItems();
-            } else if (EDIT.equals(answer)) {
-                this.editItem();
-            } else if (DEL.equals(answer)) {
-                this.deleteItem();
-            } else if (FINDID.equals(answer)) {
-                this.findItemById();
-            } else if (FINDNAME.equals(answer)) {
-                this.findItemByName();
-            } else if (EXIT.equals(answer)) {
-                exit = true;
-            }
+        public void init() {
+            MenuTracker menu = new MenuTracker(this.input, this.tracker);
+      //      List<Integer> range = new ArrayList<>();
+            menu.fillActions();
+       //     for (int i = 0; i < menu.getActionsLentgh(); i++) {
+       //         range.add(i);
+         //   }
+            do {
+                menu.show();
+               int key = Integer.valueOf(input.ask("Выбирите пункт меню:"));
+                menu.select(key);
+            } while (!"y".equals(this.input.ask("Выйти?(y): ")));
         }
-    }
+
 
     /**
      * Метод реализует добавление новый заявки в хранилище.

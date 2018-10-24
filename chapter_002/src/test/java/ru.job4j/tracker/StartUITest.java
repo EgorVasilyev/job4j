@@ -34,27 +34,23 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item item1 = tracker.add(new Item("test name 1", "desc 1"));
         Item item2 = tracker.add(new Item("test name 2", "desc 2"));
-        Input input = new StubInput(new String[]{"1", "6"});
+        Input input = new StubInput(new String[]{"1", "y"});
         new StartUI(input, tracker).init();
         assertThat(
                 new String(this.out.toByteArray()),
                 is(
                         new StringBuilder()
-                                .append("Меню.")
+                                .append("0. Добавление новой заявки.")
                                 .append(System.lineSeparator())
-                                .append("0. Add new Item")
+                                .append("1. Показать все заявки.")
                                 .append(System.lineSeparator())
-                                .append("1. Show all items")
+                                .append("2. Редактрировать заявку.")
                                 .append(System.lineSeparator())
-                                .append("2. Edit item")
+                                .append("3. Удалить заявку.")
                                 .append(System.lineSeparator())
-                                .append("3. Delete item")
+                                .append("4. Поиск заявки по ID.")
                                 .append(System.lineSeparator())
-                                .append("4. Find item by Id")
-                                .append(System.lineSeparator())
-                                .append("5. Find items by name")
-                                .append(System.lineSeparator())
-                                .append("6. Exit Program")
+                                .append("5. Поиск заявки по имени.")
                                 .append(System.lineSeparator())
                                 .append("------------ Найдено: 2 заявки -----------")
                                 .append(System.lineSeparator())
@@ -74,22 +70,6 @@ public class StartUITest {
                                 .append(" " + System.lineSeparator())
                                 .append("------------------------------------------")
                                 .append(System.lineSeparator())
-                                .append("Меню.")
-                                .append(System.lineSeparator())
-                                .append("0. Add new Item")
-                                .append(System.lineSeparator())
-                                .append("1. Show all items")
-                                .append(System.lineSeparator())
-                                .append("2. Edit item")
-                                .append(System.lineSeparator())
-                                .append("3. Delete item")
-                                .append(System.lineSeparator())
-                                .append("4. Find item by Id")
-                                .append(System.lineSeparator())
-                                .append("5. Find items by name")
-                                .append(System.lineSeparator())
-                                .append("6. Exit Program")
-                                .append(System.lineSeparator())
                                 .toString()
                 )
         );
@@ -99,27 +79,23 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item item1 = tracker.add(new Item("test name", "desc 1"));
         Item item2 = tracker.add(new Item("test name", "desc 2"));
-        Input input = new StubInput(new String[]{"5", "test name", "6"});
+        Input input = new StubInput(new String[]{"5", "test name", "y"});
         new StartUI(input, tracker).init();
         assertThat(
                 new String(this.out.toByteArray()),
                 is(
                         new StringBuilder()
-                                .append("Меню.")
+                                .append("0. Добавление новой заявки.")
                                 .append(System.lineSeparator())
-                                .append("0. Add new Item")
+                                .append("1. Показать все заявки.")
                                 .append(System.lineSeparator())
-                                .append("1. Show all items")
+                                .append("2. Редактрировать заявку.")
                                 .append(System.lineSeparator())
-                                .append("2. Edit item")
+                                .append("3. Удалить заявку.")
                                 .append(System.lineSeparator())
-                                .append("3. Delete item")
+                                .append("4. Поиск заявки по ID.")
                                 .append(System.lineSeparator())
-                                .append("4. Find item by Id")
-                                .append(System.lineSeparator())
-                                .append("5. Find items by name")
-                                .append(System.lineSeparator())
-                                .append("6. Exit Program")
+                                .append("5. Поиск заявки по имени.")
                                 .append(System.lineSeparator())
                                 .append("------------ Поиск заявки по имени --------------")
                                 .append(System.lineSeparator())
@@ -140,22 +116,6 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append(" " + System.lineSeparator())
                                 .append("--------------------------------------------------------------------------------")
-                                .append(System.lineSeparator())
-                                .append("Меню.")
-                                .append(System.lineSeparator())
-                                .append("0. Add new Item")
-                                .append(System.lineSeparator())
-                                .append("1. Show all items")
-                                .append(System.lineSeparator())
-                                .append("2. Edit item")
-                                .append(System.lineSeparator())
-                                .append("3. Delete item")
-                                .append(System.lineSeparator())
-                                .append("4. Find item by Id")
-                                .append(System.lineSeparator())
-                                .append("5. Find items by name")
-                                .append(System.lineSeparator())
-                                .append("6. Exit Program")
                                 .append(System.lineSeparator())
                                 .toString()
                 )
