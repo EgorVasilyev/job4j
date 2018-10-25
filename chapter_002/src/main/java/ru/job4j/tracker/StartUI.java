@@ -11,6 +11,7 @@ import java.util.List;
  * @since 22/10/2018
  */
 public class StartUI {
+    private boolean working = true;
     /**
      * Константа меню для добавления новой заявки.
      */
@@ -61,27 +62,28 @@ public class StartUI {
      * @param input   ввод данных.
      * @param tracker хранилище заявок.
      */
+    private int[] range = new int[7];
+
     public StartUI(Input input, Tracker tracker) {
         this.input = input;
         this.tracker = tracker;
     }
-
     /**
      * Основой цикл программы.
      */
-        public void init() {
-            MenuTracker menu = new MenuTracker(this.input, this.tracker);
-      //      List<Integer> range = new ArrayList<>();
-            menu.fillActions();
-       //     for (int i = 0; i < menu.getActionsLentgh(); i++) {
-       //         range.add(i);
-         //   }
-            do {
-                menu.show();
-               int key = Integer.valueOf(input.ask("Выбирите пункт меню:"));
-                menu.select(key);
-            } while (!"y".equals(this.input.ask("Выйти?(y): ")));
+    public void init() {
+        MenuTracker menu = new MenuTracker(this.input, this.tracker);
+        menu.fillActions(this);
+
+        for (int i = 0; i < menu.getActionsLentgh(); i++) {
+            range[i] = i;
         }
+        do {
+            menu.show();
+            menu.select(input.ask("Выбирите пункт меню:", range));
+            //} while (!"y".equals(this.input.ask("Выйти?(y): ")));
+        } while (this.working);
+    }
 
 
     /**
@@ -220,12 +222,17 @@ public class StartUI {
         }
         return zayavka;
     }
-
+    public void stop() {
+        this.working = false;
+    }
     /**
      * Запуск программы.
      */
     public static void main(String[] args) {
-        new StartUI(new ConsoleInput(), new Tracker()).init();
+        Input input2 = new ConsoleInput();
+        Input input = new ValidateInput(input2);
+        Tracker tracker = new Tracker();
+        new StartUI(input, tracker).init();
     }
 
 }

@@ -44,13 +44,14 @@ public class MenuTracker {
     /**
      * Метод заполняет массив.
      */
-    public void fillActions() {
+    public void fillActions(StartUI ui) {
         this.actions.add(new AddItem());
         this.actions.add(new ShowItems());
         this.actions.add(new MenuTracker.EditItem());
         this.actions.add(new MenuTracker.DeleteItem());
         this.actions.add(new FindItemById());
         this.actions.add(new FindItemsByName());
+        this.actions.add(new Exit(ui));
     }
 
     /**
@@ -238,6 +239,29 @@ public class MenuTracker {
         @Override
         public String info() {
             return "Поиск заявки по имени.";
+        }
+    }
+
+    public class Exit implements UserAction {
+        private final StartUI ui;
+
+        public Exit(StartUI ui) {
+            this.ui = ui;
+        }
+
+        @Override
+        public int key() {
+            return 6;
+        }
+
+        @Override
+        public void execute(Input input, Tracker tracker) {
+            this.ui.stop();
+        }
+
+        @Override
+        public String info() {
+            return "Выход.";
         }
     }
 
