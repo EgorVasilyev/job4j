@@ -12,40 +12,7 @@ import java.util.List;
  */
 public class StartUI {
     private boolean working = true;
-    /**
-     * Константа меню для добавления новой заявки.
-     */
-    private static final String ADD = "0";
 
-    /**
-     * Константа меню для отображения всех заявок.
-     */
-    private static final String SHOW = "1";
-
-    /**
-     * Константа меню для редактирования заявки.
-     */
-    private static final String EDIT = "2";
-
-    /**
-     * Константа меню для удаления заявки.
-     */
-    private static final String DEL = "3";
-
-    /**
-     * Константа меню для поиска заявки по ID.
-     */
-    private static final String FINDID = "4";
-
-    /**
-     * Константа меню для поиска заявки по имени.
-     */
-    private static final String FINDNAME = "5";
-
-    /**
-     * Константа для выхода из цикла.
-     */
-    private static final String EXIT = "6";
     /**
      * Получение данных от пользователя.
      */
@@ -192,20 +159,6 @@ public class StartUI {
         } else {
             System.out.println("------------ К сожалению, заявка с именем " + name + " не найдена. -------------");
         }
-    }
-
-    /**
-     * Отображение текста меню.
-     */
-    private void showMenu() {
-        System.out.println("Меню.");
-        System.out.println("0. Add new Item");
-        System.out.println("1. Show all items");
-        System.out.println("2. Edit item");
-        System.out.println("3. Delete item");
-        System.out.println("4. Find item by Id");
-        System.out.println("5. Find items by name");
-        System.out.println("6. Exit Program");
     }
 
     /**
