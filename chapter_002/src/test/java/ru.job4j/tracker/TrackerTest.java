@@ -11,7 +11,7 @@ public class TrackerTest {
         Tracker tracker = new Tracker();
         Item item = new Item("test1", "testDescription");
         tracker.add(item);
-        assertThat(tracker.findAll()[0], is(item));
+        assertThat(tracker.findAll().get(0), is(item));
     }
     @Test
     public void whenFindByNameTest1TwiceThenTrackerReturnArrayHavingTwoItemsWithNameTest1() {
@@ -23,10 +23,10 @@ public class TrackerTest {
         tracker.add(item2);
         tracker.add(item3);
         String key = "test1";
-        assertThat(tracker.findByName(key)[0].getName(), is(key));
-        assertThat(tracker.findByName(key)[1].getName(), is(key));
+        assertThat(tracker.findByName(key).get(0).getName(), is(key));
+        assertThat(tracker.findByName(key).get(1).getName(), is(key));
         String key2 = "test3";
-        assertThat(tracker.findByName(key2)[0].getName(), is(key2));
+        assertThat(tracker.findByName(key2).get(0).getName(), is(key2));
     }
     @Test
     public void whenFindByIdThenItem2() {
@@ -47,7 +47,7 @@ public class TrackerTest {
         Item next = new Item("test2", "testDescription2");
         tracker.replace(previous.getId(), next);
         assertThat(tracker.findById(previous.getId()).getName(), is("test2"));
-        assertThat(next, is(tracker.findAll()[0]));
+        assertThat(next, is(tracker.findAll().get(0)));
     }
     @Test
     public void whenDeleteFindByIdGiveNull() {
@@ -66,7 +66,7 @@ public class TrackerTest {
         tracker.add(item1);
         Item item2 = new Item("test2", "testDescription");
         tracker.add(item2);
-        assertThat(tracker.findAll()[0], is(item1));
-        assertThat(tracker.findAll()[1], is(item2));
+        assertThat(tracker.findAll().get(0), is(item1));
+        assertThat(tracker.findAll().get(1), is(item2));
     }
 }

@@ -17,7 +17,7 @@ public class MenuTracker {
      */
     private Tracker tracker;
     /**
-     * @param хранит ссылку на массив типа UserAction.
+     * @param хранит ссылку на списочный массив типа UserAction.
      */
     private List<UserAction> actions = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class MenuTracker {
             tracker.add(item);
             System.out.println("------------ Новая заявка с ID " + item.getId() + " добавлена.-----------");
         }
-}
+    }
     public class ShowItems extends BaseAction {
 
         public ShowItems(int key, String name) {
@@ -97,16 +97,16 @@ public class MenuTracker {
 
         @Override
         public void execute(Input input, Tracker tracker) {
-            Item[] result = tracker.findAll();
-            int count1 = result.length;
+            List<Item> result = tracker.findAll();
+            int count1 = result.size();
             if (count1 != 0) {
                 String count2 = Integer.toString(count1);
                 String count3 = count2.substring(count2.length() - 1);
                 int countOfItems = Integer.parseInt(count3);
                 String zayavka = getString(count1, countOfItems);
                 System.out.println("------------ Найдено: " + count1 + zayavka + "-----------");
-                for (int index = 0; index != result.length; index++) {
-                    System.out.println(result[index].toString());
+                for (Item item : result) {
+                    System.out.println(item.toString());
                     System.out.println(" ");
                 }
                 System.out.println("------------------------------------------");
@@ -186,9 +186,9 @@ public class MenuTracker {
             System.out.println("------------ Поиск заявки по имени --------------");
             String name = input.ask("Введите имя искомой заявки :");
 
-            Item[] result = tracker.findByName(name);
+            List<Item> result = tracker.findByName(name);
 
-            int count1 = result.length;
+            int count1 = result.size();
             if (count1 != 0) {
                 String count2 = Integer.toString(count1);
                 String count3 = count2.substring(count2.length() - 1);
@@ -196,8 +196,12 @@ public class MenuTracker {
                 String zayavka = getString(count1, countOfItems);
 
                 System.out.println("------------ Найдено: " + count1 + zayavka + "с имененем " + name + "-----------");
-                for (int index = 0; index != result.length; index++) {
+                /*for (int index = 0; index != result.size(); index++) {
                     System.out.println(result[index].toString());
+                    System.out.println(" ");
+                }*/
+                for (Item item : result) {
+                    System.out.println(item.toString());
                     System.out.println(" ");
                 }
                 System.out.println("--------------------------------------------------------------------------------");

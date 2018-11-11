@@ -29,7 +29,7 @@ public class StartUI {
      * @param input   ввод данных.
      * @param tracker хранилище заявок.
      */
-    private int[] range = new int[7];
+    private List<Integer> range = new ArrayList<Integer>();
 
     public StartUI(Input input, Tracker tracker) {
         this.input = input;
@@ -43,12 +43,11 @@ public class StartUI {
         menu.fillActions(this);
 
         for (int i = 0; i < menu.getActionsLentgh(); i++) {
-            range[i] = i;
+            range.add(i);
         }
         do {
             menu.show();
             menu.select(input.ask("Выбирите пункт меню:", range));
-            //} while (!"y".equals(this.input.ask("Выйти?(y): ")));
         } while (this.working);
     }
 
@@ -69,16 +68,16 @@ public class StartUI {
      * Метод отображает все заявки.
      */
     private void findAllItems() {
-        Item[] result = this.tracker.findAll();
-        int count1 = result.length;
+        List<Item> result = this.tracker.findAll();
+        int count1 = result.size();
         if (count1 != 0) {
             String count2 = Integer.toString(count1);
             String count3 = count2.substring(count2.length() - 1);
             int countOfItems = Integer.parseInt(count3);
             String zayavka = getString(count1, countOfItems);
             System.out.println("------------ Найдено: " + count1 + zayavka + "-----------");
-            for (int index = 0; index != result.length; index++) {
-                System.out.println(result[index].toString());
+            for (Item item : result) {
+                System.out.println(item.toString());
                 System.out.println(" ");
             }
             System.out.println("------------------------------------------");
@@ -141,9 +140,9 @@ public class StartUI {
         System.out.println("------------ Поиск заявки по имени --------------");
         String name = this.input.ask("Введите имя искомой заявки :");
 
-        Item[] result = this.tracker.findByName(name);
+        List<Item> result = this.tracker.findByName(name);
 
-        int count1 = result.length;
+        int count1 = result.size();
         if (count1 != 0) {
             String count2 = Integer.toString(count1);
             String count3 = count2.substring(count2.length() - 1);
@@ -151,10 +150,16 @@ public class StartUI {
             String zayavka = getString(count1, countOfItems);
 
             System.out.println("------------ Найдено: " + count1 + zayavka + "с имененем " + name + "-----------");
-            for (int index = 0; index != result.length; index++) {
-                System.out.println(result[index].toString());
+
+            for (Item item : result) {
+                System.out.println(item.toString());
                 System.out.println(" ");
             }
+
+           /* for (int index = 0; index != result.size(); index++) {
+                System.out.println(result[index].toString());
+                System.out.println(" ");
+            }*/
             System.out.println("--------------------------------------------------------------------------------");
         } else {
             System.out.println("------------ К сожалению, заявка с именем " + name + " не найдена. -------------");
