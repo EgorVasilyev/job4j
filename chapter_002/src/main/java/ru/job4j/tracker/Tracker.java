@@ -1,10 +1,7 @@
 package ru.job4j.tracker;
 import ru.job4j.models.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @version 2
@@ -64,11 +61,8 @@ public class Tracker {
     public void replace(String id, Item item) {
         for (Item itemRe : items) {
             if (itemRe != null && itemRe.getId().equals(id)) {
-                String tempID = itemRe.getId();
-                items.remove(itemRe);
-                item.setId(tempID);
-                items.add(item);
-                break;
+                item.setId(itemRe.getId());
+                items.set(items.indexOf(itemRe), item);
             }
         }
     }
@@ -78,16 +72,13 @@ public class Tracker {
      * @param id код удаляемой заявки.
      */
     public boolean delete(String id) {
+        Iterator<Item> iter = items.iterator();
         boolean removal = false;
-        int number = -1;
-        for (Item item : items) {
-            if (item != null && item.getId().equals(id)) {
-               number = items.indexOf(item);
+        while (iter.hasNext()) {
+            if (iter.next().getId().equals(id)) {
+                iter.remove();
                 removal = true;
             }
-        }
-        if (removal) {
-            items.remove(number);
         }
         return removal;
     }
