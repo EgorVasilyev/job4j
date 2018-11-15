@@ -3,15 +3,15 @@ package ru.job4j.bank;
 
 
 public class User implements Comparable<User> {
-    private Integer passport;
+    private String passport;
     private String name;
 
-    public User(Integer passport, String name) {
+    public User(String passport, String name) {
         this.passport = passport;
         this.name = name;
     }
 
-    public Integer getPassport() {
+    public String getPassport() {
         return passport;
     }
 
