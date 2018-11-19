@@ -12,21 +12,14 @@ import static org.junit.Assert.assertThat;
 public class LabmdaFuncTest {
     @Test
     public void whenLineFunction() {
+
         LabmdaFunc useBy = new LabmdaFunc();
-        Function<Double, Double> line = (x) -> {
-            Double k, b;
-            k = 1.0;
-            b = 0.0;
-            return k * x + b;
-        };
+        Function<Double, Double> line = (x) -> 2 * x + 3;
         List<Double> lineFunc = useBy.diapason(1, 4, line);
 
         List<Double> result = new ArrayList<>();
-        double k, b;
-        k = 1.0;
-        b = 0.0;
         for (double x = 1.0; x <= 4.0; x++) {
-            result.add(k * x + b);
+            result.add(2 * x + 3);
         }
 
         assertThat(lineFunc, is(result));
@@ -35,22 +28,12 @@ public class LabmdaFuncTest {
     @Test
     public void whenKvadrFunction() {
         LabmdaFunc useBy = new LabmdaFunc();
-        Function<Double, Double> kvadr = (x) -> {
-            Double a, b, c;
-            a = 1.0;
-            b = 2.0;
-            c = 3.0;
-            return a * Math.pow(x, 2) + b * x + c;
-        };
+        Function<Double, Double> kvadr = (x) -> 2 * Math.pow(x, 2) + 3 * x + 4;
         List<Double> kvadrFunc = useBy.diapason(1, 4, kvadr);
 
         List<Double> result = new ArrayList<>();
-        double a, b, c;
-        a = 1.0;
-        b = 2.0;
-        c = 3.0;
         for (double x = 1.0; x <= 4.0; x++) {
-            result.add(a * Math.pow(x, 2) + b * x + c);
+            result.add(2 * Math.pow(x, 2) + 3 * x + 4);
         }
 
         assertThat(kvadrFunc, is(result));
@@ -59,18 +42,12 @@ public class LabmdaFuncTest {
     @Test
     public void whenLogFunction() {
         LabmdaFunc useBy = new LabmdaFunc();
-        Function<Double, Double> log = (x) -> {
-            Double a;
-            a = 0.1;
-            return Math.log(x) / Math.log(a); //y = LOG a (X) = LN(X) / LN(a)
-        };
+        Function<Double, Double> log = (x) -> Math.log(x) / Math.log(0.1); //y = LOG a (X) = LN(X) / LN(a)
         List<Double> logFunc = useBy.diapason(1, 4, log);
 
         List<Double> result = new ArrayList<>();
-        double a;
-        a = 0.1;
         for (double x = 1.0; x <= 4.0; x++) {
-            result.add(Math.log(x) / Math.log(a));
+            result.add(Math.log(x) / Math.log(0.1));
         }
 
         assertThat(logFunc, is(result));
