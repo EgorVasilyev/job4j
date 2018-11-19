@@ -46,7 +46,8 @@ public class StartUI {
             range.add(i);
         }
         do {
-            menu.show();
+
+            menu.show(System.out::println);
             menu.select(input.ask("Выбирите пункт меню:", range));
         } while (this.working);
     }

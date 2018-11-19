@@ -6,6 +6,7 @@ import ru.job4j.start.Input;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MenuTracker {
     /**
@@ -66,10 +67,10 @@ public class MenuTracker {
     /**
      * Метод выводит на экран меню.
      */
-    public void show() {
+    public void show(Consumer<String> menu) {
         for (UserAction action : this.actions) {
             if (action != null) {
-                System.out.println(action.info());
+                menu.accept(action.info());
             }
         }
     }
