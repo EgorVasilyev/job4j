@@ -29,14 +29,12 @@ public class Tracker {
      * @param id уникальный ключ.
      */
     protected Item findById(String id) {
-        Item result = null;
-        for (Item item : items) {
-            if (item != null && item.getId().equals(id)) {
-                result = item;
-                break;
-            }
-        }
-        return result;
+        ArrayList<Item> result = new ArrayList<>();
+        result.add(0, null);
+            items.stream()
+                    .filter(item -> item.getId().equals(id))
+                    .forEach(item -> result.set(0, item));
+        return result.get(0);
     }
 
     /**
@@ -45,13 +43,10 @@ public class Tracker {
      */
     protected List<Item> findByName(String key) {
         List<Item> result = new ArrayList<Item>();
-        for (Item item : items) {
-            if (item.getName().equals(key)) {
-                result.add(item);
-            }
-        }
+        items.stream()
+                .filter(item -> item.getName().equals(key))
+                .forEach(result::add);
         return result;
-
     }
 
     /**
@@ -59,12 +54,10 @@ public class Tracker {
      * @param id код заменяемой заявки.
      */
     public void replace(String id, Item item) {
-        for (Item itemRe : items) {
-            if (itemRe != null && itemRe.getId().equals(id)) {
-                item.setId(itemRe.getId());
-                items.set(items.indexOf(itemRe), item);
-            }
-        }
+        items.stream()
+                .filter(itemRe -> itemRe.getId().equals(id))
+                .peek(itemRe -> item.setId(itemRe.getId()))
+                .forEach(itemRe -> items.set(items.indexOf(itemRe), item));
     }
 
     /**
@@ -72,15 +65,9 @@ public class Tracker {
      * @param id код удаляемой заявки.
      */
     public boolean delete(String id) {
-        Iterator<Item> iter = items.iterator();
-        boolean removal = false;
-        while (iter.hasNext()) {
-            if (iter.next().getId().equals(id)) {
-                iter.remove();
-                removal = true;
-            }
-        }
-        return removal;
+        items.removeIf(item -> item.getId().equals(id));
+        return items.stream()
+                .anyMatch(item -> item.getId().equals(id));
     }
 
     /**
