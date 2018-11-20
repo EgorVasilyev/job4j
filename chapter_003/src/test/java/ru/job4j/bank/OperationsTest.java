@@ -2,9 +2,6 @@ package ru.job4j.bank;
 
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,6 +21,7 @@ public class OperationsTest {
         assertThat(resultValue, is(60000.0));
         assertThat(resultReq, is("IP ishu rabotu"));
     }
+
     @Test
     public void whenAddSameAccounts() {
         Operations act = new Operations();
@@ -75,6 +73,8 @@ public class OperationsTest {
                 "321", "IP ishu rabotu",
                 10000);
         assertThat(result, is(true));
+        assertThat(acc1.values, is(50000.0));
+        assertThat(acc2.values, is(10000.0));
     }
 
     @Test

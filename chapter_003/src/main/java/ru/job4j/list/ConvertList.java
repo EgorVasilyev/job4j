@@ -1,6 +1,7 @@
 package ru.job4j.list;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,11 +13,8 @@ import java.util.List;
 public class ConvertList {
     public List<Integer> convert(List<int[]> list) {
         List<Integer> result = new ArrayList<>();
-        for (int[] listValue: list) {
-            for (int cellValue: listValue) {
-                result.add(cellValue);
-            }
-        }
+        list.forEach(
+                x -> Arrays.stream(x).forEach(result::add));
         return result;
     }
 }

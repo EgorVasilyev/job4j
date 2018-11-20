@@ -12,32 +12,13 @@ public class SortUser {
     }
 
     public List<User> sortNameLength(List<User> list) {
-        list.sort(
-                new Comparator<User>() {
-                    @Override
-                    public int compare(User o1, User o2) {
-                        return Integer.compare(o1.getName().length(), o2.getName().length());
-                    }
-                }
-        );
+        list.sort(Comparator.comparing(user -> user.getName().length()));
         return list;
     }
 
     public List<User> sortByAllFields(List<User> list) {
-        list.sort(
-                new Comparator<User>() {
-                    @Override
-                    public int compare(User o1, User o2) {
-                        int result = o1.getName().compareTo(o2.getName());
-                        if (result == 0) {
-                            result = o1.getAge().compareTo(o2.getAge());
-                        }
-                        return result;
-                    }
-                }
-        );
+        list.sort(Comparator.comparing(User::getName).thenComparing(User::getAge));
         return list;
     }
-
 
 }
