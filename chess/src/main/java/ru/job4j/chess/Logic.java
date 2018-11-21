@@ -5,12 +5,16 @@ import ru.job4j.chess.exeptions.ImpossibleMoveException;
 import ru.job4j.chess.exeptions.OccupiedWayException;
 import ru.job4j.chess.figures.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * //TODO add comments.
  *
  * @author Egor Vasilyev
- * @version 1
- * @since 06/11/2018
+ * @version 3
+ * @since 21/11/2018
  */
 public class Logic {
     private final Figure[] figures = new Figure[32];
@@ -32,9 +36,9 @@ public class Logic {
             if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
             }
-            if (!occupiedWay(source, dest, index)) {
-                this.figures[index] = this.figures[index].copy(dest);
-            }
+            occupiedWay(source, dest, index);
+            this.figures[index] = this.figures[index].copy(dest);
+
         } catch (FigureNotFoundException fnfe) {
             rst = false;
             System.out.println("Фигура не найдена!");
@@ -54,41 +58,36 @@ public class Logic {
         }
     }
 
-    private boolean occupiedWay(Cell source, Cell dest, int index) {
-        this.index = index;
-        boolean result = false;
+    private void occupiedWay(Cell source, Cell dest, int index) {
         if (index != -1) {
             Cell[] steps = this.figures[index].way(source, dest);
-
-            for (Cell step : steps) {
-                for (Figure otherFigure : this.figures) {
-                    if (otherFigure != null && step.equals(otherFigure.position())) {
-                        result = true;
-                    }
-                    if (otherFigure != null && step.equals(otherFigure.position())) {
-                        throw new OccupiedWayException("Путь занят!");
-                    }
-                }
-            }
+            Arrays.stream(this.figures)
+                    .forEach(otherFigure -> {
+                        if (Arrays.stream(steps)
+                                .anyMatch(step -> otherFigure != null && step.equals(otherFigure.position())
+                                )
+                        ) {
+                            throw new OccupiedWayException("Путь занят!");
+                        }
+                    });
         }
-        return result;
     }
 
     public void clean() {
-        for (int position = 0; position != this.figures.length; position++) {
-            this.figures[position] = null;
-        }
+        Arrays.stream(this.figures)
+                .forEach(figure -> figure = null);
         this.index = 0;
     }
 
     private int findBy(Cell cell) {
-        int rst = -1;
-        for (int index = 0; index != this.figures.length; index++) {
-            if (this.figures[index] != null && this.figures[index].position().equals(cell)) {
-                rst = index;
-                break;
-            }
-        }
-        return rst;
+        final int[] rst = {-1};
+        List<Figure> figuresList = Arrays.asList(this.figures);
+        figuresList.stream()
+                .forEach(figure -> {
+                    if (figure != null && figure.position().equals(cell)) {
+                        rst[0] = figuresList.indexOf(figure);
+                    }
+                });
+        return rst[0];
     }
 }
