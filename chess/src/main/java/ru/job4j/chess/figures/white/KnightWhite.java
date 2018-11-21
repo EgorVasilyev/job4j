@@ -22,16 +22,14 @@ public class KnightWhite implements Figure {
         return this.position;
     }
 
+    @Override
     public Cell[] way(Cell source, Cell dest) {
-        Cell[] steps;
-        int deltaY = Math.abs(source.y - dest.y);
-        int deltaX = Math.abs(source.x - dest.x);
-            if ((deltaY == 2 && deltaX == 1) || (deltaY == 1 && deltaX == 2)) {
-                steps = new Cell[] {dest};
-            } else {
-                throw new ImpossibleMoveException("Нарушение логики хода фигуры");
-            }
-        return steps;
+        int stepY = Math.abs(source.y - dest.y);
+        int stepX = Math.abs(source.x - dest.x);
+        if (!((stepY == 2 && stepX == 1) || (stepY == 1 && stepX == 2))) {
+            throw new ImpossibleMoveException("Нарушение логики хода фигуры");
+        }
+        return new Cell[] {dest};
     }
 
     @Override

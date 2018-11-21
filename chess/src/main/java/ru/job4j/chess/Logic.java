@@ -27,18 +27,12 @@ public class Logic {
         boolean rst = false;
         int index = this.findBy(source);
         try {
-
-            if (index == -1) {
-                throw new FigureNotFoundException("Фигура не найдена!");
-            }
+            figureAbsent(index);
             Cell[] steps = this.figures[index].way(source, dest);
             if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
             }
-            if (occupiedWay(source, dest, index)) {
-                throw new OccupiedWayException("Путь занят!");
-
-            } else {
+            if (!occupiedWay(source, dest, index)) {
                 this.figures[index] = this.figures[index].copy(dest);
             }
         } catch (FigureNotFoundException fnfe) {
@@ -54,6 +48,12 @@ public class Logic {
         return rst;
     }
 
+    private void figureAbsent(int index) {
+        if (index == -1) {
+            throw new FigureNotFoundException("Фигура не найдена!");
+        }
+    }
+
     private boolean occupiedWay(Cell source, Cell dest, int index) {
         this.index = index;
         boolean result = false;
@@ -64,6 +64,9 @@ public class Logic {
                 for (Figure otherFigure : this.figures) {
                     if (otherFigure != null && step.equals(otherFigure.position())) {
                         result = true;
+                    }
+                    if (otherFigure != null && step.equals(otherFigure.position())) {
+                        throw new OccupiedWayException("Путь занят!");
                     }
                 }
             }

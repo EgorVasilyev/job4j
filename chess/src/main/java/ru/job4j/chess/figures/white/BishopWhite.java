@@ -7,8 +7,8 @@ import ru.job4j.chess.figures.Figure;
 /**
  *
  * @author Egor Vasilyev
- * @version 1
- * @since 06/11/2018
+ * @version 2
+ * @since 21/11/2018
  */
 public class BishopWhite implements Figure {
     private final Cell position;
@@ -22,44 +22,19 @@ public class BishopWhite implements Figure {
         return this.position;
     }
 
-
     @Override
     public Cell[] way(Cell source, Cell dest) {
-        int deltaX = Math.abs(source.x - dest.x);
-        int deltaY = Math.abs(source.y - dest.y);
-        int stepX = source.x - dest.x;
-        int stepY = source.y - dest.y;
-        Cell[] steps;
-        int moveX = source.x;
-        int moveY = source.y;
-        //проверяем может ли фигура так в принципе ходить
-        if (deltaY == deltaX) {
-            dest.setXY(dest.x, dest.y);
-            steps = new Cell[deltaX];
-            for (int i = 0; i < steps.length; i++) {
-                //влево-вниз
-                if (stepX > 0 && stepY > 0) {
-                    steps[i] = Cell.values()[--(moveX) * 8 + (--(moveY))];
-                }
-                //влево-вверх
-                if (stepX > 0 && stepY < 0) {
-                    steps[i] = Cell.values()[--(moveX) * 8 + (++(moveY))];
-                }
-                //вправо-вниз
-                if (stepX < 0 && stepY > 0) {
-                    steps[i] = Cell.values()[++(moveX) * 8 + (--(moveY))];
-                }
-                //вправо-вверх
-                if (stepX < 0 && stepY < 0) {
-                    steps[i] = Cell.values()[++(moveX) * 8 + (++(moveY))];
-                }
-            }
-        } else {
+        if (!(Math.abs(source.x - dest.x) == Math.abs(source.y - dest.y))) {
             throw new ImpossibleMoveException("Нарушение логики хода фигуры");
+        }
+        int deltaX = Integer.compare(dest.x, source.x);
+        int deltaY = Integer.compare(dest.y, source.y);
+        Cell[] steps = new Cell[Math.abs(source.x - dest.x)];
+        for (int i = 0; i < steps.length; i++) {
+            steps[i] = Cell.values()[((source.x) + deltaX * (i + 1)) * 8 + (source.y + deltaY * (i + 1))];
         }
         return steps;
     }
-
     @Override
     public Figure copy(Cell dest) {
         return new BishopWhite(dest);

@@ -25,56 +25,22 @@ public class QeenWhite implements Figure {
 
     @Override
     public Cell[] way(Cell source, Cell dest) {
-        int deltaY = Math.abs(source.y - dest.y);
-        int deltaX = Math.abs(source.x - dest.x);
-        int stepX = source.x - dest.x;
-        int stepY = source.y - dest.y;
-        int moveX = source.x;
-        int moveY = source.y;
-        Cell[] steps;
-            if (deltaY == deltaX) {
-                steps = new Cell[deltaX];
-                for (int i = 0; i < steps.length; i++) {
-                    //влево-вниз
-                    if (stepX > 0 && stepY > 0) {
-                        steps[i] = Cell.values()[--(moveX) * 8 + (--(moveY))];
-                    }
-                    //влево-вверх
-                    if (stepX > 0 && stepY < 0) {
-                        steps[i] = Cell.values()[--(moveX) * 8 + (++(moveY))];
-                    }
-                    //вправо-вниз
-                    if (stepX < 0 && stepY > 0) {
-                        steps[i] = Cell.values()[++(moveX) * 8 + (--(moveY))];
-                    }
-                    //вправо-вверх
-                    if (stepX < 0 && stepY < 0) {
-                        steps[i] = Cell.values()[++(moveX) * 8 + (++(moveY))];
-                    }
-                }
-            } else if (deltaY == 0 || deltaX == 0) {
-                steps = new Cell[deltaX + deltaY];
-                for (int i = 0; i < steps.length; i++) {
-                    //влево
-                    if (stepX > 0) {
-                        steps[i] = Cell.values()[--(moveX) * 8 + moveY];
-                    }
-                    //вверх
-                    if (stepY < 0) {
-                        steps[i] = Cell.values()[moveX * 8 + (++(moveY))];
-                    }
-                    //вправо
-                    if (stepX < 0) {
-                        steps[i] = Cell.values()[++(moveX) * 8 + moveY];
-                    }
-                    //вниз
-                    if (stepY > 0) {
-                        steps[i] = Cell.values()[moveX * 8 + (--(moveY))];
-                    }
-                }
-            } else {
-                throw new ImpossibleMoveException("Нарушение логики хода фигуры");
-            }
+        if (!(Math.abs(source.x - dest.x) == Math.abs(source.y - dest.y))
+                && !(Math.abs(source.y - dest.y) == 0 || (Math.abs(source.x - dest.x) == 0))) {
+            throw new ImpossibleMoveException("Нарушение логики хода фигуры");
+        }
+        int deltaX = Integer.compare(dest.x, source.x);
+        int deltaY = Integer.compare(dest.y, source.y);
+        int size;
+        if (Math.abs(source.y - dest.y) == Math.abs(source.x - dest.x)) {
+            size = Math.abs(source.x - dest.x);
+        } else {
+            size = Math.abs(source.x - dest.x) + Math.abs(source.y - dest.y);
+        }
+        Cell[] steps = new Cell[size];
+        for (int i = 0; i < steps.length; i++) {
+            steps[i] = Cell.values()[((source.x) + deltaX * (i + 1)) * 8 + (source.y + deltaY * (i + 1))];
+        }
         return steps;
     }
 

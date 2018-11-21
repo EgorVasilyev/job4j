@@ -44,7 +44,7 @@ public class LogicTest {
         boolean result = logic.move(source, dest);
         assertTrue(result);
 
-       //влево-вверх
+        //влево-вверх
         source = dest;
         dest = Cell.E2;
         result = logic.move(source, dest);
@@ -105,6 +105,23 @@ public class LogicTest {
                 is(
                         new StringBuilder()
                                 .append("Нарушение логики хода фигуры!")
+                                .append(System.lineSeparator())
+                                .toString()
+                )
+        );
+    }
+    @Test
+    public void whenFigureNotFound() {
+        Logic logic = new Logic();
+        Cell source = Cell.B8;
+        Cell dest = Cell.B6;
+        boolean result = logic.move(source, dest);
+        assertTrue(!result);
+        assertThat(
+                new String(this.out.toByteArray()),
+                is(
+                        new StringBuilder()
+                                .append("Фигура не найдена!")
                                 .append(System.lineSeparator())
                                 .toString()
                 )
