@@ -65,9 +65,10 @@ public class Tracker {
      * @param id код удаляемой заявки.
      */
     public boolean delete(String id) {
-        items.removeIf(item -> item.getId().equals(id));
-        return items.stream()
+        boolean result = items.stream()
                 .anyMatch(item -> item.getId().equals(id));
+        items.removeIf(item -> item.getId().equals(id));
+        return result;
     }
 
     /**
