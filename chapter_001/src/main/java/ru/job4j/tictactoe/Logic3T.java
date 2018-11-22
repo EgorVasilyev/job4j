@@ -1,21 +1,91 @@
 package ru.job4j.tictactoe;
 
-import java.util.function.Predicate;
-
 public class Logic3T {
     private final Figure3T[][] table;
-
-    public Logic3T(Figure3T[][] table) {
+    private final int size;
+    public Logic3T(Figure3T[][] table, int size) {
         this.table = table;
+        this.size = size;
+    }
+    /**
+     * Проверяет победу Х
+     * @return да/нет.
+     */
+    public boolean isWinnerX() {
+        boolean[][] winCoombination = new boolean[this.size][this.size];
+        for (int i = 0; i < this.table.length; i++) {
+            for (int j = 0; j < this.table.length; j++) {
+                winCoombination[i][j] = this.table[i][j].hasMarkX();
+            }
+        }
+        return this.winnerCheck(winCoombination);
     }
 
-    public boolean fillBy(Predicate<Figure3T> predicate, int startX, int startY, int deltaX, int deltaY) {
+    /**
+     * Проверяет победу 0
+     * @return да/нет.
+     */
+    public boolean isWinnerO() {
+        boolean[][] winCoombination = new boolean[this.size][this.size];
+        for (int i = 0; i < this.table.length; i++) {
+            for (int j = 0; j < this.table.length; j++) {
+                winCoombination[i][j] = this.table[i][j].hasMarkO();
+            }
+        }
+        return this.winnerCheck(winCoombination);
+    }
+
+    /**
+     * Проверка победной коомбинации в двумерном массиве.
+     * @param winCoombination двумерный массив с коомбинациями.
+     * @return да/нет.
+     */
+    private boolean winnerCheck(boolean[][] winCoombination) {
         boolean result = true;
-        for (int index = 0; index != this.table.length; index++) {
-            Figure3T cell = this.table[startX][startY];
-            startX += deltaX;
-            startY += deltaY;
-            if (!predicate.test(cell)) {
+        for (boolean[] array : winCoombination) {
+            result = this.checkLine(array);
+            if (result) {
+                break;
+            }
+        }
+        if (!result) {
+            for (int i = 0; i < winCoombination.length; i++) {
+                boolean[] temp = new boolean[this.size];
+                for (int j = 0; j < winCoombination.length; j++) {
+                    temp[j] = winCoombination[j][i];
+                }
+                result = this.checkLine(temp);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        if (!result) {
+            boolean[] temp = new boolean[this.size];
+            for (int i = 0; i < winCoombination.length; i++) {
+                temp[i] = winCoombination[i][i];
+            }
+            result = this.checkLine(temp);
+        }
+        if (!result) {
+            boolean[] temp = new boolean[this.size];
+            for (int i = 0; i < winCoombination.length; i++) {
+                temp[i] = winCoombination[i][winCoombination.length - i - 1];
+            }
+            result = this.checkLine(temp);
+        }
+        return result;
+    }
+
+    /**
+     * Проверяет линию на истиннность
+     * @param toCheck строка/столбец/диагонали.
+     * @return да/нет.
+     */
+    private boolean checkLine(boolean[] toCheck) {
+        boolean result = true;
+        for (boolean cell : toCheck) {
+            if (!cell) {
                 result = false;
                 break;
             }
@@ -23,33 +93,11 @@ public class Logic3T {
         return result;
     }
 
-    public boolean isWinnerX() {
-        return this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 0)
-                || this.fillBy(Figure3T::hasMarkX, 0, 0, 0, 1)
-                || this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 1)
-                || this.fillBy(Figure3T::hasMarkX, 0, 1, 1, 0)
-                || this.fillBy(Figure3T::hasMarkX, 1, 0, 0, 1)
-                || this.fillBy(Figure3T::hasMarkX, this.table.length - 1, this.table.length - 1, 0, -1)
-                || this.fillBy(Figure3T::hasMarkX, this.table.length - 1, this.table.length - 1, -1, 0)
-                || this.fillBy(Figure3T::hasMarkX, this.table.length - 1, 0, -1, 1);
-    }
-
-    public boolean isWinnerO() {
-        return this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 0)
-                || this.fillBy(Figure3T::hasMarkO, 0, 0, 0, 1)
-                || this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 1)
-                || this.fillBy(Figure3T::hasMarkO, 0, 1, 1, 0)
-                || this.fillBy(Figure3T::hasMarkO, 1, 0, 0, 1)
-                || this.fillBy(Figure3T::hasMarkO, this.table.length - 1, this.table.length - 1, 0, -1)
-                || this.fillBy(Figure3T::hasMarkO, this.table.length - 1, this.table.length - 1, -1, 0)
-                || this.fillBy(Figure3T::hasMarkO, this.table.length - 1, 0, -1, 1);
-    }
-
     public boolean hasGap() {
         boolean result = false;
-        for (int i = 0; i < this.table.length; i++) {
-            for (int j = 0; j < this.table[i].length; j++) {
-                if (!this.table[i][j].hasMarkX() && !this.table[i][j].hasMarkO()) {
+        for (Figure3T[] row : this.table) {
+            for (Figure3T cell : row) {
+                if (!cell.hasMarkX() && !cell.hasMarkO()) {
                     result = true;
                     break;
                 }

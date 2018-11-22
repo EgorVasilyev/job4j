@@ -13,7 +13,7 @@ public class Logic3TTest {
                 {new Figure3T(), new Figure3T(true), new Figure3T()},
                 {new Figure3T(), new Figure3T(), new Figure3T(true)},
         };
-        Logic3T login = new Logic3T(table);
+        Logic3T login = new Logic3T(table, table.length);
         assertThat(login.isWinnerX(), is(true));
     }
 
@@ -24,7 +24,7 @@ public class Logic3TTest {
                 {new Figure3T(true), new Figure3T(true), new Figure3T(true)},
                 {new Figure3T(), new Figure3T(), new Figure3T()},
         };
-        Logic3T login = new Logic3T(table);
+        Logic3T login = new Logic3T(table, table.length);
         assertThat(login.isWinnerX(), is(true));
     }
 
@@ -35,7 +35,7 @@ public class Logic3TTest {
                 {new Figure3T(), new Figure3T(), new Figure3T()},
                 {new Figure3T(false), new Figure3T(false), new Figure3T(false)},
         };
-        Logic3T login = new Logic3T(table);
+        Logic3T login = new Logic3T(table, table.length);
         assertThat(login.isWinnerO(), is(true));
     }
 
@@ -46,7 +46,7 @@ public class Logic3TTest {
                 {new Figure3T(), new Figure3T(true), new Figure3T()},
                 {new Figure3T(), new Figure3T(true), new Figure3T()},
         };
-        Logic3T login = new Logic3T(table);
+        Logic3T login = new Logic3T(table, table.length);
         assertThat(login.isWinnerX(), is(true));
     }
 
@@ -57,7 +57,7 @@ public class Logic3TTest {
                 {new Figure3T(), new Figure3T(true), new Figure3T()},
                 {new Figure3T(true), new Figure3T(), new Figure3T()},
         };
-        Logic3T login = new Logic3T(table);
+        Logic3T login = new Logic3T(table, table.length);
         assertThat(login.isWinnerX(), is(true));
     }
 }
