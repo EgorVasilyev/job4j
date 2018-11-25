@@ -1,6 +1,7 @@
 package ru.job4j.chess.figures.black;
 
 import ru.job4j.chess.Logic;
+import ru.job4j.chess.Moving;
 import ru.job4j.chess.exeptions.ImpossibleMoveException;
 import ru.job4j.chess.figures.Cell;
 import ru.job4j.chess.figures.Figure;
@@ -8,10 +9,10 @@ import ru.job4j.chess.figures.Figure;
 /**
  *
  * @author Egor Vasilyev
- * @version 1
- * @since 06/11/2018
+ * @version 3
+ * @since 25/11/2018
  */
-public class RookBlack implements Figure {
+public class RookBlack implements Figure, Moving {
     private final Cell position;
 
     public RookBlack(final Cell position) {
@@ -27,7 +28,7 @@ public class RookBlack implements Figure {
     public Cell[] way(Cell source, Cell dest) {
         boolean wrongMove = !(Math.abs(source.y - dest.y) == 0 || (Math.abs(source.x - dest.x) == 0));
         int sizeSteps = Math.abs(source.x - dest.x) + Math.abs(source.y - dest.y);
-        return Logic.commonPart(source, dest, wrongMove, sizeSteps);
+        return Moving.commonPart(source, dest, wrongMove, sizeSteps);
     }
 
     @Override
