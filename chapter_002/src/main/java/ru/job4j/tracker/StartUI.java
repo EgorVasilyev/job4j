@@ -5,6 +5,7 @@ import ru.job4j.start.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @version 2
@@ -12,6 +13,11 @@ import java.util.List;
  */
 public class StartUI {
     private boolean working = true;
+
+    /**
+     * Вывод на печать.
+     */
+    private Consumer<String> println = System.out::println;
 
     /**
      * Получение данных от пользователя.
@@ -57,12 +63,12 @@ public class StartUI {
      * Метод реализует добавление новый заявки в хранилище.
      */
     private void createItem() {
-        System.out.println("------------ Добавление новой заявки --------------");
+        println.accept("------------ Добавление новой заявки --------------");
         String name = this.input.ask("Введите имя заявки :");
         String desc = this.input.ask("Введите описание заявки :");
         Item item = new Item(name, desc);
         this.tracker.add(item);
-        System.out.println("------------ Новая заявка с ID " + item.getId() + " добавлена.-----------");
+        println.accept("------------ Новая заявка с ID " + item.getId() + " добавлена.-----------");
     }
 
     /**
@@ -76,14 +82,14 @@ public class StartUI {
             String count3 = count2.substring(count2.length() - 1);
             int countOfItems = Integer.parseInt(count3);
             String zayavka = getString(count1, countOfItems);
-            System.out.println("------------ Найдено: " + count1 + zayavka + "-----------");
+            println.accept("------------ Найдено: " + count1 + zayavka + "-----------");
             for (Item item : result) {
                 System.out.println(item.toString());
                 System.out.println(" ");
             }
-            System.out.println("------------------------------------------");
+            println.accept("------------------------------------------");
         } else {
-            System.out.println("------------ К сожалению, заявок пока не создано. -----------");
+            println.accept("------------ К сожалению, заявок пока не создано. -----------");
         }
     }
 
@@ -91,16 +97,16 @@ public class StartUI {
      * Метод реализует изменение заявки.
      */
     private void editItem() {
-        System.out.println("------------ Изменение заявки --------------");
+        println.accept("------------ Изменение заявки --------------");
         String id = this.input.ask("Введите ID изменяемой заявки :");
         if (this.tracker.findById(id) != null) {
             String name = this.input.ask("Введите новое имя заявки :");
             String desc = this.input.ask("Введите новое описание заявки :");
             Item item = new Item(name, desc);
             this.tracker.replace(id, item);
-            System.out.println("------------ Заявка с getId : " + item.getId() + " изменена. -----------");
+            println.accept("------------ Заявка с getId : " + item.getId() + " изменена. -----------");
         } else {
-            System.out.println("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
+            println.accept("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
         }
     }
 
@@ -109,12 +115,12 @@ public class StartUI {
      * Метод удаляет заявку.
      */
     private void deleteItem() {
-        System.out.println("------------ Удаление заявки --------------");
+        println.accept("------------ Удаление заявки --------------");
         String id = this.input.ask("Введите ID удаляемой заявки :");
         if (this.tracker.delete(id)) {
-            System.out.println("------------ Заявка с getId : " + id + " удалена -----------");
+            println.accept("------------ Заявка с getId : " + id + " удалена -----------");
         } else {
-            System.out.println("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
+            println.accept("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
         }
     }
 
@@ -122,15 +128,15 @@ public class StartUI {
      * Метод ищет заявку по ID.
      */
     private void findItemById() {
-        System.out.println("------------ Поиск заявки по ID --------------");
+        println.accept("------------ Поиск заявки по ID --------------");
         String id = this.input.ask("Введите ID искомой заявки :");
         Item foundItem = this.tracker.findById(id);
         if (foundItem != null) {
-            System.out.println("------------ Заявка с getId : " + id + " найдена. -----------");
-            System.out.println(foundItem.toString());
-            System.out.println("-------------------------------------------------------------");
+            println.accept("------------ Заявка с getId : " + id + " найдена. -----------");
+            println.accept(foundItem.toString());
+            println.accept("-------------------------------------------------------------");
         } else {
-            System.out.println("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
+            println.accept("------------ К сожалению, заявка с ID " + id + " не найдена. -----------");
         }
     }
 
@@ -138,7 +144,7 @@ public class StartUI {
      * Метод ищет заявку по имени.
      */
     private void findItemByName() {
-        System.out.println("------------ Поиск заявки по имени --------------");
+        println.accept("------------ Поиск заявки по имени --------------");
         String name = this.input.ask("Введите имя искомой заявки :");
 
         List<Item> result = this.tracker.findByName(name);
@@ -150,20 +156,20 @@ public class StartUI {
             int countOfItems = Integer.parseInt(count3);
             String zayavka = getString(count1, countOfItems);
 
-            System.out.println("------------ Найдено: " + count1 + zayavka + "с имененем " + name + "-----------");
+            println.accept("------------ Найдено: " + count1 + zayavka + "с имененем " + name + "-----------");
 
             for (Item item : result) {
-                System.out.println(item.toString());
-                System.out.println(" ");
+                println.accept(item.toString());
+                println.accept(" ");
             }
 
            /* for (int index = 0; index != result.size(); index++) {
                 System.out.println(result[index].toString());
                 System.out.println(" ");
             }*/
-            System.out.println("--------------------------------------------------------------------------------");
+            println.accept("--------------------------------------------------------------------------------");
         } else {
-            System.out.println("------------ К сожалению, заявка с именем " + name + " не найдена. -------------");
+            println.accept("------------ К сожалению, заявка с именем " + name + " не найдена. -------------");
         }
     }
 
