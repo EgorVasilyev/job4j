@@ -8,6 +8,7 @@ package ru.job4j.array;
 public class Matrix {
     /**
      * строит таблицу умножения.
+     *
      * @param size размер таблицы.
      * @return результат.
      */

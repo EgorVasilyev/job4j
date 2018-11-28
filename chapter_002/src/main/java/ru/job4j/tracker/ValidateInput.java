@@ -1,4 +1,5 @@
 package ru.job4j.tracker;
+
 import ru.job4j.start.Input;
 import ru.job4j.start.MenuOutException;
 
@@ -30,6 +31,6 @@ public class ValidateInput implements Input {
                 System.out.println("Пожалуйста, введите числовое значение.");
             }
         } while (invalid);
-        return  value;
+        return value;
     }
 }

@@ -33,6 +33,7 @@ public class MenuTracker {
         this.input = input;
         this.tracker = tracker;
     }
+
     /**
      * Вывод на печать.
      */
@@ -79,6 +80,7 @@ public class MenuTracker {
             }
         }
     }
+
     class AddItem extends BaseAction {
 
         public AddItem(int key, String name) {
@@ -95,6 +97,7 @@ public class MenuTracker {
             println.accept("------------ Новая заявка с ID " + item.getId() + " добавлена.-----------");
         }
     }
+
     public class ShowItems extends BaseAction {
 
         public ShowItems(int key, String name) {
@@ -121,6 +124,7 @@ public class MenuTracker {
             }
         }
     }
+
     public class EditItem extends BaseAction {
 
         public EditItem(int key, String name) {
@@ -160,6 +164,7 @@ public class MenuTracker {
             }
         }
     }
+
     public class FindItemById extends BaseAction {
 
         public FindItemById(int key, String name) {

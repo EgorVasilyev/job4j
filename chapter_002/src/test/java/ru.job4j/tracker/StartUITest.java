@@ -8,6 +8,7 @@ import ru.job4j.start.Input;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -80,6 +81,7 @@ public class StartUITest {
                 )
         );
     }
+
     @Test
     public void whenUserFindByName() {
         Tracker tracker = new Tracker();

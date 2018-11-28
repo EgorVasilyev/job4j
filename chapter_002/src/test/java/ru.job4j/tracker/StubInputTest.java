@@ -1,8 +1,8 @@
 package ru.job4j.tracker;
 
 import org.junit.Test;
-import ru.job4j.start.*;
-import ru.job4j.models.*;
+import ru.job4j.models.Item;
+import ru.job4j.start.Input;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

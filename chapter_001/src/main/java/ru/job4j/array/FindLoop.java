@@ -9,6 +9,7 @@ package ru.job4j.array;
 public class FindLoop {
     /**
      * ищет индекс, ячейка которого содержит введеное значение.
+     *
      * @param el введенное значение.
      * @return результат.
      */

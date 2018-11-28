@@ -4,6 +4,7 @@ package ru.job4j.calculate;
 public class Calculate {
     /**
      * Main.
+     *
      * @param args - args.
      */
     public static void main(String[] args) {
@@ -12,6 +13,7 @@ public class Calculate {
 
     /**
      * Method echo.
+     *
      * @param name Your name.
      * @return Echo plus your name.
      */

@@ -71,7 +71,7 @@ public class TicTacToe extends Application {
         Group group = new Group();
         group.getChildren().addAll(
                 new Line(
-                        x + 10, y  + 10,
+                        x + 10, y + 10,
                         x + size - 10, y + size - 10
                 ),
                 new Line(

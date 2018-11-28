@@ -1,7 +1,7 @@
 package ru.job4j.tracker;
-
 import org.junit.Test;
 import ru.job4j.models.Item;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -13,6 +13,7 @@ public class TrackerTest {
         tracker.add(item);
         assertThat(tracker.findAll().get(0), is(item));
     }
+
     @Test
     public void whenFindByNameTest1TwiceThenTrackerReturnArrayHavingTwoItemsWithNameTest1() {
         Tracker tracker = new Tracker();
@@ -28,6 +29,7 @@ public class TrackerTest {
         String key2 = "test3";
         assertThat(tracker.findByName(key2).get(0).getName(), is(key2));
     }
+
     @Test
     public void whenFindByIdThenItem2() {
         Tracker tracker = new Tracker();
@@ -39,6 +41,7 @@ public class TrackerTest {
         tracker.add(item3);
         assertThat(tracker.findById(item2.getId()), is(item2));
     }
+
     @Test
     public void whenReplaceNameThenReturnNewName() {
         Tracker tracker = new Tracker();
@@ -49,6 +52,7 @@ public class TrackerTest {
         assertThat(tracker.findById(previous.getId()).getName(), is("test2"));
         assertThat(next, is(tracker.findAll().get(0)));
     }
+
     @Test
     public void whenDeleteFindByIdGiveNull() {
         Tracker tracker = new Tracker();
@@ -59,6 +63,7 @@ public class TrackerTest {
         Item nothing = null;
         assertThat(result, is(nothing));
     }
+
     @Test
     public void whenFindAllThenThisItems() {
         Tracker tracker = new Tracker();

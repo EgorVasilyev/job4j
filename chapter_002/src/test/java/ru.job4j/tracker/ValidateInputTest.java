@@ -34,7 +34,7 @@ public class ValidateInputTest {
     @Test
     public void whenInvalidInput() {
         ValidateInput input = new ValidateInput(
-                new StubInput(new String[] {"invalid", "1"})
+                new StubInput(new String[]{"invalid", "1"})
         );
         List<Integer> one = new ArrayList<Integer>();
         Integer a = 1;
@@ -47,10 +47,11 @@ public class ValidateInputTest {
                 )
         );
     }
+
     @Test
     public void whenInvalidInputVer2() {
         ValidateInput input = new ValidateInput(
-                new StubInput(new String[] {"9", "1"})
+                new StubInput(new String[]{"9", "1"})
         );
         List<Integer> one = new ArrayList<Integer>();
         Integer a = 1;

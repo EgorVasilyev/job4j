@@ -5,4 +5,4 @@
  * @version $Id$
  * @since 0.1
  */
-package ru.job4j.models;
+package src.main.java.ru.job4j.models;

@@ -14,7 +14,7 @@
             </plugin>
         </plugins>
     </build>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <parent>
         <groupId>ru.job4j</groupId>
         <artifactId>junior</artifactId>

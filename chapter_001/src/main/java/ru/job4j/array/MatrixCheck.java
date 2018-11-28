@@ -1,4 +1,5 @@
 package ru.job4j.array;
+
 /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
  * @version 3
@@ -7,6 +8,7 @@ package ru.job4j.array;
 public class MatrixCheck {
     /**
      * проверяет равенство ячеек диагоналей двумерного массива.
+     *
      * @param array входной массив.
      * @return результат.
      */
@@ -22,6 +24,7 @@ public class MatrixCheck {
                 result = false;
                 break;
             }
-        } return result;
+        }
+        return result;
     }
 }

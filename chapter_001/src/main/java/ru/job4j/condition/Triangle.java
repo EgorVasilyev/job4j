@@ -1,8 +1,8 @@
 package ru.job4j.condition;
+
 /**
  * Программа вычисляет площадь треугольника
  * при известных координатах трех ее точек.
- *
  */
 public class Triangle {
     private Point a;
@@ -14,11 +14,12 @@ public class Triangle {
         this.b = b;
         this.c = c;
     }
+
     /**
      * Метод вычисления полупериметра по длинам сторон.
-     *
+     * <p>
      * Формула.
-     *
+     * <p>
      * (ab + ac + bc) / 2
      *
      * @param ab расстояние между точками a b
@@ -29,12 +30,14 @@ public class Triangle {
     public double period(double ab, double ac, double bc) {
         return (ab + ac + bc) / 2;
     }
+
     public double max(double first, double second) {
         return (first > second ? first : second);
     }
+
     /**
      * Метод проверяет можно ли построить треугольник по заданным точкам.
-     *
+     * <p>
      * Вычисляем длину максимальной стороны maxStorona. Если сумма двух других сторон (далее SumOthers) равна
      * длине максимальной стороны, то все три линии лежат на одной прямой, а значит,
      * все точки лежат на одной прямой. При таком условии треугольник не может существовать.
@@ -42,6 +45,7 @@ public class Triangle {
      * Сумма двух других сторон : SumOthers=(ab+ac+bc)-maxStorona.
      * Сравниваем SumOthers и maxStorona.
      * SumOthers=maxStorona--->(ab+ac+bc)-maxStorona=maxStorona--->(ab+ac+bc)=2*maxStorona.
+     *
      * @param ab Длина от точки a до b.
      * @param ac Длина от точки a до c.
      * @param bc Длина от точки b до c.
@@ -52,6 +56,7 @@ public class Triangle {
         double maxStorona = this.max(temp, bc);
         return (ab + ac + bc) != 2 * maxStorona;
     }
+
     /**
      * Метод должен вычислить площадь треугольника.
      *

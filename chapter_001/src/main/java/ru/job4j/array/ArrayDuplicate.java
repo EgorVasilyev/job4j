@@ -1,5 +1,7 @@
 package ru.job4j.array;
+
 import java.util.Arrays;
+
 /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
  * @version 1
@@ -9,6 +11,7 @@ import java.util.Arrays;
 public class ArrayDuplicate {
     /**
      * Удаляет дуюликаты из массива.
+     *
      * @param array массив.
      * @return массив без дубликтов.
      */
@@ -22,6 +25,7 @@ public class ArrayDuplicate {
                     in--;
                 }
             }
-        } return Arrays.copyOf(array, unique);
+        }
+        return Arrays.copyOf(array, unique);
     }
 }

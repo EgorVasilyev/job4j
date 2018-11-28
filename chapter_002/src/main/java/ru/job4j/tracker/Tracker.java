@@ -1,7 +1,10 @@
 package ru.job4j.tracker;
-import ru.job4j.models.*;
 
-import java.util.*;
+import ru.job4j.models.Item;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * @version 2
@@ -16,6 +19,7 @@ public class Tracker {
 
     /**
      * Метод реализаущий добавление заявки в хранилище
+     *
      * @param item новая заявка
      */
     public Item add(Item item) {
@@ -26,19 +30,21 @@ public class Tracker {
 
     /**
      * Метод поиска заявки по id
+     *
      * @param id уникальный ключ.
      */
     protected Item findById(String id) {
         ArrayList<Item> result = new ArrayList<>();
         result.add(0, null);
-            items.stream()
-                    .filter(item -> item.getId().equals(id))
-                    .forEach(item -> result.set(0, item));
+        items.stream()
+                .filter(item -> item.getId().equals(id))
+                .forEach(item -> result.set(0, item));
         return result.get(0);
     }
 
     /**
      * Метод поиска заявки по имени
+     *
      * @param key искомое имя.
      */
     protected List<Item> findByName(String key) {
@@ -51,6 +57,7 @@ public class Tracker {
 
     /**
      * Метод замены заявки по коду
+     *
      * @param id код заменяемой заявки.
      */
     public void replace(String id, Item item) {
@@ -62,6 +69,7 @@ public class Tracker {
 
     /**
      * Метод удаляет заявку по коду
+     *
      * @param id код удаляемой заявки.
      */
     public boolean delete(String id) {
@@ -74,6 +82,7 @@ public class Tracker {
     /**
      * Метод генерирует уникальный ключ для заявки.
      * Так как у заявки нет уникальности полей, имени и описание. Для идентификации нам нужен уникальный ключ.
+     *
      * @return Уникальный ключ.
      */
     private String generateId() {

@@ -4,6 +4,14 @@
     <artifactId>junior</artifactId>
     <packaging>pom</packaging>
     <version>2.0</version>
+    <modules>
+        <module>2_chapter_001</module>
+        <module>chapter_001</module>
+        <module>chapter_002</module>
+        <module>chapter_003</module>
+        <module>chapter_004</module>
+        <module>chess</module>
+    </modules>
     <name>junior</name>
     <url>http://job4j.ru/</url>
 
@@ -13,13 +21,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <modules>
-        <module>chapter_001</module>
-        <module>chapter_002</module>
-        <module>chess</module>
-        <module>chapter_003</module>
-        <module>chapter_004</module>
-    </modules>
 
     <dependencies>
         <dependency>
@@ -33,6 +34,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
         </dependency>
     </dependencies>
 
@@ -108,8 +114,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>10</source>
-                    <target>10</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

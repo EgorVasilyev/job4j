@@ -8,6 +8,7 @@ package ru.job4j.array;
 public class Square {
     /**
      * заполняет массив через цикл элементами от 1 до bound, возведенными в квадрат.
+     *
      * @param bound число.
      * @return результат.
      */

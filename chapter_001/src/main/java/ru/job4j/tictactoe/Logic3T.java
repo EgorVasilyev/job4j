@@ -3,12 +3,15 @@ package ru.job4j.tictactoe;
 public class Logic3T {
     private final Figure3T[][] table;
     private final int size;
+
     public Logic3T(Figure3T[][] table, int size) {
         this.table = table;
         this.size = size;
     }
+
     /**
      * Проверяет победу Х
+     *
      * @return да/нет.
      */
     public boolean isWinnerX() {
@@ -23,6 +26,7 @@ public class Logic3T {
 
     /**
      * Проверяет победу 0
+     *
      * @return да/нет.
      */
     public boolean isWinnerO() {
@@ -37,6 +41,7 @@ public class Logic3T {
 
     /**
      * Проверка победной коомбинации в двумерном массиве.
+     *
      * @param winCoombination двумерный массив с коомбинациями.
      * @return да/нет.
      */
@@ -79,6 +84,7 @@ public class Logic3T {
 
     /**
      * Проверяет линию на истиннность
+     *
      * @param toCheck строка/столбец/диагонали.
      * @return да/нет.
      */

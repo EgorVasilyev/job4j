@@ -9,6 +9,7 @@ package ru.job4j.array;
 public class Check {
     /**
      * Метод проверяет, что все элементы в массиве являются true или false.
+     *
      * @param data Массив булевых значений.
      * @return результат.
      */

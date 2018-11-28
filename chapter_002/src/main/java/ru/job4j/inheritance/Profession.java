@@ -15,11 +15,13 @@ public class Profession {
     }
 
     public String getName() {
-       return this.name;
+        return this.name;
     }
+
     public int getAge() {
         return this.age;
     }
+
     public String getEducation() {
         return this.education;
     }

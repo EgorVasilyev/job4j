@@ -1,8 +1,9 @@
 package ru.job4j.tracker;
-import ru.job4j.models.*;
-import ru.job4j.start.*;
 
-import java.sql.SQLOutput;
+import ru.job4j.models.Item;
+import ru.job4j.start.ConsoleInput;
+import ru.job4j.start.Input;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -41,6 +42,7 @@ public class StartUI {
         this.input = input;
         this.tracker = tracker;
     }
+
     /**
      * Основой цикл программы.
      */
@@ -187,9 +189,11 @@ public class StartUI {
         }
         return zayavka;
     }
+
     public void stop() {
         this.working = false;
     }
+
     /**
      * Запуск программы.
      */
