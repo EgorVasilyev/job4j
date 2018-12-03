@@ -5,15 +5,15 @@ import java.util.NoSuchElementException;
 
 /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
- * @version 1
- * @since 29.11.2018
+ * @version 2
+ * @since 03.12.2018
  */
+
 
 public class IteratorEven implements Iterator {
 
     private final int[] array;
     private int index = 0;
-    private int count = 0;
 
     public IteratorEven(int[] array) {
         this.array = array;
@@ -21,24 +21,20 @@ public class IteratorEven implements Iterator {
 
     @Override
     public boolean hasNext() {
-        boolean result = false;
-        for (int i = count; i < array.length; i++) {
-            if (array[i] % 2 == 0) {
-                result = true;
-                break;
+        int count = 0;
+        while (index + count < array.length) {
+            if (array[index + count] % 2 == 0) {
+                index = index + count;
+                return true;
             }
+            count++;
         }
-        return result;
+        return false;
     }
 
     public Object next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
-        }
-        count++;
-        while (array[index] % 2 != 0) {
-            index++;
-            count++;
         }
         return array[index++];
     }
