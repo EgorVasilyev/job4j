@@ -46,18 +46,12 @@ public class IteratorEvenTest {
         assertThat(it.hasNext(), is(false));
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void whenNoSuchElementException() {
-        String result = null;
         it.next();
         it.next();
         it.next();
-        try {
-            it.next();
-        } catch (NoSuchElementException nsee) {
-            result = "Even numbers are no more!";
-        }
-        assertThat(result, is("Even numbers are no more!"));
+        it.next();
     }
 
 }
