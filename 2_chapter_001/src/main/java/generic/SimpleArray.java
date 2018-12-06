@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 public class SimpleArray<T> implements Iterable<T> {
     private Object[] array;
     private int index = 0;
-    private int iter = 0;
 
     /**
      * Конструктор.
@@ -40,7 +39,9 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param model элемент.
      */
     public void set(int index, T model) {
-        this.array[index] = model;
+        if (index >= 0 && index <= this.index) {
+            this.array[index] = model;
+        }
     }
 
     /**
@@ -48,8 +49,11 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param index индекс.
      */
     public void delete(int index) {
-        int nextIndex = index + 1;
-        System.arraycopy(array, nextIndex, array, index, array.length - (index + 1));
+        if (index >= 0 && index <= this.index) {
+            int nextIndex = index + 1;
+            System.arraycopy(array, nextIndex, array, index, array.length - (index + 1));
+            this.index--;
+        }
     }
 
     /**
@@ -58,6 +62,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @return элемент типа Т.
      */
     public T get(int index) {
+
         return (T) this.array[index];
     }
 
@@ -68,6 +73,7 @@ public class SimpleArray<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
+            private int iter = 0;
 
             @Override
             public boolean hasNext() {
@@ -76,11 +82,10 @@ public class SimpleArray<T> implements Iterable<T> {
 
             @Override
             public T next() {
-                if (iter < index) {
-                    return (T) array[iter++];
-                } else {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
+                return (T) array[iter++];
             }
         };
     }

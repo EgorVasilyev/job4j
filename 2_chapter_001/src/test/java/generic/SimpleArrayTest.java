@@ -2,6 +2,7 @@ package generic;
 
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,42 +62,45 @@ public class SimpleArrayTest {
     @Test
     public void sequentialHasNextInvocationDoesntAffectRetrievalOrder() {
         SimpleArray<Integer> array = new SimpleArray<Integer>(3);
+        Iterator<Integer> it = array.iterator();
         array.add(4);
         array.add(1);
         array.add(2);
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().next(), is(4));
-        assertThat(array.iterator().next(), is(1));
-        assertThat(array.iterator().next(), is(2));
-        assertThat(array.iterator().hasNext(), is(false));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(4));
+        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(2));
+        assertThat(it.hasNext(), is(false));
     }
 
     @Test
     public void hasNextNextSequentialInvocation() {
         SimpleArray<Integer> array = new SimpleArray<Integer>(3);
+        Iterator<Integer> it = array.iterator();
         array.add(4);
         array.add(1);
         array.add(2);
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().next(), is(4));
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().next(), is(1));
-        assertThat(array.iterator().hasNext(), is(true));
-        assertThat(array.iterator().next(), is(2));
-        assertThat(array.iterator().hasNext(), is(false));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(4));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(1));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(2));
+        assertThat(it.hasNext(), is(false));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void whenNoSuchElementException() {
         SimpleArray<Integer> array = new SimpleArray<Integer>(3);
+        Iterator<Integer> it = array.iterator();
         array.add(4);
         array.add(1);
         array.add(2);
-        array.iterator().next();
-        array.iterator().next();
-        array.iterator().next();
-        array.iterator().next();
+        it.next();
+        it.next();
+        it.next();
+        it.next();
     }
 }
