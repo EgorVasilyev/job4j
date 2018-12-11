@@ -45,6 +45,7 @@ public class AbstractStore<T extends Base> implements Store<T> {
                 if (array.get(i) != null && array.get(i).getId().equals(id)) {
                     array.set(i, model);
                     result = true;
+                    break;
                 }
             }
         }
@@ -61,6 +62,7 @@ public class AbstractStore<T extends Base> implements Store<T> {
             if (array.get(i) != null && array.get(i).getId().equals(id)) {
                 array.delete(i);
                 result = true;
+                break;
             }
         }
         return result;
@@ -75,6 +77,7 @@ public class AbstractStore<T extends Base> implements Store<T> {
         for (int i = 0; i < this.size; i++) {
             if (array.get(i) != null && array.get(i).getId().equals(id)) {
                 resultUser = array.get(i);
+                break;
             }
         }
         return resultUser;
