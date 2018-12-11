@@ -1,5 +1,7 @@
 package list;
 
+import java.util.NoSuchElementException;
+
 /**
  * Класс SimpleArrayList.
  */
@@ -22,6 +24,9 @@ public class SimpleArrayList<E> {
      * Реализовать метод удаления первого элемент в списке.
      */
     public E delete() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
         Node<E> result = this.first;
         this.first = this.first.next;
         this.size--;
@@ -32,6 +37,9 @@ public class SimpleArrayList<E> {
      * Метод получения элемента по индексу.
      */
     public E get(int index) {
+        if (size == 0 || index < 0 || index >= size) {
+            throw new NoSuchElementException();
+        }
         Node<E> result = this.first;
         for (int i = 0; i < index; i++) {
             result = result.next;
