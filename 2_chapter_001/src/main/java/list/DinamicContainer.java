@@ -1,5 +1,6 @@
 package list;
 
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -42,8 +43,7 @@ public class DinamicContainer<T> implements Iterable<T> {
     private void increaseSize() {
         Object[] tempContainer = this.container;
         this.size = this.size + 10;
-        this.container = new Object[size];
-        System.arraycopy(tempContainer, 0, this.container, 0, this.size - 10);
+        this.container = Arrays.copyOf(tempContainer, size);
     }
 
     /**
@@ -65,9 +65,9 @@ public class DinamicContainer<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        int countMod = changed;
         return new Iterator<T>() {
             private int iter = 0;
+            private int countMod = changed;
             @Override
             public boolean hasNext() {
                 if (countMod != changed) {
