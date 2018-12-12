@@ -14,7 +14,7 @@ public class DinamicContainer<T> implements Iterable<T> {
     private Object[] container;
     private int index = 0;
     private int size = 3;
-    protected boolean changed = false;
+    private int changed = 0;
 
 
     /**
@@ -30,13 +30,20 @@ public class DinamicContainer<T> implements Iterable<T> {
      */
     public void add(T model) {
         if (index == this.container.length) {
-            Object[] tempContainer = this.container;
-            this.size = this.size + 10;
-            this.container = new Object[size];
-            System.arraycopy(tempContainer, 0, this.container, 0, this.size - 10);
+            this.increaseSize();
         }
         this.container[index++] = model;
-        changed = true;
+        changed++;
+    }
+
+    /**
+     * Увеличение размера контейнера.
+     */
+    private void increaseSize() {
+        Object[] tempContainer = this.container;
+        this.size = this.size + 10;
+        this.container = new Object[size];
+        System.arraycopy(tempContainer, 0, this.container, 0, this.size - 10);
     }
 
     /**
@@ -45,10 +52,10 @@ public class DinamicContainer<T> implements Iterable<T> {
      * @return элемент типа Т.
      */
     public T get(int index) {
-        T result = null;
-        if (index > 0 && index < this.container.length) {
-            result = (T) this.container[index];
+        if (this.index == 0 || index < 0 || index >= size) {
+            throw new NoSuchElementException();
         }
+        T result = (T) this.container[index];
         return result;
     }
 
@@ -58,20 +65,19 @@ public class DinamicContainer<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        //Обновляем переменную change при создании Итератора.
-        changed = false;
+        int countMod = changed;
         return new Iterator<T>() {
             private int iter = 0;
             @Override
             public boolean hasNext() {
+                if (countMod != changed) {
+                    throw new ConcurrentModificationException();
+                }
                 return (iter < index);
             }
 
             @Override
             public T next() {
-                if (changed) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
