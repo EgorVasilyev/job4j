@@ -9,17 +9,17 @@ import static org.junit.Assert.assertThat;
 
 public class SimpleStackTest {
 
-    private SimpleStack<Integer> linkedList;
+    private SimpleStack<Integer> stack;
 
     @Test(expected = NoSuchElementException.class)
     public void whenAddThreeElementsAndGetFourElementThenNoSuchElemException() {
-        linkedList = new SimpleStack<>();
-        linkedList.push(1);
-        linkedList.push(2);
-        linkedList.push(3);
-        assertThat(linkedList.poll(), is(3));
-        assertThat(linkedList.poll(), is(2));
-        assertThat(linkedList.poll(), is(1));
-        linkedList.poll();
+        stack = new SimpleStack<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        assertThat(stack.poll(), is(3));
+        assertThat(stack.poll(), is(2));
+        assertThat(stack.poll(), is(1));
+        stack.poll();
     }
 }
