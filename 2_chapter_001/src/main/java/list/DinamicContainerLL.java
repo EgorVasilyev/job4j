@@ -60,9 +60,10 @@ public class DinamicContainerLL<E> implements Iterable<E> {
 
     @Override
     public Iterator<E> iterator() {
-        final Node[] iterLink = new Node[] {this.first};
+
 
         return new Iterator<E>() {
+            Node iterLink = DinamicContainerLL.this.first;
             private int iter = 0;
             int countMod = changed;
             @Override
@@ -79,10 +80,10 @@ public class DinamicContainerLL<E> implements Iterable<E> {
                     throw new NoSuchElementException();
                 }
                 if (iter != 0) {
-                    iterLink[0] = iterLink[0].next;
+                    iterLink = iterLink.next;
                 }
                 iter++;
-                return (E) iterLink[0].date;
+                return (E) iterLink.date;
             }
 
         };
