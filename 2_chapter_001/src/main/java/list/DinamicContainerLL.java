@@ -57,7 +57,6 @@ public class DinamicContainerLL<E> implements Iterable<E> {
         return result.date;
     }
 
-
     @Override
     public Iterator<E> iterator() {
 

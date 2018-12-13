@@ -2,49 +2,40 @@ package list;
 /**
  * @author Egor
  * @version 1
- * @since 12.12.2018
+ * @since 13.12.2018
  */
-import java.util.NoSuchElementException;
-
 public class SimpleQueue<T> {
 
-    private int size;
-    private Node<T> first;
+    private DinamicContainerLL<T> stackOne = new DinamicContainerLL<>();
+    private DinamicContainerLL<T> stackTwo = new DinamicContainerLL<>();;
+    private int count;
 
     /**
      * Метод вставляет в начало списка данные.
      */
     public void push(T date) {
-        Node<T> newLink = new Node<>(date);
-        newLink.next = this.first;
-        this.first = newLink;
-        this.size++;
+        if (date != null) {
+            stackOne.add(date);
+            count++;
+        }
     }
 
     /**
      * Метод возвращает последнее значение из связанного списка и удаляет его.
+     * First input first output
      */
     public T poll() {
-        if (size == 0) {
-            throw new NoSuchElementException();
+        for (int i = 0; i < count; i++) {
+            stackTwo.add(stackOne.get(i));
         }
-        Node<T> result = this.first;
-        for (int i = 0; i < size - 1; i++) {
-            result = result.next;
+        T result = stackTwo.delete();
+        //обнуляем первый стек
+        stackOne = new DinamicContainerLL<>();
+        //обновляем первый стек (без первого элемента)
+        for (int j = 0; j < count - 1; j++) {
+            stackOne.add(stackTwo.delete());
         }
-        this.size--;
-        return result.date;
-    }
-
-    /**
-     * Класс предназначен для хранения данных.
-     */
-    private static class Node<T> {
-        T date;
-        Node<T> next;
-
-        Node(T date) {
-            this.date = date;
-        }
+        count--;
+        return result;
     }
 }
