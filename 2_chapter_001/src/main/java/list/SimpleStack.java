@@ -23,4 +23,11 @@ public class SimpleStack<T> {
     public T poll() {
         return stack.delete();
     }
+
+    /**
+     * Обнуление размера списка.
+     */
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
 }

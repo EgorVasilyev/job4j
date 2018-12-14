@@ -6,8 +6,8 @@ package list;
  */
 public class SimpleQueue<T> {
 
-    private DinamicContainerLL<T> stackOne = new DinamicContainerLL<>();
-    private DinamicContainerLL<T> stackTwo = new DinamicContainerLL<>();;
+    private SimpleStack<T> stackOne = new SimpleStack<>();
+    private SimpleStack<T> stackTwo = new SimpleStack<>();;
     private int count;
 
     /**
@@ -15,7 +15,7 @@ public class SimpleQueue<T> {
      */
     public void push(T date) {
         if (date != null) {
-            stackOne.add(date);
+            stackOne.push(date);
             count++;
         }
     }
@@ -25,17 +25,12 @@ public class SimpleQueue<T> {
      * First input first output
      */
     public T poll() {
-        for (int i = 0; i < count; i++) {
-            stackTwo.add(stackOne.get(i));
-        }
-        T result = stackTwo.delete();
-        //обнуляем первый стек
-        stackOne = new DinamicContainerLL<>();
-        //обновляем первый стек (без первого элемента)
-        for (int j = 0; j < count - 1; j++) {
-            stackOne.add(stackTwo.delete());
+        if (stackTwo.isEmpty()) {
+            for (int i = 0; i < count; i++) {
+                stackTwo.push(stackOne.poll());
+            }
         }
         count--;
-        return result;
+        return stackTwo.poll();
     }
 }
