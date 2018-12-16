@@ -56,6 +56,12 @@ public class DinamicContainerLL<E> implements Iterable<E> {
         this.size--;
         return result.date;
     }
+    /**
+     * Обнуление размера списка.
+     */
+    public boolean isEmpty() {
+        return this.size == 0;
+    }
 
     @Override
     public Iterator<E> iterator() {
