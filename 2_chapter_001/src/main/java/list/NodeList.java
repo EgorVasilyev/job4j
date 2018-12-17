@@ -29,7 +29,7 @@ public class NodeList<T> {
             Node slow, fast;
             slow = this.first;
             fast = this.first;
-            while (slow.next != null && fast.next!= null) {
+            while (slow.next != null && fast.next != null) {
                 slow = slow.next;
                 fast = fast.next.next;
                 if (fast == null) {
