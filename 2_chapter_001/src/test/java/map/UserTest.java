@@ -52,7 +52,6 @@ public class UserTest {
     @Test
     public void whenEqualsMirrorShouldTrue() {
 
-        // тест падает, т.к. метод equals не переопределен и сравнивает ссылки, а не поля объектов
 
         Calendar birthday = new GregorianCalendar(1993, 11, 5);
         User first = new User("Egor", 3, birthday);
@@ -68,7 +67,6 @@ public class UserTest {
     @Test
     public void whenEqualsTransitivityShouldTrue() {
 
-        // тест падает, т.к. метод equals не переопределен и сравнивает ссылки, а не поля объектов
 
         Calendar birthday = new GregorianCalendar(1993, 11, 5);
         User first = new User("Egor", 3, birthday);
@@ -86,7 +84,6 @@ public class UserTest {
     @Test
     public void whenEqualsCoherenceShouldTrue() {
 
-        // тест падает, т.к. метод equals не переопределен и сравнивает ссылки, а не поля объектов
 
         Calendar birthday = new GregorianCalendar(1993, 11, 5);
         Calendar birthday1 = new GregorianCalendar(1995, 8, 30);
@@ -149,7 +146,12 @@ public class UserTest {
          * данные объекты будут являться разными ключами.
          * В итоге произойдет запись двух пар ключ-значение в HashMap.
          *
-
+         *  5. Перекрывать и equals и hashCode[#92218]
+         * результат {map.User@57992887=second}
+         * В данном случае переопределены два метода hashCode() и equals(), в которых учитываются поля
+         * ключей first и second. Так как поля одинаковые, то метод hashCode() вернет одинаковые значения
+         * метод equals() вернет true. Таким образом ключи являются одинаковыми и произойдет замена
+         * значения одинаковых ключей при добавлении пары ("first" заменяется на "second").
          */
 
     }
