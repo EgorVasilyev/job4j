@@ -1,5 +1,6 @@
 package map;
 import java.util.Calendar;
+import java.util.Objects;
 
  /**
  * @author Egor Vasilyev (deseng_pgs@mail.ru)
@@ -37,7 +38,7 @@ public class User {
      public void setBirthday(Calendar calendar) {
          this.birthday = calendar;
      }
-     @Override
+/*     @Override
      public int hashCode() {
          final int prime = 31;
          int result = 13;
@@ -45,5 +46,17 @@ public class User {
          result = prime * result + this.children;
          result = prime * result + ((this.birthday == null) ? 0 : this.birthday.hashCode());
          return result;
+     }*/
+     @Override
+     public boolean equals(Object obj) {
+         if (obj == this) {
+             return true;
+         }
+         if (obj == null || obj.getClass() != this.getClass()) {
+             return false;
+         }
+         User user = (User) obj;
+         return Objects.equals(this.name, user.name) && this.children == user.children
+                 && this.birthday == user.birthday;
      }
 }
