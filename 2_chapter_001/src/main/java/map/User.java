@@ -38,7 +38,7 @@ public class User {
      public void setBirthday(Calendar calendar) {
          this.birthday = calendar;
      }
-     @Override
+/*     @Override
      public int hashCode() {
          final int prime = 31;
          int result = 13;
@@ -46,7 +46,7 @@ public class User {
          result = prime * result + this.children;
          result = prime * result + ((this.birthday == null) ? 0 : this.birthday.hashCode());
          return result;
-     }
+     }*/
      @Override
      public boolean equals(Object obj) {
          if (obj == this) {
