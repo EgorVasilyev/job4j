@@ -37,4 +37,13 @@ public class User {
      public void setBirthday(Calendar calendar) {
          this.birthday = calendar;
      }
+     @Override
+     public int hashCode() {
+         final int prime = 31;
+         int result = 13;
+         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+         result = prime * result + this.children;
+         result = prime * result + ((this.birthday == null) ? 0 : this.birthday.hashCode());
+         return result;
+     }
 }
