@@ -41,6 +41,7 @@ public class HashMap<K, V> implements Iterable<HashMap.Entry<K, V>>  {
             container[newIndex] = new Entry(key, value);
             index++;
             countMod++;
+            checkCAPACITY();
         }
         return result;
     }
@@ -96,7 +97,9 @@ public class HashMap<K, V> implements Iterable<HashMap.Entry<K, V>>  {
             Entry[] second = new Entry[capacity];
             //перехеширование элементов
             for (Entry pair : container) {
-                second[getIndex((K) pair.key)] = pair;
+                if (pair != null) {
+                    second[getIndex((K) pair.key)] = pair;
+                }
             }
             container = Arrays.copyOf(second, capacity);
         }
@@ -125,9 +128,10 @@ public class HashMap<K, V> implements Iterable<HashMap.Entry<K, V>>  {
                 }
                 boolean result = false;
                 int hasNextCount = count;
-                while (hasNextCount < capacity) {
+                while (hasNextCount <= index) {
                     if (container[hasNextCount] != null) {
                         result = true;
+                        count = hasNextCount;
                         break;
                     }
                     hasNextCount++;

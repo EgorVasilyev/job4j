@@ -55,7 +55,7 @@ public class HashMapTest {
     @Test
     public void checkIteratorMethod() {
         assertTrue(hashMap.delete(5));
-        int i = 0;
+        int i = 1;
         Iterator<HashMap.Entry<Integer, String>> iterator = hashMap.iterator();
         while (i < hashMap.getSize()) {
             iterator.next();
@@ -68,10 +68,10 @@ public class HashMapTest {
 
     @Test(expected = NoSuchElementException.class)
     public void checkNoSuchElementsInIteratorMethodWhenCallNext12times() {
-        int i = 0;
+        int i = 1;
         assertTrue(hashMap.delete(5));
         Iterator<HashMap.Entry<Integer, String>> iterator = hashMap.iterator();
-        while (i < 11) {
+        while (i < hashMap.getSize()) {
             iterator.next();
             assertThat(iterator.hasNext(), is(true));
             i++;
