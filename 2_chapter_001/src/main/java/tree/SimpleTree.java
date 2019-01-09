@@ -74,6 +74,13 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
         return rsl;
     }
 
+    /**
+     * Метод getRoot. Получение корневого элемента.
+     * @return Элемент.
+     */
+    public Node<E> getRoot() {
+        return this.root;
+    }
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
