@@ -13,14 +13,12 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
     private Node<E> root;
     private int size = 0;
     private int modCount = 0;
-    private Queue<Node<E>> tree = new LinkedList<>();
     /**
      * Метод SimpleTree. Конструктор.
      * @param root Корневой элемент.
      */
     public SimpleTree(Node<E> root) {
         this.root = root;
-        this.tree.add(root);
         this.size++;
     }
     /**
@@ -41,10 +39,7 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
                 res = true;
                 this.size++;
                 modCount++;
-                this.tree.add(node);
             }
-        } else {
-            this.tree.add(op.get());
         }
         return res;
     }
