@@ -14,7 +14,6 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
     private int size = 0;
     private int modCount = 0;
     private Queue<Node<E>> tree = new LinkedList<>();
-    private Queue<Node<E>> iter = new LinkedList<>();
     /**
      * Метод SimpleTree. Конструктор.
      * @param root Корневой элемент.
@@ -22,7 +21,6 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
     public SimpleTree(Node<E> root) {
         this.root = root;
         this.tree.add(root);
-        this.iter.add(root);
         this.size++;
     }
     /**
@@ -38,16 +36,15 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
         Optional<Node<E>> op;
         op = findBy(parent);
         if (op.isPresent()) {
-            this.tree.add(op.get());
             Node<E> node = new Node<>(child);
             if (op.get().add(node)) {
                 res = true;
                 this.size++;
                 modCount++;
-                this.iter.add(node);
+                this.tree.add(node);
             }
         } else {
-            this.iter.add(op.get());
+            this.tree.add(op.get());
         }
         return res;
     }
@@ -84,6 +81,7 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
+            private Queue<Node<E>> iter = new LinkedList<>(tree);
             private int nextIndex = 0;
             int expectedModCount = modCount;
             /**
