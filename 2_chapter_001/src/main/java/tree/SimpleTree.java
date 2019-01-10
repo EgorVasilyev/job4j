@@ -80,8 +80,10 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
     }
     @Override
     public Iterator<E> iterator() {
+        Queue<Node<E>> iter = new LinkedList<>();
+        iter.add(root);
         return new Iterator<E>() {
-            private Queue<Node<E>> iter = new LinkedList<>(tree);
+
             private int nextIndex = 0;
             int expectedModCount = modCount;
             /**
@@ -105,7 +107,11 @@ public class SimpleTree<E extends Comparable<E>> implements SimpleTreeContainer<
                     throw new NoSuchElementException();
                 }
                 this.nextIndex++;
-                return iter.poll().getValue();
+                Node<E> result = iter.poll();
+                for (Node<E> child : result.leaves()) {
+                    iter.offer(child);
+                }
+                return result.getValue();
             }
         };
     }

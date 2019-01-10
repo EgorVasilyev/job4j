@@ -12,8 +12,8 @@ import static org.junit.Assert.*;
  * 1. Создать элементарную структуру дерева[#92230]
  *
  * @author Egor Vasilyev
- * @since 09.01.2019
- * @version 1
+ * @since 10.01.2019
+ * @version 2
  */
 public class SimpleTreeTest {
     /**
