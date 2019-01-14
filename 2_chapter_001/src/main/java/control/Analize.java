@@ -1,60 +1,33 @@
 package control;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Analize {
     Info info = new Info();
+    HashMap<Integer, User> checkUser = new HashMap<Integer, User>();
+
     public Info diff(List<User> previous, List<User> current) {
-        for (User curUser : current) {
-            boolean addResult = false;
-            for (User prevUser : previous) {
-                if (curUser.id == prevUser.id) {
-                    addResult = true;
-                    break;
-                }
-            }
-            if (!addResult) {
-                info.added++;
-            }
-        }
-
-        for (User prevUser : previous) {
-            for (User curUser : current) {
-                if (prevUser.id == curUser.id && curUser.changedName) {
-                    info.changed++;
-                }
-            }
-        }
-
-        for (User prevUser : previous) {
-            boolean delResult = false;
-            for (User curUser : current) {
-                if (prevUser.id == curUser.id) {
-                    delResult = true;
-                    break;
-                }
-            }
-            if (!delResult) {
+        current.forEach(user -> checkUser.put(user.id, user));
+        for (User user : previous) {
+            User result = checkUser.remove(user.id);
+            if (result == null) {
                 info.deleted++;
+            } else if (!result.name.equals(user.name)) {
+                info.changed++;
             }
         }
+        info.added = checkUser.size();
+        checkUser.clear();
         return info;
     }
 
     public static class User {
         int id;
         String name;
-        boolean changedName;
         public User(int id, String name) {
             this.id = id;
             this.name = name;
-        }
-        public void setName(String newName) {
-            this.name = newName;
-            changedName = true;
-        }
-        public void refreshStatusName() {
-            changedName = false;
         }
     }
 
