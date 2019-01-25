@@ -10,7 +10,6 @@ public class CoffeeMachine {
             coins.add(new Integer("2"));
             coins.add(new Integer("5"));
             coins.add(new Integer("10"));
-
         int remainingChange = value - price;
         Iterator it = coins.descendingIterator();
         while (remainingChange != 0) {
@@ -19,7 +18,6 @@ public class CoffeeMachine {
             if (count != 0) {
                 remainingChange -= addMonets(count, coin);
             }
-
         }
         int[] change = new int[changesList.size()];
         for (int i = 0; i < changesList.size(); i++) {
@@ -35,13 +33,5 @@ public class CoffeeMachine {
             count--;
         }
         return sum;
-    }
-
-    public static void main(String[] args) {
-        CoffeeMachine coffee = new CoffeeMachine();
-        int[] result = coffee.changes(100, 54);
-        for (int coin : result) {
-            System.out.println(coin);
-        }
     }
 }
