@@ -11,8 +11,7 @@ import java.util.Iterator;
 @ThreadSafe
 public class ThreadSafeDinamicContainer<T> implements Iterable<T>, Cloneable {
     @GuardedBy("this")
-    DinamicContainer<T> array;
-    DinamicContainer<T> copyArray;
+    private DinamicContainer<T> array;
 
     public ThreadSafeDinamicContainer() {
         this.array = new DinamicContainer<T>();
@@ -45,7 +44,7 @@ public class ThreadSafeDinamicContainer<T> implements Iterable<T>, Cloneable {
      * @return Копия коллекции.
      */
     private synchronized DinamicContainer<T> copy() {
-        copyArray = new DinamicContainer<>();
+        DinamicContainer<T> copyArray = new DinamicContainer<>();
         for (T value : this.array) {
             copyArray.add(value);
         }
