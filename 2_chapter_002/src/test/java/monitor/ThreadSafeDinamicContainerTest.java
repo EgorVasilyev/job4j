@@ -13,7 +13,7 @@ public class ThreadSafeDinamicContainerTest {
      */
     @Test
     public void testIteratorInOneThread() {
-        ThreadSafeDinamicContainer<Integer> array = new ThreadSafeDinamicContainer<>();
+        ThreadSafeDinamicContainer<Integer> array = new ThreadSafeDinamicContainer<Integer>();
         array.add(1);
         array.add(2);
         array.add(3);
@@ -36,7 +36,7 @@ public class ThreadSafeDinamicContainerTest {
      */
     @Test
     public void testIteratorMultiThread() {
-        ThreadSafeDinamicContainer<Integer> array = new ThreadSafeDinamicContainer<>();
+        ThreadSafeDinamicContainer<Integer> array = new ThreadSafeDinamicContainer<Integer>();
         array.add(1);
         array.add(2);
         array.add(3);
