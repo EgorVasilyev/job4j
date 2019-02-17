@@ -10,14 +10,22 @@ public class SimpleBlockingQueueTest {
         Thread consumer = new Thread(() -> {
             int i = 1;
             while (true) {
-                queue.offer(i++);
+                try {
+                    queue.offer(i++);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         consumer.setName("Consumer");
 
         Thread producer = new Thread(() -> {
             while (true) {
-                queue.poll();
+                try {
+                    queue.poll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         producer.setName("Producer");
