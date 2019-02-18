@@ -9,22 +9,24 @@ public class SimpleBlockingQueueTest {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>(5);
         Thread consumer = new Thread(() -> {
             int i = 1;
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     queue.offer(i++);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
         consumer.setName("Consumer");
 
         Thread producer = new Thread(() -> {
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     queue.poll();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -33,7 +35,9 @@ public class SimpleBlockingQueueTest {
         consumer.start();
         producer.start();
 
-        producer.join();
+        Thread.sleep(1000);
+        consumer.interrupt();
+        producer.interrupt();
     }
 
 }
