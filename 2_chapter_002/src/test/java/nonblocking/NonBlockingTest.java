@@ -1,6 +1,5 @@
 package nonblocking;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -61,11 +60,12 @@ public class NonBlockingTest {
             }
         });
         t3.setName("Thread3");
+
         Thread t4 = new Thread(() -> {
             try {
                 //блок if для наглядности, что потоки запущены совместно
                 if (t3.getState() == Thread.State.RUNNABLE) {
-                    System.out.println("Threads started together\n");
+                    System.out.println("Threads 3 and 4 started together\n");
                     queue.update(new Base(0, queue.get(0).version));
                 }
             } catch (OptimisticException e) {
@@ -85,14 +85,16 @@ public class NonBlockingTest {
 
         //для наглядности
         Thread.sleep(500);
-        System.out.println("finish version is " + queue.get(0).version);
+        System.out.println("finish model version is " + queue.get(0).version);
+        System.out.println();
 
         assertThat(queue.size(), is(3));
         assertThat(queue.get(0).version, is(1));
-        Assert.assertThat(ex.get().getMessage(), is("Data already updated by another thread!"));
 
-        //все что ниже еще не доделано, пока проверяю только update
-       /* Thread t5 = new Thread(() -> {
+        assertThat(ex.get().getMessage(), is("Data already updated by another thread!"));
+
+        Thread.sleep(500);
+        Thread t5 = new Thread(() -> {
             try {
                 queue.delete(new Base(0, queue.get(0).version));
             } catch (OptimisticException e) {
@@ -104,7 +106,11 @@ public class NonBlockingTest {
         t5.setName("Thread5");
         Thread t6 = new Thread(() -> {
             try {
-                queue.delete(new Base(0, queue.get(0).version));
+                //блок if для наглядности, что потоки запущены совместно
+                if (t5.getState() == Thread.State.RUNNABLE) {
+                    System.out.println("Threads started together\n");
+                    queue.delete(new Base(0, queue.get(0).version));
+                }
             } catch (OptimisticException e) {
                 System.out.println("Thread6 interrupt");
                 ex.set(e);
@@ -112,11 +118,14 @@ public class NonBlockingTest {
             }
         });
         t6.setName("Thread6");
+
         t5.start();
         t6.start();
+
         t5.join();
         t6.join();
+
+        Thread.sleep(500);
         assertThat(queue.size(), is(2));
-        Assert.assertThat(ex.get().getMessage(), is("Data already deleted by another thread!"));*/
     }
 }

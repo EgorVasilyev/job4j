@@ -18,9 +18,9 @@ public class NonBlocking {
      */
     public void update(Base model) {
         this.cache.computeIfPresent(model.id, (Integer k, Base v) -> {
-                    System.out.format("this occurs in the %s:\n", Thread.currentThread().getName());
-                    System.out.format("version from CACHE = %s\n", v.version);
-                    System.out.format("version of model-PARAMETR = %s\n", model.version);
+                    System.out.format("TRY UPDATE in the %s:\n", Thread.currentThread().getName());
+                    System.out.format("UPD: version from CACHE = %s\n", v.version);
+                    System.out.format("UPD: version of model-PARAMETR = %s\n", model.version);
                     if (v.equals(model)) {
                         ++model.version;
                         System.out.format("update id = %s from ver.%s to %s by %s\n\n",
@@ -38,22 +38,31 @@ public class NonBlocking {
      * Метод delete. Удаление элемента из коллекции.
      * @param model Элемент.
      */
-   /* public void delete(Base model){
-        System.out.println(this.cache.computeIfPresent(model.id, (Integer k, Base v) -> {
-            Base result = model;
-            if (model.equals(v)) {
-                result = new Base(model.id, ++model.version);
-                this.cache.remove(model.id);
-                System.out.println("deleted id = " + v.id + " by " + Thread.currentThread().getName());
-            }
-            return result;
-        }));
-        if (!this.cache.contains(model)){
-            System.out.println(true);
-            // System.out.println("id = " + model.id + " is did not delete by " + Thread.currentThread().getName());
-            // throw new OptimisticException("Data already deleted by another thread!");
+    public void delete(Base model){
+        System.out.format("DELETING occurs in the %s:\n", Thread.currentThread().getName());
+        if (this.cache.containsKey(model.id)) {
+            this.cache.remove(model.id);
+            System.out.println("deleted id = " + model.id + " by " + Thread.currentThread().getName());
         }
-    }*/
+
+
+/*        this.cache.computeIfPresent(model.id, (Integer k, Base v) -> {
+                    System.out.format("DELETING occurs in the %s:\n", Thread.currentThread().getName());
+                    System.out.format("DEL: version from CACHE = %s\n", v.version);
+                    System.out.format("DEL: version of model-PARAMETR = %s\n", model.version);
+                    if (v.equals(model)) {
+                        ++model.version;
+                        this.cache.remove(model.id);
+                        System.out.println("deleted id = " + model.id + " by " + Thread.currentThread().getName());
+                    } else {
+                        System.out.format("model with id = %s is DID NOT delete by %s\n\n",
+                                model.id, Thread.currentThread().getName());
+                        throw new OptimisticException("Data already updated by another thread!");
+                    }
+                    return model;
+                }
+        );*/
+    }
     /**
      * Метод size. Размер коллекции.
      * @return model Элемент.
@@ -67,7 +76,6 @@ public class NonBlocking {
      * @return Элемент.
      */
     public Base get(int id) {
-        //System.out.println("get id=" + id);
         Optional<Base> res = Optional.of(this.cache.get(id));
         return res.orElseGet(null);
     }
