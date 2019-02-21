@@ -18,21 +18,19 @@ public class NonBlocking {
      */
     public void update(Base model) {
         this.cache.computeIfPresent(model.id, (Integer k, Base v) -> {
-                    Base resultModel;
                     System.out.format("this occurs in the %s:\n", Thread.currentThread().getName());
                     System.out.format("version from CACHE = %s\n", v.version);
                     System.out.format("version of model-PARAMETR = %s\n", model.version);
                     if (v.equals(model)) {
-                        resultModel = new Base(model.id, model.version + 1);
-                        this.cache.put(model.id, resultModel);
+                        ++model.version;
                         System.out.format("update id = %s from ver.%s to %s by %s\n\n",
-                                v.id, v.version, resultModel.version, Thread.currentThread().getName());
+                                v.id, v.version, model.version, Thread.currentThread().getName());
                     } else {
                         System.out.format("model with id = %s is DID NOT update by %s\n\n",
                                 model.id, Thread.currentThread().getName());
                         throw new OptimisticException("Data already updated by another thread!");
                     }
-                    return resultModel;
+                    return model;
                 }
         );
     }
