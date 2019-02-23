@@ -28,7 +28,7 @@ public class SimpleBlockingQueue<T> {
             wait();
         }
         queue.offer(value);
-        System.out.println("offer = " + value);
+        System.out.println("offer = " + value.toString());
         notify();
     }
 
@@ -39,7 +39,7 @@ public class SimpleBlockingQueue<T> {
         }
         T result = queue.poll();
         notify();
-        System.out.println("poll = " + result);
+        System.out.println("poll = " + result.toString());
         return result;
     }
 
@@ -48,5 +48,8 @@ public class SimpleBlockingQueue<T> {
     }
     public synchronized boolean isEmpty() {
         return queue.isEmpty();
+    }
+    public synchronized int size() {
+        return queue.size();
     }
 }
