@@ -9,9 +9,10 @@ import java.util.List;
  * Class ThreadPool - Пул потоков.
  */
 public class ThreadPool {
-    private final List<Thread> threads = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(100);
-    private final Object threadLock = new Object();
+    //список потоков
+    private final List<Task> threads = new LinkedList<Task>();
+    //очередь заданий
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<Runnable>(100);
 
     public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
@@ -24,15 +25,12 @@ public class ThreadPool {
      * @param job Задание.
      */
     public void work(Runnable job) {
-        synchronized (threadLock) {
             try {
                 this.tasks.offer(job);
-                threadLock.notify();
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
-        }
     }
     /**
      * Метод shutdown. Остановка пула.
@@ -49,13 +47,16 @@ public class ThreadPool {
     public int size() {
         return this.tasks.size();
     }
-
-    public List<Thread> getThreads() {
+    /**
+     * Метод getThreads. Получение списка потоков.
+     * @return Список потоков.
+     */
+    public List<Task> getThreads() {
         return this.threads;
     }
 
     /**
-     * Class Task - Пул потоков.
+     * Class Task - Получение задания.
      */
     private class Task extends Thread {
         public Task(int i) {
@@ -67,17 +68,12 @@ public class ThreadPool {
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
-                synchronized (threadLock) {
                     try {
-                        if (tasks.isEmpty()) {
-                            threadLock.wait();
-                        }
                         tasks.poll().run();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                         Thread.currentThread().interrupt();
                     }
-                }
             }
         }
     }
