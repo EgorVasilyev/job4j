@@ -55,7 +55,7 @@ public class ThreadPoolTest {
         System.out.println();
 
         for (int i = 0; i < 10; i++) {
-            threadPool.work(new Job((i+1)*10));
+            threadPool.work(new Job((i + 1) * 10));
         }
 
         threadPool.shutdown();

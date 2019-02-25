@@ -38,7 +38,7 @@ public class NonBlocking {
      * Метод delete. Удаление элемента из коллекции.
      * @param model Элемент.
      */
-    public void delete(Base model){
+    public void delete(Base model) {
         System.out.format("DELETING occurs in the %s:\n", Thread.currentThread().getName());
         if (this.cache.containsKey(model.id)) {
             this.cache.remove(model.id);

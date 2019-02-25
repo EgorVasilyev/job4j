@@ -18,11 +18,15 @@ public class Base {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         Base base = (Base) o;
-        return this.id == base.id &&
-                this.version == base.version;
+        return this.id == base.id
+                && this.version == base.version;
     }
 
     @Override
@@ -32,9 +36,9 @@ public class Base {
 
     @Override
     public String toString() {
-        return "Base{" +
-                "id=" + id +
-                ", version=" + version +
-                '}';
+        return "Base{"
+                + "id=" + id
+                + ", version=" + version
+                + '}';
     }
 }
