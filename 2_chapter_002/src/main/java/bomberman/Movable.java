@@ -17,7 +17,7 @@ public interface Movable {
         return result;
     }
 
-    boolean move(Cell source, Cell dest, int sizeOfBoard) throws InterruptedException;
+    Cell move(Cell source, Cell dest, int sizeOfBoard) throws InterruptedException;
 
     /*class IllegalMoveException extends RuntimeException {
         public IllegalMoveException(String message) {
