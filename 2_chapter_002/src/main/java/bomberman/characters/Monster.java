@@ -1,4 +1,4 @@
-package bomberman.Characters;
+package bomberman.characters;
 
 import bomberman.Cell;
 

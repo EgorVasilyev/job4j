@@ -36,8 +36,8 @@ public class Cell {
             return false;
         }
         Cell cell = (Cell) o;
-        return x == cell.x &&
-                y == cell.y;
+        return x == cell.x
+                && y == cell.y;
     }
 
     @Override
