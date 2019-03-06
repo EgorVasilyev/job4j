@@ -15,5 +15,5 @@ public interface Movable {
         return result;
     }
 
-    Cell move(Cell source, Cell dest) throws InterruptedException;
+    boolean move(Cell source, Cell dest) throws InterruptedException;
 }

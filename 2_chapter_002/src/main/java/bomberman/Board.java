@@ -1,20 +1,21 @@
 package bomberman;
 
-import bomberman.characters.*;
+import bomberman.characters.Bomberman;
+import bomberman.characters.Hero;
+import bomberman.characters.Monster;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Board implements Movable {
     private final ReentrantLock[][] board;
-    private final List<Thread> threads;
+    private Thread threadBomberman;
     private final List<Hero> characters;
     private final int size;
-    private boolean stopShowBoard;
+    private boolean stop;
     /**
      * Конструктор. Инициализация полей.
      * @param size - размер доски
@@ -27,20 +28,18 @@ public class Board implements Movable {
             this.size = size;
         }
         this.board = new ReentrantLock[this.size][this.size];
-        this.threads = new ArrayList<>();
         this.characters = characters;
         for (int i = 0; i < this.size; i++) {
             for (int j = 0; j < this.size; j++) {
                 this.board[i][j] = new ReentrantLock();
             }
         }
+        System.out.println("Adding blocks...");
         for (int i = 0; i < size / 5; i++) {
             try {
-                System.out.println("Добавление БЛОКОВ в конструкторе:");
-
                 Cell freeCell = getFreeCell();
                 this.board[freeCell.getX()][freeCell.getY()].tryLock();
-                System.out.println(" блок поставлен на клетку [" + freeCell.getX() + "][" + freeCell.getY() + "] - "
+                System.out.println(" Cell-block is locked: [" + freeCell.getX() + "][" + freeCell.getY() + "] - "
                         + this.board[freeCell.getX()][freeCell.getY()].isLocked());
 
             } catch (InterruptedException e) {
@@ -51,35 +50,20 @@ public class Board implements Movable {
         System.out.println("----------------------------constructor_FINISH----------------------------------------");
     }
     /**
-     * Получение двумерного массива.
+     * Получение псевдографики-состояния двумерного массива.
      */
-    public void getStateOfBoard(int millis) {
-        stopShowBoard = false;
-        Thread showBoard = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Thread.sleep(millis);
-                    if (stopShowBoard) {
-                        Thread.currentThread().interrupt();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
+    public void getStateOfBoard() {
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
+                if (this.board[i][j].isLocked()) {
+                    System.out.print(" 0 ");
+                } else {
+                    System.out.print(" - ");
                 }
-                for (int i = 0; i < this.size; i++) {
-                    for (int j = 0; j < this.size; j++) {
-                        if (this.board[i][j].isLocked()) {
-                            System.out.print(" 0 ");
-                        } else {
-                            System.out.print(" - ");
-                        }
-                    }
-                    System.out.println();
-                }
-                System.out.println();
             }
-        });
-        showBoard.start();
+            System.out.println();
+        }
+        System.out.println();
     }
     /**
      * Проверка блокировки клетки.
@@ -109,13 +93,9 @@ public class Board implements Movable {
      * @return - новая клетка source для hero
      */
     @Override
-    public Cell move(Cell source, Cell dest) throws InterruptedException {
-        try {
-            this.board[dest.getX()][dest.getY()].tryLock(500, TimeUnit.MILLISECONDS);
-        } finally {
-            this.board[source.getX()][source.getY()].unlock();
-        }
-        return dest;
+    public boolean move(Cell source, Cell dest) throws InterruptedException {
+        return Movable.wayIsRight(source, dest, this.size)
+                && this.board[dest.getX()][dest.getY()].tryLock(500, TimeUnit.MILLISECONDS);
     }
     /**
      * Изменение следующей клетки на произвольную
@@ -140,7 +120,6 @@ public class Board implements Movable {
                 dest.setX(source.getX());
                 dest.setY(source.getY() - 1);
         }
-        //      System.out.println("dest = " + dest.toString());
         return dest;
     }
     /**
@@ -163,94 +142,134 @@ public class Board implements Movable {
                 newDest.setY(newDest.getY() + 1);
                 break;
             default:
-                System.out.println("Направление некорреткно!");
+                System.out.println("Incorrect buttom!");
                 break;
         }
         return newDest;
     }
     /**
+     * Проверка, свободна ли клетка для героя и не находится ли она за границами доски.
+     * Если условие не выполняется, то устанавливаем герою рандомную свободную клетку.
+     */
+    private void checkCorrectPut(Hero hero) {
+        while (cellIsLock(hero.getCell())
+                || hero.getCell().getX() < 0
+                || hero.getCell().getX() >= this.size
+                || hero.getCell().getY() < 0
+                || hero.getCell().getY() >= this.size) {
+            try {
+                System.out.println("Incorrect cell for " + hero.getName() + ". Changing cell...");
+                hero.setCell(getFreeCell());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+    /**
      * Добавление потоков в список потоков и их запуск.
      */
     public void runGame() {
+        List<Thread> threadsForMonsters = new ArrayList<>();
+        int numberOfMonsterThread = 0;
         for (Hero hero : this.characters) {
-            if (cellIsLock(hero.getCell())
-                    || hero.getCell().getX() < 0
-                    || hero.getCell().getX() >= this.size
-                    || hero.getCell().getY() < 0
-                    || hero.getCell().getY() >= this.size) {
-                System.out.println("bad Cell in constructor");
-                try {
-                    hero.setCell(getFreeCell());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
-            }
-            this.threads.add(
-                    new Thread(() -> {
-                        while (this.board[hero.getCell().getX()][hero.getCell().getY()].isLocked()) {
-                            try {
-                                hero.setCell(getFreeCell());
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                Thread.currentThread().interrupt();
-                            }
-                        }
+            if ("Bomberman".equals(hero.getName())) {
+                this.threadBomberman = new Thread(() -> {
+                    try {
+                        checkCorrectPut(hero);
                         this.board[hero.getCell().getX()][hero.getCell().getY()].tryLock();
-                        try {
-                            while (!Thread.currentThread().isInterrupted()) {
-                                Thread.sleep(500);
-                                Cell newSource;
-                                Cell dest;
-                                if ("Bomberman".equals(hero.getName())) {
-                                    boolean result;
-                                    do {
-                                        System.out.println("Введи направление:");
-                                        Scanner in = new Scanner(System.in);
-                                        dest = userDest(hero.getCell(), in.nextInt());
-                                        result = Movable.wayIsRight(hero.getCell(), dest, this.size)
-                                                && !this.board[dest.getX()][dest.getY()].isLocked();
-                                    }
-                                    while (!result);
-                                } else {
-                                    boolean result;
-                                    dest = this.autoDest(hero.getCell());
-                                    do {
-                                        result = Movable.wayIsRight(hero.getCell(), dest, this.size)
-                                                && !this.board[dest.getX()][dest.getY()].isLocked();
-                                        if (!result) {
-                                            dest = this.autoDest(hero.getCell());
-                                        }
-                                    }
-                                    while (!result);
+                        while (!Thread.currentThread().isInterrupted()) {
+                            Cell newSource;
+                            Cell dest;
+                            boolean result;
+                            do {
+                                /*System.out.println("Enter the direction: 2 - down, 8 - up, 6 - right, 4 - left");
+                                dest = userDest(hero.getCell(), new Scanner(System.in).nextInt());*/
+                                dest = this.autoDest(hero.getCell());
+                                result = move(hero.getCell(), dest);
+                                if (!result) {
+                                    System.out.println("Incorrect direction!");
                                 }
-                                newSource = move(hero.getCell(), dest);
-                                // System.out.println("new Source Cell для " + hero.getName() + " = " + newSource);
-                                hero.setCell(newSource);
-
                             }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            Thread.currentThread().interrupt();
+                            while (!result);
+                            board[hero.getCell().getX()][hero.getCell().getY()].unlock();
+                            newSource = dest;
+                            // System.out.println("new Source Cell для " + hero.getName() + " = " + newSource);
+                            hero.setCell(newSource);
+                            //запуск отображения состояния массива, когда добавлен только Bomberman:
+                            //this.getStateOfBoard();
                         }
-                    })
-            );
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                    }
+                });
+                this.threadBomberman.setName("Thread for Bomberman");
+                this.threadBomberman.start();
+
+                Thread checkHasQueuedThreads = new Thread(() -> {
+                    while(true) {
+                          System.out.println("checking:" + this.board[hero.getCell().getX()][hero.getCell().getY()].hasQueuedThreads());
+                        if (this.board[hero.getCell().getX()][hero.getCell().getY()].hasQueuedThreads()) {
+                            this.threadBomberman.interrupt();
+                            System.out.println(this.threadBomberman.getName() + " is " + this.threadBomberman.isInterrupted());
+                        }
+                    }
+                });
+                checkHasQueuedThreads.setDaemon(true);
+                checkHasQueuedThreads.start();
+
+            } else {
+                threadsForMonsters.add(
+                new Thread(() -> {
+                    try {
+                        checkCorrectPut(hero);
+                        this.board[hero.getCell().getX()][hero.getCell().getY()].tryLock();
+                        while (true) {
+                            Cell newSource;
+                            Cell dest;
+                            boolean result;
+                            do {
+                                dest = this.autoDest(hero.getCell());
+                                result = move(hero.getCell(), dest);
+                            }
+                            while (!result);
+                            //   System.out.println("3 " + cellIsLock(hero.getCell()) + " " + hero.getCell().toString() + "  current Thread is " + Thread.currentThread().getName());
+                            board[hero.getCell().getX()][hero.getCell().getY()].unlock();
+                            //   System.out.println("4 " + cellIsLock(hero.getCell()));
+                            newSource = dest;
+                            // System.out.println("new Source Cell для " + hero.getName() + " = " + newSource);
+                            hero.setCell(newSource);
+                            //запуск отображения состояния массива:
+                            this.getStateOfBoard();
+                           // Thread.sleep(1000);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                    }
+                }));
+            }
         }
-        this.threads.forEach(thread -> {
+        for (Thread thread : threadsForMonsters) {
+
+            numberOfMonsterThread++;
+            thread.setName("Thread for Monster " + numberOfMonsterThread);
+            thread.setDaemon(true);
+            thread.start();
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            thread.start();
-        });
+        }
     }
+
     /**
-     * Прерывание потоков.
+     * Завершение игры. Прерывание потока для бомбермена.
      */
     public void stopGame() {
-        stopShowBoard = true;
-        this.threads.forEach(Thread::interrupt);
+        this.threadBomberman.interrupt();
     }
 
     public static void main(String[] args) {
@@ -259,19 +278,17 @@ public class Board implements Movable {
         List<Hero> characters = new ArrayList<Hero>();
         characters.add(bomberman);
         characters.add(monster);
-        Board board = new Board(10, characters);
+        //     characters.add(monster);
+
+        Board board = new Board(5, characters);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         board.runGame();
-        //запуск отображения состояния массива
-        //параметр 1 - время задержки отображения
-        //параметр 2 - время показа
-        board.getStateOfBoard(400);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
