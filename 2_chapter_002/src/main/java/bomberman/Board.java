@@ -4,9 +4,7 @@ import bomberman.characters.Bomberman;
 import bomberman.characters.Hero;
 import bomberman.characters.Monster;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,15 +13,14 @@ public class Board implements Movable {
     private Thread threadBomberman;
     private final List<Hero> characters;
     private final int size;
-    private boolean stop;
     /**
      * Конструктор. Инициализация полей.
      * @param size - размер доски
      * @param characters - список персонажей
      */
     public Board(final int size, final List<Hero> characters) {
-        if (size < 3) {
-            this.size = 3;
+        if (size < 5) {
+            this.size = 5;
         } else {
             this.size = size;
         }
@@ -42,6 +39,19 @@ public class Board implements Movable {
                     + this.board[freeCell.getX()][freeCell.getY()].isLocked());
 
         }
+
+        //this part of code checks start cells for sameness
+        Set<Cell> uniqueCells = new HashSet<Cell>();
+        for (Hero hero : this.characters) {
+            System.out.println();
+            System.out.println(hero.getName() + " start " + hero.getCell().toString());
+            while (!uniqueCells.add(hero.getCell())) {
+                System.out.println("Cell is incorrect! Changing start cell for hero in the constructor:");
+                hero.setCell(getFreeCell());
+                System.out.println(hero.getName() + " start " + hero.getCell().toString() + " after changing.");
+            }
+        }
+        System.out.println();
         System.out.println("----------------------------constructor_FINISH----------------------------------------");
     }
     /**
@@ -149,47 +159,112 @@ public class Board implements Movable {
      * Проверка, свободна ли клетка для героя и не находится ли она за границами доски.
      * Если условие не выполняется, то устанавливаем герою рандомную свободную клетку.
      */
-    private void checkCorrectPut(Hero hero) {
-        while (cellIsLock(hero.getCell())
-                || hero.getCell().getX() < 0
-                || hero.getCell().getX() >= this.size
-                || hero.getCell().getY() < 0
-                || hero.getCell().getY() >= this.size) {
-            System.out.println("Incorrect cell for " + hero.getName() + ". Changing cell...");
-            hero.setCell(getFreeCell());
-        }
+    private boolean cellIsCorrect(Cell startCell) {
+        return !cellIsLock(startCell)
+                && startCell.getX() >= 0
+                && startCell.getX() < this.size
+                && startCell.getY() >= 0
+                && startCell.getY() < this.size;
     }
     /**
      * Добавление потоков в список потоков и их запуск.
      */
     public void runGame() {
-        for (Hero hero : this.characters) {
-            this.checkCorrectPut(hero);
-            new Thread(() -> {
+
+        //this part of code starts thread for show state od board in a second
+        Thread showBoard = new Thread(() -> {
+            while(true) {
+                getStateOfBoard();
                 try {
-                    this.board[hero.getCell().getX()][hero.getCell().getY()].tryLock();
-                    while (!Thread.currentThread().isInterrupted()) {
-                        Cell dest;
-                        boolean result;
-                        do {
-                            dest = this.autoDest(hero.getCell());
-                            result = Movable.wayIsRight(hero.getCell(), dest, this.size)
-                                    && move(hero.getCell(), dest);
-                        }
-                        while (!result);
-                        hero.setCell(dest);
-                        //запуск отображения состояния массива, когда добавлен только Bomberman:
-                        this.getStateOfBoard();
-                        Thread.sleep(1000);
-                            /*if (board[hero.getCell().getX()][hero.getCell().getY()].hasQueuedThreads()) {
-                                Thread.currentThread().interrupt();
-                            }*/
-                    }
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    Thread.currentThread().interrupt();
                 }
-            }).start();
+            }
+        });
+        showBoard.setDaemon(true);
+        showBoard.start();
+
+        List<Thread> threadsForMonsters = new ArrayList<>();
+
+        for (Hero hero : this.characters) {
+
+            if ("Bomberman".equals(hero.getName())) {
+                this.threadBomberman = new Thread(() -> {
+                    try {
+                        while (!cellIsCorrect(hero.getCell())
+                                || !this.board[hero.getCell().getX()][hero.getCell().getY()].tryLock()) {
+                            hero.setCell(getFreeCell());
+                        }
+                        while (!Thread.currentThread().isInterrupted()) {
+                            Cell dest;
+                            boolean result;
+                            do {
+                                /*System.out.println("Enter the direction: 2 - down, 8 - up, 6 - right, 4 - left");
+                                dest = userDest(hero.getCell(), new Scanner(System.in).nextInt());*/
+                                dest = this.autoDest(hero.getCell());
+                                result = Movable.wayIsRight(hero.getCell(), dest, this.size)
+                                        && move(hero.getCell(), dest);
+                                if (!result) {
+                                    System.out.println("Incorrect direction!");
+                                }
+                            }
+                            while (!result);
+                            hero.setCell(dest);
+                            Thread.sleep(1000);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                    }
+                });
+                this.threadBomberman.setName("Thread for Bomberman");
+                this.threadBomberman.start();
+
+                //this part of code starts thread for check hasQueuedThreads() for cell
+                Thread checkHasQueuedThreads = new Thread(() -> {
+                    while(true) {
+                        if (this.board[hero.getCell().getX()][hero.getCell().getY()].hasQueuedThreads()) {
+                            this.threadBomberman.interrupt();
+                            System.out.println(this.threadBomberman.getName() + " is " + this.threadBomberman.getState());
+                        }
+                    }
+                });
+                checkHasQueuedThreads.setDaemon(true);
+                checkHasQueuedThreads.start();
+            } else {
+                threadsForMonsters.add(
+                        new Thread(() -> {
+                            try {
+                                while (!cellIsCorrect(hero.getCell())
+                                        || !this.board[hero.getCell().getX()][hero.getCell().getY()].tryLock()) {
+                                    hero.setCell(getFreeCell());
+                                }
+                                while (!Thread.currentThread().isInterrupted()) {
+                                    Cell dest;
+                                    boolean result;
+                                    do {
+                                        dest = this.autoDest(hero.getCell());
+                                        result = Movable.wayIsRight(hero.getCell(), dest, this.size)
+                                                && move(hero.getCell(), dest);
+                                    }
+                                    while (!result);
+                                    hero.setCell(dest);
+                                    Thread.sleep(1000);
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                Thread.currentThread().interrupt();
+                            }
+                        }));
+            }
+        }
+        int numberOfMonsterThread = 1;
+        for (Thread thread : threadsForMonsters) {
+            thread.setName("Thread for Monster " + numberOfMonsterThread);
+            thread.setDaemon(true);
+            thread.start();
+            numberOfMonsterThread++;
         }
     }
 
@@ -203,16 +278,17 @@ public class Board implements Movable {
     public static void main(String[] args) {
         Hero bomberman = new Bomberman(new Cell(0, 0));
         Hero monster = new Monster(new Cell(0, 0));
+        Hero monster2 = new Monster(new Cell(0, 0));
+        Hero monster3 = new Monster(new Cell(0, 0));
         List<Hero> characters = new ArrayList<Hero>();
         characters.add(bomberman);
-        characters.add(bomberman);
-        // characters.add(monster);
-
-        Board board = new Board(3, characters);
-
+        characters.add(monster);
+        characters.add(monster2);
+        characters.add(monster3);
+        Board board = new Board(10, characters);
         board.runGame();
         try {
-            Thread.sleep(100000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
