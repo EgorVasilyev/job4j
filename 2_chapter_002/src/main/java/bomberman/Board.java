@@ -88,7 +88,7 @@ public class Board implements Movable {
             i = new Random().nextInt(this.board.length);
             j = new Random().nextInt(this.board.length);
         }
-        while(this.board[i][j].isLocked());
+        while (this.board[i][j].isLocked());
         return new Cell(i, j);
     }
     /**
@@ -173,7 +173,7 @@ public class Board implements Movable {
 
         //this part of code starts thread for show state od board in a second
         Thread showBoard = new Thread(() -> {
-            while(true) {
+            while (true) {
                 getStateOfBoard();
                 try {
                     Thread.sleep(1000);
@@ -223,7 +223,7 @@ public class Board implements Movable {
 
                 //this part of code starts thread for check hasQueuedThreads() for cell
                 Thread checkHasQueuedThreads = new Thread(() -> {
-                    while(true) {
+                    while (true) {
                         if (this.board[hero.getCell().getX()][hero.getCell().getY()].hasQueuedThreads()) {
                             this.threadBomberman.interrupt();
                             System.out.println(this.threadBomberman.getName() + " is " + this.threadBomberman.getState());
