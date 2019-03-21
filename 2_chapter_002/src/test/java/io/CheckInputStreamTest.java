@@ -5,37 +5,23 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CheckInputStreamTest {
     @Test
-    public void whenAllElementsAreEvenThenTrue() {
-        byte[] array = new byte[]{2, 4, 6, 22};
-        ByteArrayInputStream stream = new ByteArrayInputStream(array);
-        try {
-            assertTrue(CheckInputStream.isEvenNumber(stream));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void whenEvenThenTrue() throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream("123456789123456789123456788".getBytes());
+        assertTrue(CheckInputStream.isEvenNumber(stream));
     }
     @Test
-    public void whenInputStreamContainNullThenFalse() {
-        byte[] array = new byte[]{2, 0, 6, 22};
-        ByteArrayInputStream stream = new ByteArrayInputStream(array);
-        try {
-            assertFalse(CheckInputStream.isEvenNumber(stream));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void whenNotEvenThenFalse() throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream("123456789123456789123456789".getBytes());
+        assertFalse(CheckInputStream.isEvenNumber(stream));
     }
     @Test
-    public void whenInputStreamContainMinusOneThenFalse() {
-        byte[] array = new byte[]{2, 4, 6, -1};
-        ByteArrayInputStream stream = new ByteArrayInputStream(array);
-        try {
-            assertFalse(CheckInputStream.isEvenNumber(stream));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void whenNotNumberThenFalse() throws IOException {
+        ByteArrayInputStream stream = new ByteArrayInputStream("1234567aaaaaaaaa123456788".getBytes());
+        assertFalse(CheckInputStream.isEvenNumber(stream));
     }
 }
