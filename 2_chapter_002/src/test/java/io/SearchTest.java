@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class SearchTest {
     @Test
-    public void whenFoldersContainsTXTFilesThen5files() {
+    public void whenFoldersContainsTXTandINIFilesThen5files() {
         String path = System.getProperty("java.io.tmpdir");
         System.out.println(path);
 
@@ -51,6 +51,6 @@ public class SearchTest {
 
         List<String> exts = Arrays.asList(".txt", ".ini");
 
-        assertTrue(result.removeAll(Search.files(path, exts)));
+        assertTrue(result.removeAll(Search.files(folder1.getPath(), exts)));
     }
 }
