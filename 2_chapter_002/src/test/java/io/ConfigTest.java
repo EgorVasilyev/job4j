@@ -1,6 +1,6 @@
 package io;
 
-import org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -13,33 +13,26 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class ConfigTest {
-    @Test
-    public void testMyConfig() {
-        String path = System.getProperty("java.io.tmpdir");
+    String path = System.getProperty("java.io.tmpdir");
+    @Before
+    public void createTestConfigFile() throws IOException {
         System.out.println(path);
         File testConfig = new File(path + "\\testConfig.txt");
-        BufferedWriter bufferWriter = null;
-        try {
-            assertTrue(testConfig.createNewFile());
-            FileWriter writer = new FileWriter(testConfig);
-            bufferWriter = new BufferedWriter(writer);
-            String testConfigString = "123=321\nasd=dsa\n//testComment\nKo9=9oK"
-                    + "\n/*testComment2*/\nIP=192.168.2.3\ndate=02/04/2019";
-            int index = 0;
-            while (index != 7) {
-                String line = testConfigString.split("\n")[index++];
-                bufferWriter.write(line);
-                bufferWriter.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                bufferWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        assertTrue(testConfig.createNewFile());
+        FileWriter writer = new FileWriter(testConfig);
+        BufferedWriter bufferWriter = new BufferedWriter(writer);
+        String testConfigString = "123=321" + System.lineSeparator()
+                + "asd=dsa" + System.lineSeparator()
+                + "//testComment" + System.lineSeparator()
+                + "Ko9=9oK" + System.lineSeparator()
+                + "/*testComment2*/" + System.lineSeparator()
+                + "IP=192.168.2.3" + System.lineSeparator()
+                + "date=02/04/2019";
+        bufferWriter.write(testConfigString);
+        bufferWriter.close();
+    }
+    @Test
+    public void testMyConfig() {
         Config config = new Config(path + "\\testConfig.txt");
         config.load();
         assertThat(config.value("123"), is("321"));
