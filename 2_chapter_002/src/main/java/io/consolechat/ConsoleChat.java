@@ -1,27 +1,21 @@
-package io;
+package io.consolechat;
 
 import java.io.*;
-import java.util.Random;
 
 /**
  * ConsoleChat - класс консольный чат.
  */
 public class ConsoleChat {
 
-    private BufferedReader bufferReader;
     private BufferedWriter bufferWriter;
     private String emulateConsoleInput;
+    private Answer answer;
 
     public ConsoleChat(String loggerPath, String phrasesPath) {
         try {
-            File logger = new File(loggerPath + "\\logger.txt");
-            this.bufferReader =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    new FileInputStream(phrasesPath), "Cp1251"
-                            )
-                    );
-            FileWriter writer = new FileWriter(logger.getPath(), true);
+            this.answer = new Answer(new File(phrasesPath));
+            FileWriter writer = new FileWriter(
+                    new File(loggerPath + "\\logger.txt").getPath(), true);
             this.bufferWriter = new BufferedWriter(writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +40,6 @@ public class ConsoleChat {
     public void letsChat() throws IOException {
         boolean stopAnswer = false;
         boolean stopChat = false;
-        Object[] phrasesArray = bufferReader.lines().toArray();
         int indexForEmulatedInput = 0;
         try {
             while (!stopChat) {
@@ -57,8 +50,8 @@ public class ConsoleChat {
                     textFromConsole = emulateConsoleInput.split("\n")[indexForEmulatedInput++];
                     System.out.println("user:          " + textFromConsole);
                 }
-                String texttoLowerCase = textFromConsole.toLowerCase();
-                switch (texttoLowerCase) {
+                String textToLowerCase = textFromConsole.toLowerCase();
+                switch (textToLowerCase) {
                     case "закончить":
                         stopChat = true;
                         stopAnswer = true;
@@ -75,10 +68,9 @@ public class ConsoleChat {
                 bufferWriter.newLine();
 
                 if (!stopAnswer) {
-                    int number = new Random().nextInt(phrasesArray.length);
-                    String phrase = (String) phrasesArray[number];
-                    System.out.println("random phrase: " + phrase);
-                    bufferWriter.write("random phrase: " + phrase);
+                    String randomLine = this.answer.randomLine();
+                    System.out.println("random phrase: " + randomLine);
+                    bufferWriter.write("random phrase: " + randomLine);
                     bufferWriter.newLine();
                 }
             }

@@ -1,5 +1,6 @@
 package io;
 
+import io.consolechat.ConsoleChat;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
