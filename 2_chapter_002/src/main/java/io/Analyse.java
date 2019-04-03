@@ -3,8 +3,7 @@ package io;
 import java.io.*;
 
 public class Analyse {
-    public static void unavailable(String source, String target) throws IOException {
-        new File(target).createNewFile();
+    public static void unavailable(String source, String target) {
         boolean serverIsNotWork = false;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
              BufferedWriter bufferWriter = new BufferedWriter(new FileWriter(target))) {
@@ -19,10 +18,12 @@ public class Analyse {
                 }
                 if (serverIsNotWork && (stringLine.startsWith("200 ") || stringLine.startsWith("300 "))) {
                     serverIsNotWork = false;
-                    bufferWriter.write(";" + stringLine.substring(4));
+                    bufferWriter.write(";" + stringLine.substring(4) + ";");
                     bufferWriter.newLine();
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
