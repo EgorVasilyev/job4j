@@ -15,10 +15,10 @@ public class ConsoleChatTest {
     public void test() {
         String path = System.getProperty("java.io.tmpdir");
         System.out.println(path);
-        File folderChat = new File(path + "\\folderChat");
+        File folderChat = new File(path + File.separator + "folderChat");
         assertTrue(folderChat.mkdir());
 
-        File phrases = new File(path + "\\folderChat\\phrases.txt");
+        File phrases = new File(path + File.separator + "folderChat" + File.separator + "phrases.txt");
         BufferedWriter bufferWriter = null;
         try {
             assertTrue(phrases.createNewFile());
@@ -43,8 +43,8 @@ public class ConsoleChatTest {
         }
 
         ConsoleChat chat = new ConsoleChat(
-                path + "\\folderChat",
-                path + "\\folderChat\\phrases.txt",
+                path + File.separator + "folderChat",
+                path + File.separator + "folderChat" + File.separator + "phrases.txt",
                 "первая имитация ввода\nвторая имитация ввода"
                         + "\nстоп\nтретья имитация ввода\nчетвертая имитация ввода\nпродолжить\nзакончить"
         );

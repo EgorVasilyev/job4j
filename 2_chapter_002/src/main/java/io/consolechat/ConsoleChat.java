@@ -1,6 +1,7 @@
 package io.consolechat;
 
 import java.io.*;
+import java.util.HashMap;
 
 /**
  * ConsoleChat - класс консольный чат.
@@ -10,16 +11,46 @@ public class ConsoleChat {
     private BufferedWriter bufferWriter;
     private String emulateConsoleInput;
     private Answer answer;
+    private HashMap<String, Action> actions;
+    private boolean stopAnswer = false;
+    private boolean stopChat = false;
 
     public ConsoleChat(String loggerPath, String phrasesPath) {
         try {
             this.answer = new Answer(new File(phrasesPath));
             FileWriter writer = new FileWriter(
-                    new File(loggerPath + "\\logger.txt").getPath(), true);
+                    new File(loggerPath + File.separator + "logger.txt").getPath(), true);
             this.bufferWriter = new BufferedWriter(writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.actions = new HashMap<>(3);
+        this.createActions();
+    }
+
+    private void createActions() {
+        class AllStop implements Action {
+            @Override
+            public void execute() {
+                stopChat = true;
+                stopAnswer = true;
+            }
+        }
+        class StopAnswer implements Action {
+            @Override
+            public void execute() {
+                stopAnswer = true;
+            }
+        }
+        class ContinueAnswer implements Action {
+            @Override
+            public void execute() {
+                stopAnswer = false;
+            }
+        }
+        this.actions.put("закончить", new AllStop());
+        this.actions.put("стоп", new StopAnswer());
+        this.actions.put("продолжить", new ContinueAnswer());
     }
 
     /**
@@ -38,8 +69,6 @@ public class ConsoleChat {
      * @throws IOException
      */
     public void letsChat() throws IOException {
-        boolean stopAnswer = false;
-        boolean stopChat = false;
         int indexForEmulatedInput = 0;
         try {
             while (!stopChat) {
@@ -51,19 +80,11 @@ public class ConsoleChat {
                     System.out.println("user:          " + textFromConsole);
                 }
                 String textToLowerCase = textFromConsole.toLowerCase();
-                switch (textToLowerCase) {
-                    case "закончить":
-                        stopChat = true;
-                        stopAnswer = true;
-                        break;
-                    case "стоп":
-                        stopAnswer = true;
-                        break;
-                    case "продолжить":
-                        stopAnswer = false;
-                        break;
-                    default:
+
+                if (this.actions.containsKey(textToLowerCase)) {
+                    this.actions.get(textToLowerCase).execute();
                 }
+
                 bufferWriter.write("user:          " + textFromConsole);
                 bufferWriter.newLine();
 
