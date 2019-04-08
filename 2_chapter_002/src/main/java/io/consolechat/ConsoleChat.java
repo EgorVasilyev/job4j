@@ -29,28 +29,16 @@ public class ConsoleChat {
     }
 
     private void createActions() {
-        class AllStop implements Action {
-            @Override
-            public void execute() {
-                stopChat = true;
-                stopAnswer = true;
-            }
-        }
-        class StopAnswer implements Action {
-            @Override
-            public void execute() {
-                stopAnswer = true;
-            }
-        }
-        class ContinueAnswer implements Action {
-            @Override
-            public void execute() {
-                stopAnswer = false;
-            }
-        }
-        this.actions.put("закончить", new AllStop());
-        this.actions.put("стоп", new StopAnswer());
-        this.actions.put("продолжить", new ContinueAnswer());
+        this.actions.put("закончить", () -> {
+            stopChat = true;
+            stopAnswer = true;
+        });
+        this.actions.put("стоп", () -> {
+            stopAnswer = true;
+        });
+        this.actions.put("продолжить", () -> {
+            stopAnswer = false;
+        });
     }
 
     /**
