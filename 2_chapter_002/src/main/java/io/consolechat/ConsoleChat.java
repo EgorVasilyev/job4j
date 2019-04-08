@@ -69,9 +69,7 @@ public class ConsoleChat {
                 }
                 String textToLowerCase = textFromConsole.toLowerCase();
 
-                if (this.actions.containsKey(textToLowerCase)) {
-                    this.actions.get(textToLowerCase).execute();
-                }
+                this.actions.getOrDefault(textToLowerCase, () -> {}).execute();
 
                 bufferWriter.write("user:          " + textFromConsole);
                 bufferWriter.newLine();
