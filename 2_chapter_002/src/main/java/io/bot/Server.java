@@ -53,4 +53,8 @@ public class Server {
             }
         } while (!"выход".equals(ask.toLowerCase()));
     }
+
+/*    public static void main(String[] args) throws IOException {
+        new Server(5000, "C:\\Users\\georg\\AppData\\Local\\Temp\\botOracle.txt").runServer();
+    }*/
 }
