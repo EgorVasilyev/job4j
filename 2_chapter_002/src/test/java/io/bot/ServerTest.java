@@ -31,9 +31,9 @@ public class ServerTest {
     @Test
     public void serverTest() throws IOException {
         String inputString = String.format(
-                "привет%sкак дела?%sвыход"
-                , System.lineSeparator()
-                , System.lineSeparator()
+                "привет%sкак дела?%sвыход",
+                System.lineSeparator(),
+                System.lineSeparator()
         );
         Socket socket = mock(Socket.class);
         ByteArrayInputStream in = new ByteArrayInputStream(inputString.getBytes());
@@ -44,11 +44,11 @@ public class ServerTest {
         server.runServer();
         assertThat(out.toString(), is(
                 String.format(
-                        "Приветствую%s%sВ порядке%s%s"
-                        , System.lineSeparator()
-                        , System.lineSeparator()
-                        , System.lineSeparator()
-                        , System.lineSeparator()
+                        "Приветствую%s%sВ порядке%s%s",
+                        System.lineSeparator(),
+                        System.lineSeparator(),
+                        System.lineSeparator(),
+                        System.lineSeparator()
                 )
                 )
         );

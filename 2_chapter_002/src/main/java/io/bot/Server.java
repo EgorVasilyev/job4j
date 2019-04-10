@@ -18,7 +18,7 @@ public class Server {
                         )
                 );
         String line;
-        while((line = answerBox.readLine()) != null) {
+        while ((line = answerBox.readLine()) != null) {
             String[] questionAndAnswer = line.split("___");
             answers.putIfAbsent(questionAndAnswer[0], questionAndAnswer[1]);
         }

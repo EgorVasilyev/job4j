@@ -14,16 +14,16 @@ public class ClientTest {
     @Test
     public void clientTest() throws IOException {
         String emulateConsoleInput = String.format(
-                "привет%sкак дела?%sвыход"
-                , System.lineSeparator()
-                , System.lineSeparator()
+                "привет%sкак дела?%sвыход",
+                System.lineSeparator(),
+                System.lineSeparator()
         );
         String lineFromServer = String.format(
-                "Приветствую%s%sВ порядке%s%s"
-                , System.lineSeparator()
-                , System.lineSeparator()
-                , System.lineSeparator()
-                , System.lineSeparator()
+                "Приветствую%s%sВ порядке%s%s",
+                System.lineSeparator(),
+                System.lineSeparator(),
+                System.lineSeparator(),
+                System.lineSeparator()
         );
         Socket socket = mock(Socket.class);
         ByteArrayInputStream in = new ByteArrayInputStream(lineFromServer.getBytes());

@@ -69,7 +69,7 @@ public class ConsoleChat {
                 }
                 String textToLowerCase = textFromConsole.toLowerCase();
 
-                this.actions.getOrDefault(textToLowerCase, () -> {}).execute();
+                this.actions.getOrDefault(textToLowerCase, () -> { }).execute();
 
                 bufferWriter.write("user:          " + textFromConsole);
                 bufferWriter.newLine();
