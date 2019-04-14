@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 public class Client {
     private final Socket socket;
-    private String emulateConsoleInput;
 
     public Client(int port, String ip) throws IOException {
         this.socket = new Socket(InetAddress.getByName(ip), port);
@@ -20,23 +19,13 @@ public class Client {
         this.socket = socket;
     }
 
-    public Client(Socket socket, String emulateConsoleInput) {
-        this.emulateConsoleInput = emulateConsoleInput;
-        this.socket = socket;
-    }
-
     public void runClient() throws IOException {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String string;
-        int indexForEmulatedInput = 0;
+        Scanner scanner = new Scanner(System.in);
         do {
-            if (this.emulateConsoleInput == null) {
-                string = new Scanner(System.in).nextLine();
-            } else {
-                string = emulateConsoleInput.split("\n")[indexForEmulatedInput++];
-            }
-            //System.out.println("out: " + string);
+            string = scanner.nextLine();
             out.println(string);
             String str;
             while (!(str = in.readLine()).isEmpty()) {
