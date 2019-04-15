@@ -24,17 +24,22 @@ public class Client {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String string;
         Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
         do {
             string = scanner.nextLine();
             out.println(string);
-            String str;
-            while (!(str = in.readLine()).isEmpty()) {
+            String str = in.readLine();
+            while (!str.isEmpty()) {
                 System.out.println(str);
+                str = in.readLine();
             }
-        } while (true);
+            if (string.toLowerCase().equals("выход")) {
+                exit = true;
+            }
+        } while (!exit);
     }
 
-/*    public static void main(String[] args) throws IOException {
+ /*   public static void main(String[] args) throws IOException {
         new Client(5000, "").runClient();
     }*/
 }
