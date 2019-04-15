@@ -8,43 +8,45 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import static org.hamcrest.core.Is.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ClientTest {
     @Test
     public void clientTest() throws IOException {
-        //эмулируем ввод с консоли
         String consoleInput = String.format(
                 "привет%sвыход",
                 System.lineSeparator()
         );
-        ByteArrayInputStream consoleInputStream = new ByteArrayInputStream(consoleInput.getBytes());
-        System.setIn(consoleInputStream);
-
-        //ловим ответ
-        ByteArrayOutputStream consoleOutputStream = new ByteArrayOutputStream();
-        PrintStream consolePrintStream = new PrintStream(consoleOutputStream);
-        System.setOut(consolePrintStream);
-
-        Socket socket = mock(Socket.class);
-
         String serverInput = String.format(
                 "Приветствую%s%s",
                 System.lineSeparator(),
                 System.lineSeparator()
         );
-        ByteArrayInputStream in = new ByteArrayInputStream(serverInput.getBytes());
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Socket socket = mock(Socket.class);
 
-        //serverInput это то что должен вернуть сервер
+        ByteArrayOutputStream consoleOutputStream = new ByteArrayOutputStream();
+        PrintStream consolePrintStream = new PrintStream(consoleOutputStream);
+        System.setOut(consolePrintStream);
+        ByteArrayInputStream consoleInputStream = new ByteArrayInputStream(consoleInput.getBytes());
+        System.setIn(consoleInputStream);
 
-        when(socket.getInputStream()).thenReturn(in);
-        when(socket.getOutputStream()).thenReturn(out);
+        when(socket.getInputStream()).thenReturn( new ByteArrayInputStream(serverInput.getBytes()));
+        when(socket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
+
         Client client = new Client(socket);
         client.runClient();
-        assertThat(out.toString(), is(consoleInput));
+
+        String expected = String.format(
+                "привет%sПриветствую%sвыход%s",
+                System.lineSeparator(),
+                System.lineSeparator(),
+                System.lineSeparator()
+        );
+
+        assertThat(consoleOutputStream.toString(), is(expected));
         System.setIn(System.in);
         System.setOut(System.out);
     }
