@@ -2,7 +2,7 @@ package io;
 
 import java.util.ArrayList;
 /**
- * Class MainFindFile - Запуск jar архиватора.
+ * Class MainToZip - Запуск jar архиватора.
  */
 public class MainToZip {
     public static void main(String[] args) {
