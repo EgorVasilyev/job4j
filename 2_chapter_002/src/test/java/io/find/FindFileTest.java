@@ -14,6 +14,8 @@ import static org.junit.Assert.assertThat;
 public class FindFileTest {
     private String path = System.getProperty("java.io.tmpdir");
     private String fs = File.separator;
+    private FindFile findFile;
+    private Args args;
     @Before
     public void createFiles() throws IOException {
         System.out.println(path);
@@ -42,8 +44,10 @@ public class FindFileTest {
     }
     @Test
     public void findByNameWithoutExt() throws IOException {
-        FindFile.files(path + fs + "FindFileTest", path + fs + "FindFileTest",
+        args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
                 "file3", false);
+        findFile = new FindFile(args);
+        findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
         String firstLine = br.readLine();
         String secondLine = br.readLine();
@@ -52,16 +56,20 @@ public class FindFileTest {
     }
     @Test
     public void findByFullNameWithExt() throws IOException {
-        FindFile.files(path + fs + "FindFileTest", path + fs + "FindFileTest",
+        args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
                 "file3.txt", false);
+        findFile = new FindFile(args);
+        findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
         String firstLine = br.readLine();
         assertThat(firstLine, is(path + "FindFileTest" + fs + "folder2" + fs + "file3.txt"));
     }
     @Test
     public void findByEndMask() throws IOException {
-        FindFile.files(path + fs + "FindFileTest", path + fs + "FindFileTest",
+        args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
                 "file*", false);
+        findFile = new FindFile(args);
+        findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
         String firstLine = br.readLine();
         String secondLine = br.readLine();
@@ -76,8 +84,10 @@ public class FindFileTest {
     }
     @Test
     public void findByStartMask() throws IOException {
-        FindFile.files(path + fs + "FindFileTest", path + fs + "FindFileTest",
+        args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
                 "*.ini", false);
+        findFile = new FindFile(args);
+        findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
         String firstLine = br.readLine();
         String secondLine = br.readLine();
@@ -86,8 +96,10 @@ public class FindFileTest {
     }
     @Test
     public void findByRegEx() throws IOException {
-        FindFile.files(path + fs + "FindFileTest", path + fs + "FindFileTest",
+        args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
                 "^.*[4].*$", true);
+        findFile = new FindFile(args);
+        findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
         String firstLine = br.readLine();
         String secondLine = br.readLine();

@@ -10,18 +10,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FindFile {
-    /**
-     * Method files. Поиск файлов по каталогу
-     * @param parent Проверяемый каталог
-     * @param target Целевой каталог для результата-списка найденных файлов
-     * @param parameter Параметр поиска (имя, маска или регулярное выражение)
-     * @param parameterIsRegEx Утверждение от пользователя, что параметр является/не является регулярым выражением
-     */
-    public static void files(String parent, String target,
-                             String parameter, boolean parameterIsRegEx) throws IOException {
-        Pattern pt = parameterIsRegexOrMask(parameter, parameterIsRegEx);
-        Queue<File> queue = new LinkedList<File>();
+    private String parent;
+    private String target;
+    private String parameter;
+    private boolean parameterIsRegEx;
+    private Pattern pt;
 
+    public FindFile(Args arguments) {
+        this.parent = arguments.directory();
+        this.target = arguments.output();
+        this.parameter = arguments.name();
+        this.parameterIsRegEx = arguments.regex();
+        this.pt = parameterIsRegexOrMask(parameter, parameterIsRegEx);
+    }
+
+    /**
+     * Method files. Поиск файлов по каталогу.
+     */
+    public void files() throws IOException {
+        Queue<File> queue = new LinkedList<File>();
         File root = new File(parent);
         queue.offer(root);
         try (BufferedWriter bufferWriter = new BufferedWriter(
@@ -48,7 +55,7 @@ public class FindFile {
      * @param parameterIsRegEx Утверждение от пользователя, что параметр является/не является регулярым выражением
      * @return Скомпилированное представление регулярного выражения
      */
-    private static Pattern parameterIsRegexOrMask(String parameter, boolean parameterIsRegEx) {
+    private Pattern parameterIsRegexOrMask(String parameter, boolean parameterIsRegEx) {
         Pattern result = null;
         if (parameterIsRegEx) {
             result = Pattern.compile(parameter);
@@ -76,14 +83,15 @@ public class FindFile {
      * @param pt Скомпилированное представление регулярного выражения
      * @param parameter Параметр поиска - полное имя файла
      */
-    private static boolean requiredName(File checkableFile, Pattern pt, String parameter) {
+    private boolean requiredName(File checkableFile, Pattern pt, String parameter) {
         boolean result;
         if (pt != null) {
             Matcher m = pt.matcher(checkableFile.getName());
             result = m.matches();
         } else {
            // System.out.println("проверка имени - " + checkableFile.getName());
-            if (!(result = checkableFile.getName().equals(parameter)) && checkableFile.getName().contains(".")) {
+            result = checkableFile.getName().equals(parameter);
+            if (!result && checkableFile.getName().contains(".")) {
                 result = checkableFile.getName()
                         .substring(0, checkableFile.getName()
                                 .lastIndexOf(".")

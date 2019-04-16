@@ -32,7 +32,7 @@ public class ClientTest {
         ByteArrayInputStream consoleInputStream = new ByteArrayInputStream(consoleInput.getBytes());
         System.setIn(consoleInputStream);
 
-        when(socket.getInputStream()).thenReturn( new ByteArrayInputStream(serverInput.getBytes()));
+        when(socket.getInputStream()).thenReturn(new ByteArrayInputStream(serverInput.getBytes()));
         when(socket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
 
         Client client = new Client(socket);
