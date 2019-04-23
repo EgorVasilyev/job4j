@@ -16,6 +16,7 @@ public class FindFileTest {
     private String fs = File.separator;
     private FindFile findFile;
     private Args args;
+
     @Before
     public void createFiles() throws IOException {
         System.out.println(path);
@@ -45,7 +46,7 @@ public class FindFileTest {
     @Test
     public void findByNameWithoutExt() throws IOException {
         args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
-                "file3", false);
+                "file3", "false");
         findFile = new FindFile(args);
         findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
@@ -57,7 +58,7 @@ public class FindFileTest {
     @Test
     public void findByFullNameWithExt() throws IOException {
         args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
-                "file3.txt", false);
+                "file3.txt", "false");
         findFile = new FindFile(args);
         findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
@@ -67,7 +68,7 @@ public class FindFileTest {
     @Test
     public void findByEndMask() throws IOException {
         args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
-                "file*", false);
+                "file*", "false");
         findFile = new FindFile(args);
         findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
@@ -85,7 +86,7 @@ public class FindFileTest {
     @Test
     public void findByStartMask() throws IOException {
         args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
-                "*.ini", false);
+                "*.ini", "false");
         findFile = new FindFile(args);
         findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
@@ -97,7 +98,7 @@ public class FindFileTest {
     @Test
     public void findByRegEx() throws IOException {
         args = new Args(path + fs + "FindFileTest", path + fs + "FindFileTest",
-                "^.*[4].*$", true);
+                "^.*[4].*$", "true");
         findFile = new FindFile(args);
         findFile.files();
         BufferedReader br = new BufferedReader(new FileReader(path + fs + "FindFileTest" + fs + "foundFiles.txt"));
