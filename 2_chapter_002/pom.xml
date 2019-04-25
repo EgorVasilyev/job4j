@@ -11,9 +11,6 @@
 
     <artifactId>2_chapter_002</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>2_chapter_003</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>ru.job4j</groupId>
