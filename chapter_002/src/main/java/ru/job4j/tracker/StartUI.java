@@ -28,17 +28,16 @@ public class StartUI {
     /**
      * Хранилище заявок.
      */
-    private final Tracker tracker;
+    private final ITracker tracker;
 
+    private List<Integer> range = new ArrayList<>();
     /**
      * Конструтор инициализирующий поля.
      *
      * @param input   ввод данных.
      * @param tracker хранилище заявок.
      */
-    private List<Integer> range = new ArrayList<Integer>();
-
-    public StartUI(Input input, Tracker tracker) {
+    public StartUI(Input input, ITracker tracker) {
         this.input = input;
         this.tracker = tracker;
     }

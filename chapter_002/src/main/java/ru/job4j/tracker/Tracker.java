@@ -10,12 +10,12 @@ import java.util.Random;
  * @version 2
  * @since 10/11/2018
  */
-public class Tracker {
+public class Tracker implements ITracker{
     private static final Random RN = new Random();
     /**
      * Списочный массив для хранение заявок.
      */
-    private final List<Item> items = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<>();
 
     /**
      * Метод реализаущий добавление заявки в хранилище
@@ -33,7 +33,7 @@ public class Tracker {
      *
      * @param id уникальный ключ.
      */
-    protected Item findById(String id) {
+    public Item findById(String id) {
         ArrayList<Item> result = new ArrayList<>();
         result.add(0, null);
         items.stream()
@@ -47,8 +47,8 @@ public class Tracker {
      *
      * @param key искомое имя.
      */
-    protected List<Item> findByName(String key) {
-        List<Item> result = new ArrayList<Item>();
+    public List<Item> findByName(String key) {
+        List<Item> result = new ArrayList<>();
         items.stream()
                 .filter(item -> item.getName().equals(key))
                 .forEach(result::add);
