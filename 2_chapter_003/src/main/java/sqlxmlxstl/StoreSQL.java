@@ -13,13 +13,15 @@ import java.util.List;
  * Class StoreSQL. Генерация данных в SQLLite.
  */
 public class StoreSQL implements AutoCloseable {
+    private File xmlFile;
     private Connection connect;
     private static final Logger LOG = LogManager.getLogger(StoreSQL.class.getName());
     /**
      * Constructor StoreSQL.
      * @param config Объект, содержащий настройки для подключения к базе.
      */
-    public StoreSQL(Config config) {
+    public StoreSQL(Config config, File targetForXML) {
+        this.xmlFile = targetForXML;
         config.init();
 /*      //for postgres with Config of app.properties
         try {
@@ -47,14 +49,15 @@ public class StoreSQL implements AutoCloseable {
     public void generate(int size) {
         createEntryTable();
         if (size > 0) {
-            for (int i = 1; i <= size; i++) {
-                try (PreparedStatement stForQuery = connect.prepareStatement(
-                        "insert into entry(field) values (?);", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stForQuery = connect.prepareStatement(
+                    "insert into entry(field) values (?);")) {
+                for (int i = 1; i <= size; i++) {
                     stForQuery.setInt(1, i);
-                    stForQuery.execute();
-                } catch (Exception e) {
-                    LOG.error(e.getMessage(), e);
+                    stForQuery.addBatch();
                 }
+                stForQuery.executeBatch();
+            } catch (Exception e) {
+                LOG.error(e.getMessage(), e);
             }
         }
     }
@@ -103,8 +106,8 @@ public class StoreSQL implements AutoCloseable {
      * Method showSumOfFields. Выводит арифметическую сумму значений всех атрибутов field в консоль
      */
     public void showSumOfFields() {
-        List<Integer> listValues = SaxParseXML.parseToListInteger("C:\\Users\\georg\\Desktop\\target.xml");
         int sum = 0;
+        List<Integer> listValues = SaxParseXML.parseToListInteger(this.xmlFile.getPath());
         for (int value : listValues) {
             sum += value;
         }
@@ -112,21 +115,19 @@ public class StoreSQL implements AutoCloseable {
     }
     /**
      * Method fieldsToXML. Генерация XML из данных базы
-     * @param targetForXML конечный XML файл
      */
-    public void fieldsToXML(File targetForXML) throws JAXBException {
+    public void fieldsToXML() throws JAXBException {
         List<Entry> list = this.load();
-        StoreXML storeXML = new StoreXML(targetForXML);
+        StoreXML storeXML = new StoreXML(this.xmlFile);
         storeXML.save(list);
     }
     /**
      * Method convertXMLtoXLTS. Конвертирует XML в XLTS
-     * @param sourceXML исходный XML файл
      * @param targetXLTS конечный XLTS файл
      * @param scheme схема для конвертации
      */
-    public void convertXMLtoXLTS(File sourceXML, File targetXLTS, File scheme) {
-        ConvertXSTL.convert(sourceXML, targetXLTS, scheme);
+    public void convertXMLtoXLTS(File targetXLTS, File scheme) {
+        ConvertXSTL.convert(this.xmlFile, targetXLTS, scheme);
     }
 
     public static void main(String[] args) throws Exception {
@@ -137,10 +138,10 @@ public class StoreSQL implements AutoCloseable {
         File targetXLTS = new File(path + fs + "XLTStarget.xlts");
         File scheme = new File(StoreSQL.class.getClassLoader().getResource("scheme.xsl").getPath());
 
-        try (StoreSQL storeSQL = new StoreSQL(new Config())) {
-            storeSQL.generate(10);
-            storeSQL.fieldsToXML(targetForXML);
-            storeSQL.convertXMLtoXLTS(targetForXML, targetXLTS, scheme);
+        try (StoreSQL storeSQL = new StoreSQL(new Config(), targetForXML)) {
+            storeSQL.generate(15);
+            storeSQL.fieldsToXML();
+            storeSQL.convertXMLtoXLTS(targetXLTS, scheme);
             storeSQL.showSumOfFields();
         }
     }
