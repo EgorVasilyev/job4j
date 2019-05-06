@@ -5,18 +5,20 @@ import org.apache.logging.log4j.Logger;
 import ru.job4j.models.Item;
 import ru.job4j.tracker.ITracker;
 
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 
 public class TrackerSQL implements ITracker, AutoCloseable {
-    private Connection connection;
+    private final Connection connection;
     private static final Logger LOG = LogManager.getLogger(TrackerSQL.class.getName());
 
-    public boolean init() {
+    public TrackerSQL(Connection connection) {
+        this.connection = connection;
+    }
+
+/*    public boolean init() {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
             config.load(in);
@@ -30,12 +32,12 @@ public class TrackerSQL implements ITracker, AutoCloseable {
             throw new IllegalStateException(e);
         }
         return this.connection != null;
-    }
+    }*/
     @Override
     public Item add(Item item) {
         createItemsTable();
         try (PreparedStatement stForQuery = connection.prepareStatement(
-                "INSERT INTO items(id, name, description, create_date) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                "INSERT INTO items(id, name, description, create_date) VALUES (?, ?, ?, ?)")) {
             item.setId(String.valueOf(System.currentTimeMillis() + new Random().nextInt()));
             stForQuery.setString(1, item.getId());
             stForQuery.setString(2, item.getName());
@@ -51,7 +53,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public void replace(String id, Item item) {
         try (PreparedStatement stForQuery = connection.prepareStatement(
-                "update items set name = ?, description = ? where id = ?;", Statement.RETURN_GENERATED_KEYS)) {
+                "update items set name = ?, description = ? where id = ?;")) {
             item.setId(id);
             stForQuery.setString(1, item.getName());
             stForQuery.setString(2, item.getDescription());
@@ -66,9 +68,9 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     public boolean delete(String id) {
         boolean deleted = true;
         try (PreparedStatement stForQuery = connection.prepareStatement(
-                "delete from items where id = ?;", Statement.RETURN_GENERATED_KEYS);
+                "delete from items where id = ?;");
              PreparedStatement stForCheck = connection.prepareStatement(
-                     "select * from items where id = ?;", Statement.RETURN_GENERATED_KEYS)) {
+                     "select * from items where id = ?;")) {
             stForQuery.setString(1, id);
             stForQuery.execute();
             stForCheck.setString(1, id);
@@ -102,7 +104,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         ResultSet result;
         List<Item> itemsList = null;
         try (PreparedStatement stForQuery = connection.prepareStatement(
-                "select * from items where name = ?;", Statement.RETURN_GENERATED_KEYS)) {
+                "select * from items where name = ?;")) {
             stForQuery.setString(1, name);
             result = stForQuery.executeQuery();
             itemsList = findItems(result);
@@ -138,16 +140,9 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         return resultItem;
     }
 
+    //управление закрытием соединения передано классу ConnectionRollback
     @Override
     public void close() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
-            }
-        }
-        connection = null;
     }
 
     private void createItemsTable() {

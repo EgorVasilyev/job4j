@@ -1,86 +1,100 @@
 package sql;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.models.Item;
+
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class TrackerSQLTest {
-    private TrackerSQL sql;
-    @Before
-    public void checkConnection() {
-        sql = new TrackerSQL();
-        assertThat(sql.init(), is(true));
-    }
-    @After
-    public void closeConnection() {
-        sql.close();
-    }
-    @Test
-    public void whenAddOneAndFindAllThenOneItem() {
-        sql.add(new Item("firstName", "firstDesc"));
-        String expectedName = "firstName";
-        String expectedDesc = "firstDesc";
-        assertThat(sql.findAll().size(), is(1));
-        assertThat(sql.findAll().get(0).getName(), is(expectedName));
-        assertThat(sql.findAll().get(0).getDescription(), is(expectedDesc));
-        sql.deleteItemsTable();
+    public Connection init() {
+        try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
+            Properties config = new Properties();
+            config.load(in);
+            Class.forName(config.getProperty("driver-class-name"));
+            return DriverManager.getConnection(
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
     @Test
-    public void whenAddOneAndReplaceThenNewName() {
-        Item firstItem = new Item("firstName", "firstDesc");
-        sql.add(firstItem);
-        sql.replace(firstItem.getId(), new Item("replacedName", "replacedDesc"));
-        String expectedName = "replacedName";
-        String expectedDesc = "replacedDesc";
-        assertThat(sql.findAll().size(), is(1));
-        assertThat(sql.findAll().get(0).getName(), is(expectedName));
-        assertThat(sql.findAll().get(0).getDescription(), is(expectedDesc));
-        sql.deleteItemsTable();
+    public void whenAddOneAndFindAllThenOneItem() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            trackerSQL.add(new Item("firstName", "firstDesc"));
+            String expectedName = "firstName";
+            String expectedDesc = "firstDesc";
+            assertThat(trackerSQL.findAll().size(), is(1));
+            assertThat(trackerSQL.findAll().get(0).getName(), is(expectedName));
+            assertThat(trackerSQL.findAll().get(0).getDescription(), is(expectedDesc));
+        }
     }
     @Test
-    public void whenAddOneAndDeleteThenThereIsNotAnItem() {
-        Item firstItem = new Item("firstName", "firstDesc");
-        sql.add(firstItem);
-        sql.delete(firstItem.getId());
-        assertThat(sql.findAll().size(), is(0));
-        sql.deleteItemsTable();
+    public void whenAddOneAndReplaceThenNewName() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            Item firstItem = new Item("firstName", "firstDesc");
+            trackerSQL.add(firstItem);
+            trackerSQL.replace(firstItem.getId(), new Item("replacedName", "replacedDesc"));
+            String expectedName = "replacedName";
+            String expectedDesc = "replacedDesc";
+            assertThat(trackerSQL.findAll().size(), is(1));
+            assertThat(trackerSQL.findAll().get(0).getName(), is(expectedName));
+            assertThat(trackerSQL.findAll().get(0).getDescription(), is(expectedDesc));
+        }
     }
     @Test
-    public void whenAddTwoAndFindAllThenTwoItem() {
-        sql.add(new Item("firstName", "firstDesc"));
-        sql.add(new Item("secondName", "secondDesc"));
-        String expectedName = "firstName";
-        String expectedDesc = "secondDesc";
-        assertThat(sql.findAll().size(), is(2));
-        assertThat(sql.findAll().get(0).getName(), is(expectedName));
-        assertThat(sql.findAll().get(1).getDescription(), is(expectedDesc));
-        sql.deleteItemsTable();
+    public void whenAddOneAndDeleteThenThereIsNotAnItem() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            Item firstItem = new Item("firstName", "firstDesc");
+            trackerSQL.add(firstItem);
+            trackerSQL.delete(firstItem.getId());
+            assertThat(trackerSQL.findAll().size(), is(0));
+        }
     }
     @Test
-    public void whenAddOneAndFindByIdThenOneItem() {
-        Item firstItem = new Item("firstName", "firstDesc");
-        sql.add(firstItem);
-        Item resultItem = sql.findById(firstItem.getId());
-        String expectedName = "firstName";
-        String expectedDesc = "firstDesc";
-        assertThat(resultItem.getName(), is(expectedName));
-        assertThat(resultItem.getDescription(), is(expectedDesc));
-        sql.deleteItemsTable();
+    public void whenAddTwoAndFindAllThenTwoItem() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            trackerSQL.add(new Item("firstName", "firstDesc"));
+            trackerSQL.add(new Item("secondName", "secondDesc"));
+            String expectedName = "firstName";
+            String expectedDesc = "secondDesc";
+            assertThat(trackerSQL.findAll().size(), is(2));
+            assertThat(trackerSQL.findAll().get(0).getName(), is(expectedName));
+            assertThat(trackerSQL.findAll().get(1).getDescription(), is(expectedDesc));
+        }
     }
     @Test
-    public void whenAddTwoAndFindByNameThentwoItem() {
-        Item firstItem = new Item("Name", "firstDesc");
-        Item secondItem = new Item("Name", "secondDesc");
-        sql.add(firstItem);
-        sql.add(secondItem);
-        String expectedFirstDesc = "firstDesc";
-        String expectedSecondDesc = "secondDesc";
-        assertThat(sql.findByName("Name").get(0).getDescription(), is(expectedFirstDesc));
-        assertThat(sql.findByName("Name").get(1).getDescription(), is(expectedSecondDesc));
-        sql.deleteItemsTable();
+    public void whenAddOneAndFindByIdThenOneItem() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            Item firstItem = new Item("firstName", "firstDesc");
+            trackerSQL.add(firstItem);
+            Item resultItem = trackerSQL.findById(firstItem.getId());
+            String expectedName = "firstName";
+            String expectedDesc = "firstDesc";
+            assertThat(resultItem.getName(), is(expectedName));
+            assertThat(resultItem.getDescription(), is(expectedDesc));
+        }
+    }
+    @Test
+    public void whenAddTwoAndFindByNameThenTwoItem() throws SQLException {
+        try (TrackerSQL trackerSQL = new TrackerSQL(ConnectionRollback.create(this.init()))) {
+            Item firstItem = new Item("Name", "firstDesc");
+            Item secondItem = new Item("Name", "secondDesc");
+            trackerSQL.add(firstItem);
+            trackerSQL.add(secondItem);
+            String expectedFirstDesc = "firstDesc";
+            String expectedSecondDesc = "secondDesc";
+            assertThat(trackerSQL.findByName("Name").get(0).getDescription(), is(expectedFirstDesc));
+            assertThat(trackerSQL.findByName("Name").get(1).getDescription(), is(expectedSecondDesc));
+        }
     }
 }
