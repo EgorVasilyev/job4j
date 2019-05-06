@@ -53,8 +53,8 @@ public class Item {
         String nameString = "-Имя: " + name;
         String descString = "-Описание: " + description;
         String createString = "-Дата создания(год/месяц/число): " + create;
-        String LN = System.lineSeparator();
+        String ln = System.lineSeparator();
 
-        return new StringJoiner(LN).add(idString).add(nameString).add(descString).add(createString).toString();
+        return new StringJoiner(ln).add(idString).add(nameString).add(descString).add(createString).toString();
     }
 }

@@ -48,7 +48,7 @@ public class StartUITest {
 
     @Test
     public void whenUserFindAllItems() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item item1 = tracker.add(new Item("test name 1", "desc 1"));
         Item item2 = tracker.add(new Item("test name 2", "desc 2"));
         Input input = new StubInput(new String[]{"1", "6"});
@@ -66,12 +66,16 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append("-Описание: " + item1.getDescription())
                                 .append(System.lineSeparator())
+                                .append("-Дата создания(год/месяц/число): " + item2.getCreate())
+                                .append(System.lineSeparator())
                                 .append(" " + System.lineSeparator())
                                 .append("-ID: " + item2.getId())
                                 .append(System.lineSeparator())
                                 .append("-Имя: " + item2.getName())
                                 .append(System.lineSeparator())
                                 .append("-Описание: " + item2.getDescription())
+                                .append(System.lineSeparator())
+                                .append("-Дата создания(год/месяц/число): " + item2.getCreate())
                                 .append(System.lineSeparator())
                                 .append(" " + System.lineSeparator())
                                 .append("------------------------------------------")
@@ -84,7 +88,7 @@ public class StartUITest {
 
     @Test
     public void whenUserFindByName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item item1 = tracker.add(new Item("test name", "desc 1"));
         Item item2 = tracker.add(new Item("test name", "desc 2"));
         Input input = new StubInput(new String[]{"5", "test name", "6"});
@@ -104,12 +108,16 @@ public class StartUITest {
                                 .append(System.lineSeparator())
                                 .append("-Описание: " + item1.getDescription())
                                 .append(System.lineSeparator())
+                                .append("-Дата создания(год/месяц/число): " + item2.getCreate())
+                                .append(System.lineSeparator())
                                 .append(" " + System.lineSeparator())
                                 .append("-ID: " + item2.getId())
                                 .append(System.lineSeparator())
                                 .append("-Имя: " + item2.getName())
                                 .append(System.lineSeparator())
                                 .append("-Описание: " + item2.getDescription())
+                                .append(System.lineSeparator())
+                                .append("-Дата создания(год/месяц/число): " + item2.getCreate())
                                 .append(System.lineSeparator())
                                 .append(" " + System.lineSeparator())
                                 .append("--------------------------------------------------------------------------------")

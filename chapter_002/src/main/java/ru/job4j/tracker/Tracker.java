@@ -10,7 +10,7 @@ import java.util.Random;
  * @version 2
  * @since 10/11/2018
  */
-public class Tracker implements ITracker{
+public class Tracker implements ITracker {
     private static final Random RN = new Random();
     /**
      * Списочный массив для хранение заявок.
