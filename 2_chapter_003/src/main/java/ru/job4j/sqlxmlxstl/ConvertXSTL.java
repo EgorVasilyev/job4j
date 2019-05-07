@@ -1,4 +1,4 @@
-package sqlxmlxstl;
+package ru.job4j.sqlxmlxstl;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;

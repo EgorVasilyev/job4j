@@ -1,4 +1,4 @@
-package sqlxmlxstl;
+package ru.job4j.sqlxmlxstl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -139,7 +139,7 @@ public class StoreSQL implements AutoCloseable {
         File scheme = new File(StoreSQL.class.getClassLoader().getResource("scheme.xsl").getPath());
 
         try (StoreSQL storeSQL = new StoreSQL(new Config(), targetForXML)) {
-            storeSQL.generate(15);
+            storeSQL.generate(4);
             storeSQL.fieldsToXML();
             storeSQL.convertXMLtoXLTS(targetXLTS, scheme);
             storeSQL.showSumOfFields();

@@ -1,4 +1,4 @@
-package sqlxmlxstl;
+package ru.job4j.sqlxmlxstl;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

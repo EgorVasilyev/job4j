@@ -1,4 +1,4 @@
-package sql;
+package ru.job4j.sql;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;

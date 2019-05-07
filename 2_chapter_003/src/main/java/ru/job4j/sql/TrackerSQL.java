@@ -1,4 +1,4 @@
-package sql;
+package ru.job4j.sql;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

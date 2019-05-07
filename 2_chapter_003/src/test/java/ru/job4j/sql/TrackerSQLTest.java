@@ -1,4 +1,4 @@
-package sql;
+package ru.job4j.sql;
 
 import org.junit.Test;
 import ru.job4j.models.Item;

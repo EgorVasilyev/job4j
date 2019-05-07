@@ -1,4 +1,4 @@
-package sqlxmlxstl;
+package ru.job4j.sqlxmlxstl;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

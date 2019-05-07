@@ -1,7 +1,8 @@
-package sqlxmlxstl;
+package ru.job4j.sqlxmlxstl;
 
 import java.io.InputStream;
 import java.util.Properties;
+
 /**
  * Class Config - Настройки для подключения к базе данных.
  */
