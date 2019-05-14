@@ -73,13 +73,13 @@ public class ParserSqlRu {
                 new FileReader("2_chapter_003\\src\\main\\resources\\logs_of_parser.txt"));
         //получаем список имен из лог-файла
         logBufferForNames.lines()
-                .filter(line -> line.startsWith("[INFO ]") && line.contains("Name of vacancy:"))
-                .forEach(line -> this.vacancyNames.add(line.substring(66)));
+                .filter(line -> line.startsWith("[INFO ]") && line.contains("Name of vacancy: "))
+                .forEach(line -> this.vacancyNames.add(line.split("Name of vacancy: ")[1]));
         BufferedReader logBufferForDates = new BufferedReader(
                 new FileReader("2_chapter_003\\src\\main\\resources\\logs_of_parser.txt"));
         //получаем последнюю дату добавленной вакансии из лог-файла
         Optional<String> lastDate = logBufferForDates.lines()
-                .filter(line -> line.startsWith("[INFO ]") && line.contains("Date of vacancy"))
+                .filter(line -> line.startsWith("[INFO ]") && line.contains("Date of vacancy: "))
                 .reduce((first, second) -> second);
         //логическая переменная, указывает, первый ли это запуск программы
         boolean firstStart = !lastDate.isPresent();
@@ -88,7 +88,7 @@ public class ParserSqlRu {
             this.finishDate = this.getDate("1 янв 19, 0:0");
         } else {
             //проверяем вакансии с даты последней добавленной вакансии
-            this.finishDate = this.getDate(lastDate.get().substring(66));
+            this.finishDate = this.getDate(lastDate.get().split("Date of vacancy: ")[1]);
         }
     }
     /**
@@ -261,8 +261,8 @@ public class ParserSqlRu {
         return pages;
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         ParserSqlRu parserSqlRu = new ParserSqlRu();
         parserSqlRu.start();
-    }
+    }*/
 }
