@@ -74,8 +74,8 @@ public class VacancySQL implements AutoCloseable {
         String textDate = null;
         ResultSet result;
         try (Statement stForQuery = connection.createStatement()) {
-            result = stForQuery.executeQuery("select * from vacancy\n" +
-                    "where id = (select max(id) from vacancy) ORDER BY id;");
+            result = stForQuery.executeQuery("select * from vacancy\n"
+                    + "where id = (select max(id) from vacancy) ORDER BY id;");
             if (result.next()) {
                 textDate = result.getString("date");
             }
@@ -84,11 +84,5 @@ public class VacancySQL implements AutoCloseable {
             LOG.error(e.getMessage(), e);
         }
         return textDate;
-    }
-
-    public static void main(String[] args) {
-        VacancySQL vacancySQL = new VacancySQL();
-        vacancySQL.init();
-        System.out.println(vacancySQL.getLastDate());;
     }
 }

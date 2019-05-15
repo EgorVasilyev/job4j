@@ -65,7 +65,7 @@ public class ParserSqlRu {
     /**
      * Method readNameAndDateFromLog. Чтение лог-файла, получение списка имен вакансий и даты последней вакансии
      */
-    private void readDateFromDataBase() throws ParseException{
+    private void readDateFromDataBase() throws ParseException {
         String lastDate = vacancySQL.getLastDate();
         //логическая переменная, указывает, первый ли это запуск программы
         if (lastDate == null) {
