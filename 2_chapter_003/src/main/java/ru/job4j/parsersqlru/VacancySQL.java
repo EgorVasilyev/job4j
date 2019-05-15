@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 /**
@@ -59,7 +56,7 @@ public class VacancySQL implements AutoCloseable {
         try (Statement stForCreateItems = connection.createStatement()) {
             stForCreateItems.execute("create table if not exists vacancy(\n"
                     + "\tid serial primary key,\n"
-                    + "\tname varchar(200),\n"
+                    + "\tname varchar(200) NOT NULL UNIQUE,\n"
                     + "\tdate varchar(50),\n"
                     + "\ttext varchar(5000),\n"
                     + "\tlink varchar(200)"
@@ -67,5 +64,31 @@ public class VacancySQL implements AutoCloseable {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * Method getLastDate. Делает запрос в БД на получение даты последней вакансии
+     * @return дата в виде текста
+     */
+    public String getLastDate() {
+        String textDate = null;
+        ResultSet result;
+        try (Statement stForQuery = connection.createStatement()) {
+            result = stForQuery.executeQuery("select * from vacancy\n" +
+                    "where id = (select max(id) from vacancy) ORDER BY id;");
+            if (result.next()) {
+                textDate = result.getString("date");
+            }
+            result.close();
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return textDate;
+    }
+
+    public static void main(String[] args) {
+        VacancySQL vacancySQL = new VacancySQL();
+        vacancySQL.init();
+        System.out.println(vacancySQL.getLastDate());;
     }
 }

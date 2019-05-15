@@ -8,13 +8,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * Class ParserSqlRu. Приложение парсер заходит на сайт sql.ru в раздел работа и собирает Java вакансии.
@@ -22,8 +22,6 @@ import java.util.*;
 public class ParserSqlRu {
     //объект для работы с базой данных sql
     private VacancySQL vacancySQL;
-    //коллекция с уникальными именами вакансий
-    private HashSet<String> vacancyNames;
     //отсортированная по дате коллекция вакансий
     private TreeSet<Vacancy> vacancies;
     //логирование
@@ -36,7 +34,6 @@ public class ParserSqlRu {
     public ParserSqlRu() {
         this.vacancySQL = new VacancySQL();
         this.vacancySQL.init();
-        this.vacancyNames = new HashSet<>(200);
         Comparator<Vacancy> comparator = Comparator.comparing(Vacancy::getCreated);
         this.vacancies = new TreeSet<>(comparator);
     }
@@ -48,7 +45,7 @@ public class ParserSqlRu {
             Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
             if (doc != null) {
                 //получение списка имен и дат вакансий из лог-файла
-                this.readNameAndDateFromLog();
+                this.readDateFromLog();
                 //получение количества страниц
                 int numberOfPages = this.getNumbersOfPages(doc);
                 //перебор по страницам
@@ -68,27 +65,15 @@ public class ParserSqlRu {
     /**
      * Method readNameAndDateFromLog. Чтение лог-файла, получение списка имен вакансий и даты последней вакансии
      */
-    private void readNameAndDateFromLog() throws ParseException, FileNotFoundException {
-        BufferedReader logBufferForNames = new BufferedReader(
-                new FileReader("2_chapter_003\\src\\main\\resources\\logs_of_parser.txt"));
-        //получаем список имен из лог-файла
-        logBufferForNames.lines()
-                .filter(line -> line.startsWith("[INFO ]") && line.contains("Name of vacancy: "))
-                .forEach(line -> this.vacancyNames.add(line.split("Name of vacancy: ")[1]));
-        BufferedReader logBufferForDates = new BufferedReader(
-                new FileReader("2_chapter_003\\src\\main\\resources\\logs_of_parser.txt"));
-        //получаем последнюю дату добавленной вакансии из лог-файла
-        Optional<String> lastDate = logBufferForDates.lines()
-                .filter(line -> line.startsWith("[INFO ]") && line.contains("Date of vacancy: "))
-                .reduce((first, second) -> second);
+    private void readDateFromLog() throws ParseException{
+        String lastDate = vacancySQL.getLastDate();
         //логическая переменная, указывает, первый ли это запуск программы
-        boolean firstStart = !lastDate.isPresent();
-        if (firstStart) {
+        if (lastDate == null) {
             //проверяем вакансии с начала года
             this.finishDate = this.getDate("1 янв 19, 0:0");
         } else {
             //проверяем вакансии с даты последней добавленной вакансии
-            this.finishDate = this.getDate(lastDate.get().split("Date of vacancy: ")[1]);
+            this.finishDate = this.getDate(lastDate);
         }
     }
     /**
@@ -125,10 +110,6 @@ public class ParserSqlRu {
             //(текст) name из aHref
             String name = firstAHref.text();
             if (name == null || !onlyJava(name)) {
-                continue;
-            }
-            //проверка уникальности имени
-            if (!this.vacancyNames.add(name)) {
                 continue;
             }
             //элемент с тегом <td class="altCol"> с датой
@@ -261,8 +242,8 @@ public class ParserSqlRu {
         return pages;
     }
 
-/*    public static void main(String[] args) {
+    public static void main(String[] args) {
         ParserSqlRu parserSqlRu = new ParserSqlRu();
         parserSqlRu.start();
-    }*/
+    }
 }
