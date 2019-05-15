@@ -45,7 +45,7 @@ public class ParserSqlRu {
             Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
             if (doc != null) {
                 //получение списка имен и дат вакансий из лог-файла
-                this.readDateFromLog();
+                this.readDateFromDataBase();
                 //получение количества страниц
                 int numberOfPages = this.getNumbersOfPages(doc);
                 //перебор по страницам
@@ -65,7 +65,7 @@ public class ParserSqlRu {
     /**
      * Method readNameAndDateFromLog. Чтение лог-файла, получение списка имен вакансий и даты последней вакансии
      */
-    private void readDateFromLog() throws ParseException{
+    private void readDateFromDataBase() throws ParseException{
         String lastDate = vacancySQL.getLastDate();
         //логическая переменная, указывает, первый ли это запуск программы
         if (lastDate == null) {
