@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 /**
  * Class ParserSqlRu. Приложение парсер заходит на сайт sql.ru в раздел работа и собирает Java вакансии.
@@ -28,6 +29,8 @@ public class ParserSqlRu {
     private static final Logger LOG = LogManager.getLogger(ParserSqlRu.class.getName());
     //дата, после которой нужно собрать все вакансии
     private Date finishDate;
+    private Pattern pattern;
+    private Pattern pattern2;
     /**
      * Constructor ParserSqlRu.
      */
@@ -36,6 +39,8 @@ public class ParserSqlRu {
         this.vacancySQL.init();
         Comparator<Vacancy> comparator = Comparator.comparing(Vacancy::getCreated);
         this.vacancies = new TreeSet<>(comparator);
+        this.pattern = Pattern.compile("(^.*java.*$)");
+        this.pattern2 = Pattern.compile("(?>(?!script).)*");
     }
     /**
      * Method start. Подключение к сайту, запуск парсинга и добавления вакансий в базу данных
@@ -180,9 +185,8 @@ public class ParserSqlRu {
      * @return true/false
      */
     private boolean onlyJava(String name) {
-        return !name.toLowerCase().contains("javascript")
-                && !name.toLowerCase().contains("java script")
-                && name.toLowerCase().contains("java");
+        return this.pattern.matcher(name.toLowerCase()).matches()
+                && this.pattern2.matcher(name.toLowerCase()).matches();
     }
     /**
      * Method parseTextToDate. Получение даты из строки
@@ -243,7 +247,8 @@ public class ParserSqlRu {
     }
 
     public static void main(String[] args) {
-        ParserSqlRu parserSqlRu = new ParserSqlRu();
+       ParserSqlRu parserSqlRu = new ParserSqlRu();
         parserSqlRu.start();
+
     }
 }
