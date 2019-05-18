@@ -1,152 +1,202 @@
 package ru.job4j.solid.srp;
 
-import ru.job4j.calculator.Calculator;
-
-import java.util.HashMap;
-import java.util.Scanner;
-
+/**
+ * InteractCalc - интерактивный калькулятор
+ */
 public class InteractCalc {
+    /**
+     * Калькулятор
+     */
     private final Calculator calculator;
+    /**
+     * Первое число
+     */
     private double first;
+    /**
+     * Второе число
+     */
     private double second;
+    /**
+     * Результат вычисления
+     */
     private double result;
+    /**
+     * Булева переменная, показывающая, что одно вычисление уже было выполнено
+     */
     private boolean notFirstAction;
+    /**
+     * Булева переменная для заверения программы
+     */
     private boolean exitCalc;
-    private boolean isAction;
-    private Action lastAction;
-    private HashMap<String, Action> actions;
+    /**
+     * Булева переменная, показывающая отсутствие значения переменной
+     */
+    private boolean valueIsAbsent;
+    /**
+     * Символ последней используемой операции
+     */
+    private String lastActionSymbol;
+    /**
+     * Способ ввода информации
+     */
+    private final Input input;
 
-
-    public InteractCalc(final Calculator calculator) {
+    /**
+     * Конструктор
+     * @param calculator - калькулятор
+     * @param input - способ ввода
+     */
+    public InteractCalc(final Calculator calculator, final Input input) {
         this.calculator = calculator;
+        this.input = input;
         this.notFirstAction = false;
-        this.actions = new HashMap<>(10);
-        this.createActions();
+        this.valueIsAbsent = true;
     }
 
-    private void createActions() {
-        String add = "+";
-        this.actions.put(add, () -> {
-            this.calculator.add(this.first, this.second);
-            this.showResult(add);
-        });
-        String subtract = "-";
-        this.actions.put(subtract, () -> {
-            this.calculator.subtract(this.first, this.second);
-            this.showResult(subtract);
-        });
-        String multiple = "*";
-        this.actions.put(multiple, () -> {
-            this.calculator.multiple(this.first, this.second);
-            this.showResult(multiple);
-        });
-        String div = "/";
-        this.actions.put(div, () -> {
-            this.calculator.div(this.first, this.second);
-            this.showResult(div);
-        });
-        String exit = "e";
-        this.actions.put(exit, () -> {
-            this.isAction = true;
-            this.exitCalc = true;
-        });
+    /**
+     * Выводит на консоль результат вычсиления
+     */
+    private void showResult() {
+        System.out.println("Результат: " + this.first + " " + this.lastActionSymbol + " " + this.second + " = " + this.result);
+        checkExit();
     }
 
-    private void showResult(String action) {
-        this.isAction = true;
-        this.notFirstAction = true;
-        this.result = calculator.getResult();
-        System.out.println("Результат: " + this.first + " " + action + " " + this.second + " = " + this.result);
-    }
-
+    /**
+     * Ввод значений и операции
+     */
     public void input() {
-        Scanner scanner;
         do {
-            scanner = new Scanner(System.in);
-            this.first = this.checkNumber(scanner);
+            this.first = checkInput(this.input.askString("Введите первое число (или \"e\" для выхода, или \"p\" "
+                    + "для использования предыдущего вычисления):"));
             if (this.exitCalc) {
-                break;
+                return;
             }
-            scanner = new Scanner(System.in);
-            this.second = this.checkNumber(scanner);
+            this.second = checkInput(this.input.askString("Введите второе число (или \"e\" для выхода, или \"p\" "
+                    + "для использования предыдущего вычисления):"));
             if (this.exitCalc) {
-                break;
+                return;
             }
-            scanner = new Scanner(System.in);
-            this.chooseAction(scanner);
+            this.showActions();
+            this.result = chooseAction(this.input.askString("Введите символ операции "
+                    + "(или \"l\" для использования предыдущей операции, "
+                    + "или \"e\" для выхода):"));
             if (this.exitCalc) {
-                break;
+                return;
             }
-            scanner = new Scanner(System.in);
-            this.checkExit(scanner);
+            this.showResult();
+            this.notFirstAction = true;
         } while (!this.exitCalc);
     }
 
-    private double checkNumber(Scanner scanner) {
-        double number = 0;
-        boolean isDouble;
-        do {
-            System.out.println("Введите число (или \"e\" для выхода, или \"p\" "
-                    + "для использования предыдущего вычисления): ");
-            isDouble = scanner.hasNextDouble();
-            if (!isDouble) {
-                String command = scanner.nextLine().toLowerCase();
-                boolean usePrevResult = command.equals("p");
-                if (usePrevResult) {
-                    if (this.notFirstAction) {
-                        isDouble = true;
-                        number = this.result;
-                    } else {
-                        System.out.println("Предыдущий результат отсутствует!");
-                    }
-                }
-                this.exitCalc = command.equals("e");
-                if (!this.exitCalc && !usePrevResult) {
-                    System.out.println("Введенный символ не является числом или командой.");
+    /**
+     * Проверка на выход из программы и использование предыдущего значения
+     * @param in - введенное значение
+     * @return число
+     */
+    private double checkInput(String in) {
+        valueIsAbsent = true;
+        double value = -1;
+        if (in.equals("e")) {
+            this.exitCalc = true;
+        } else {
+            if (in.equals("p")) {
+                if (this.notFirstAction) {
+                    value = this.result;
+                    System.out.println("Используем предыдущий результат: " + value);
+                } else {
+                    System.out.println("Предыдущий результат отсутствует!");
+                    value = checkInput(this.input.askString("Введите число (или \"e\" для выхода):"));
                 }
             } else {
-                number = scanner.nextDouble();
+                try {
+                    value = this.input.askDouble(in);
+                } catch (NumberFormatException nfe) {
+                    value = checkInput(this.input.askString(
+                            String.format("'%s' не является числом. Введите число (или \"e\" для выхода, или \"p\" "
+                                    + "для использования предыдущего вычисления):", in))
+                    );
+                }
             }
-        } while (!this.exitCalc && !isDouble);
-        return number;
+        }
+        return value;
     }
-
-    private void checkExit(Scanner scanner) {
-        System.out.println("Для выхода из программы введите \"e\".");
-        System.out.println("Для продолжения вычислений любой другой символ.");
-        if (scanner.nextLine().toLowerCase().equals("e")) {
+    /**
+     * Проверка на выход из программы
+     */
+    private void checkExit() {
+        System.out.println("Для выхода из программы введите \"e\"");
+        System.out.println("или любой другой символ для продолжения вычислений:");
+        if (this.input.next().toLowerCase().equals("e")) {
             this.exitCalc = true;
         }
     }
-
-    private void chooseAction(Scanner scanner) {
-        this.isAction = false;
-        do {
-            System.out.println("Введите действие: "
-                    + "\n + сложение," + "\n - вычитание,"
-                    + "\n * умножение," + "\n / деление "
-                    + "\n(или \"e\" для выхода, или \"l\" для повторного использования последнего действия):");
-            if (scanner.hasNext()) {
-                String action = scanner.next();
-                if (action.equals("l")) {
-                    if (this.notFirstAction) {
-                        this.lastAction.execute();
-                    } else {
-                        System.out.println("Предыдущее действие отсутствует!");
+    /**
+     * Проверка на выход из программы и использование предыдущей операции
+     * @param symbol - введенное значение
+     * @return результат вычисления
+     */
+    private double chooseAction(String symbol) {
+        double value = -1;
+        if (symbol.equals("e")) {
+            this.exitCalc = true;
+        } else {
+            if (symbol.equals("l")) {
+                if (this.notFirstAction) {
+                    try {
+                        value = calculator.getResult(this.first, this.second, lastActionSymbol);
+                    } catch (CalculateException e) {
+                        System.out.println(e.getMessage());
+                        this.showActions();
+                        value = chooseAction(this.input.askString("Введите другую доступную операцию "
+                                + "(или \"l\" для использования предыдущей операции, "
+                                + "или \"e\" для выхода):"));
                     }
                 } else {
-                    this.lastAction = this.actions.getOrDefault(action, () -> { });
-                    this.lastAction.execute();
+                    System.out.println("Предыдущая операция отсутствует!");
+                    this.showActions();
+                    value = chooseAction(this.input.askString("Введите символ операции "
+                            + "(или \"e\" для выхода):"));
                 }
-                if (!this.isAction) {
-                    System.out.println("Введенный символ не является действием.");
-                }
+            } else {
+                do {
+                    valueIsAbsent = true;
+                    if (calculator.getActions().containsKey(symbol)) {
+                        try {
+                            value = calculator.getResult(this.first, this.second, symbol);
+                            valueIsAbsent = false;
+                            lastActionSymbol = calculator.getActions().get(symbol).getSymbol();
+                        } catch (CalculateException e) {
+                            System.out.println(e.getMessage());
+                            this.showActions();
+                            value = chooseAction(this.input.askString("Введите другую доступную операцию "
+                                    + "(или \"l\" для использования предыдущей операции, "
+                                    + "или \"e\" для выхода):"));
+                        }
+                    } else {
+                        System.out.printf("Символ '%s' не является операцией! ", symbol);
+                        this.showActions();
+                        value = chooseAction(this.input.askString("Введите доступную операцию "
+                                + "(или \"l\" для использования предыдущей операции, "
+                                + "или \"e\" для выхода):"));
+                    }
+                } while (!this.exitCalc && valueIsAbsent);
             }
-        } while (!this.exitCalc && !this.isAction);
+        }
+        return value;
+    }
+
+    /**
+     * Вывод на консоль всех доступных операций
+     */
+    private void showActions() {
+        System.out.println("Доступны следующие операции:");
+        for (Action action : this.calculator.getActions().values()) {
+            System.out.println(action.getSymbol() + "  " + action.description());
+        }
     }
 
     public static void main(String[] args) {
-        InteractCalc intCalc = new InteractCalc(new Calculator());
+        InteractCalc intCalc = new InteractCalc(new Calculator(), new ValidateInputConsole());
         intCalc.input();
     }
 }
