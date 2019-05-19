@@ -1,5 +1,7 @@
 package ru.job4j.solid.srp;
 
+import ru.job4j.solid.ocp.EngineerCalculator;
+
 /**
  * InteractCalc - интерактивный калькулятор
  */
@@ -57,7 +59,7 @@ public class InteractCalc {
      * Выводит на консоль результат вычсиления
      */
     private void showResult() {
-        System.out.println("Результат: " + this.first + " " + this.lastActionSymbol + " " + this.second + " = " + this.result);
+        System.out.println("Результат: " + this.result);
         checkExit();
     }
 
@@ -196,7 +198,7 @@ public class InteractCalc {
     }
 
     public static void main(String[] args) {
-        InteractCalc intCalc = new InteractCalc(new Calculator(), new ValidateInputConsole());
+        InteractCalc intCalc = new InteractCalc(new EngineerCalculator(), new ValidateInputConsole());
         intCalc.input();
     }
 }

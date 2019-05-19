@@ -29,6 +29,12 @@ public class Calculator {
        return this.actions.get(symbol).calculate(first, second);
     }
 
+    protected void showActions() {
+        for (Action action : this.actions.values()) {
+            System.out.println(action.getSymbol() + "  " + action.description());
+        }
+    }
+
     private class Addition implements Action {
 
         @Override
@@ -38,7 +44,7 @@ public class Calculator {
 
         @Override
         public String description() {
-            return "Сложение";
+            return "  Сложение";
         }
 
         @Override
@@ -56,7 +62,7 @@ public class Calculator {
 
         @Override
         public String description() {
-            return "Вычитание";
+            return "  Вычитание";
         }
 
         @Override
@@ -74,7 +80,7 @@ public class Calculator {
 
         @Override
         public String description() {
-            return "Умножение";
+            return "  Умножение";
         }
 
         @Override
@@ -92,7 +98,7 @@ public class Calculator {
 
         @Override
         public String description() {
-            return "Деление";
+            return "  Деление";
         }
 
         @Override
