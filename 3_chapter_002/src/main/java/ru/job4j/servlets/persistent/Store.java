@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public interface Store {
     void add(User user);
-    void update(int id, String newName, String newLogin, String newEmail);
+    void update(int id, User user);
     void delete(int id);
     ConcurrentHashMap<Integer, User> findAll();
     User findById(int id);

@@ -45,7 +45,7 @@ public class ValidateService {
     }
     public void update(int id, String newName, String newLogin, String newEmail) {
         if (newName != null && newLogin != null && newEmail != null) {
-            this.persistent.update(id, newName, newLogin, newEmail);
+            this.persistent.update(id, new User(newName, newLogin, newEmail));
         }
     }
     public boolean delete(int id) {

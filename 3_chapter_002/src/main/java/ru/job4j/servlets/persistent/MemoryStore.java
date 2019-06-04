@@ -46,12 +46,12 @@ public class MemoryStore implements Store {
     }
 
     @Override
-    public void update(int id, String newName, String newLogin, String newEmail) {
+    public void update(int id, User user) {
         Optional<User> userOptional = Optional.ofNullable(this.findById(id));
-        userOptional.ifPresent(user -> {
-            user.setName(newName);
-            user.setLogin(newLogin);
-            user.setEmail(newEmail);
+        userOptional.ifPresent(userValue -> {
+            userValue.setName(user.getName());
+            userValue.setLogin(user.getLogin());
+            userValue.setEmail(user.getEmail());
         });
     }
 
