@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title></title>
+    <title>Show users</title>
 </head>
 <body>
 <table style="border: 1px solid black" cellpadding="1" cellspacing="1" border="1">

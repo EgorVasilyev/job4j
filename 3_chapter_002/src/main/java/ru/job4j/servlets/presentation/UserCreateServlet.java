@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class UserCreateServlet extends HttpServlet {
     private final ValidateService logic = ValidateService.getSingletonInstance();
@@ -19,24 +18,7 @@ public class UserCreateServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        PrintWriter printWriter = new PrintWriter(resp.getOutputStream());
-        printWriter.append("<!DOCTYPE html>" +
-                "<html lang=\"en\">" +
-                "<head>" +
-                "    <meta charset=\"UTF-8\">" +
-                "    <title></title>" +
-                "</head>" +
-                "<body>" +
-                "<form action='" + req.getContextPath() + "/create' method='post'>" +
-                "Name: <input type='text' name='name'/>" +
-                "Login: <input type='text' name='login'/>" +
-                "Email: <input type='text' name='email'/>" +
-                "<input type='submit'>" +
-                "</form>" +
-                "</body>" +
-                "</html>");
-        printWriter.flush();
+        req.getRequestDispatcher("/WEB-INF/create.jsp").forward(req, resp);
     }
 
     @Override
