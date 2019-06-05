@@ -1,7 +1,7 @@
 package ru.job4j.servlets.logic;
 
 import ru.job4j.servlets.datamodel.User;
-import ru.job4j.servlets.persistent.MemoryStore;
+import ru.job4j.servlets.persistent.DbStore;
 import ru.job4j.servlets.persistent.Store;
 
 import java.util.Optional;
@@ -19,11 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Класс ValidateService сделать синглетоном. Использовать Eager initiazitation.
  */
 
-public class ValidateService {
-    private final Store persistent = MemoryStore.getSingletonInstance();
+public class ValidateService implements Validate {
+    private final Store persistent = DbStore.getSingletonInstance();
     // Static member holds only one instance of the
     // ValidateService class
-    private static ValidateService singletonInstance =
+    private static Validate singletonInstance =
             new ValidateService();
 
     // ValidateService prevents any other class from instantiating
@@ -31,23 +31,24 @@ public class ValidateService {
     }
 
     // Providing Global point of access
-    public static ValidateService getSingletonInstance() {
+    public static Validate getSingletonInstance() {
         return singletonInstance;
     }
 
-    public boolean add(User user) {
-        boolean result = false;
-        if (user != null && !this.persistent.findAll().contains(user)) {
-            result = true;
+    @Override
+    public User add(User user) {
+        if (user.getName() != null && user.getLogin() != null && user.getEmail() != null && user.getPassword() != null) {
             this.persistent.add(user);
         }
-        return result;
+        return user;
     }
-    public void update(int id, String newName, String newLogin, String newEmail) {
-        if (newName != null && newLogin != null && newEmail != null) {
-            this.persistent.update(id, new User(newName, newLogin, newEmail));
+    @Override
+    public void update(int id, User user) {
+        if (user.getName() != null && user.getLogin() != null && user.getEmail() != null && user.getPassword() != null) {
+            this.persistent.update(id, user);
         }
     }
+    @Override
     public boolean delete(int id) {
         Optional<User> userOptional = Optional.ofNullable(this.findById(id));
         boolean result = userOptional.isPresent();
@@ -56,10 +57,23 @@ public class ValidateService {
         }
         return result;
     }
+    @Override
     public ConcurrentHashMap<Integer, User> findAll() {
         return this.persistent.findAll();
     }
+    @Override
     public User findById(int id) {
         return this.persistent.findById(id);
+    }
+    @Override
+    public int isCredential(final String login, final String password) {
+        int id = 0;
+        User foundUser = this.persistent.findAll().values().stream()
+                .filter(user -> user.getLogin().equals(login) && user.getPassword().equals(password))
+                .findFirst().orElse(null);
+        if (foundUser != null) {
+            id = foundUser.getId();
+        }
+        return id;
     }
 }

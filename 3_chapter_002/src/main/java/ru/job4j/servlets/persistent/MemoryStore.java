@@ -52,6 +52,8 @@ public class MemoryStore implements Store {
             userValue.setName(user.getName());
             userValue.setLogin(user.getLogin());
             userValue.setEmail(user.getEmail());
+            userValue.setPassword(user.getPassword());
+            userValue.setRole(user.getRole());
         });
     }
 

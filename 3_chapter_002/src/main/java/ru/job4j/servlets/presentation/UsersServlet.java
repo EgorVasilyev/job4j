@@ -1,5 +1,6 @@
 package ru.job4j.servlets.presentation;
 
+import ru.job4j.servlets.logic.Validate;
 import ru.job4j.servlets.logic.ValidateService;
 
 import javax.servlet.ServletException;
@@ -9,14 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UsersServlet extends HttpServlet {
-    private final ValidateService logic = ValidateService.getSingletonInstance();
+    private final Validate logic = ValidateService.getSingletonInstance();
     /**
      * - doGet URL  /list - открывает таблицу со всеми пользователями.
      * В каждой строку должна быть колонка с кнопками (редактировать, удалить)
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/users.jsp").forward(req, resp);
+        req.setAttribute("users", this.logic.findAll().values());
+        req.getRequestDispatcher("/WEB-INF/views/users.jsp").forward(req, resp);
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

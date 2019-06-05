@@ -1,6 +1,7 @@
 package ru.job4j.servlets.presentation;
 
 import ru.job4j.servlets.datamodel.User;
+import ru.job4j.servlets.logic.Validate;
 import ru.job4j.servlets.logic.ValidateService;
 
 import javax.servlet.ServletException;
@@ -54,7 +55,7 @@ import java.io.PrintWriter;
  */
 
 public class UserServlet extends HttpServlet {
-    private final ValidateService logic = ValidateService.getSingletonInstance();
+    private final Validate logic = ValidateService.getSingletonInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -72,16 +73,22 @@ public class UserServlet extends HttpServlet {
             this.logic.add(
                     new User(req.getParameter("name"),
                             req.getParameter("login"),
-                            req.getParameter("email")
+                            req.getParameter("email"),
+                            req.getParameter("password"),
+                            req.getParameter("role")
                     )
             );
         }
         if ("update".equals(action)) {
             this.logic.update(
-                    Integer.valueOf(req.getParameter("id"))
-                    , req.getParameter("name")
-                    , req.getParameter("login")
-                    , req.getParameter("email")
+                    Integer.valueOf(req.getParameter("id")),
+                    new User(
+                    req.getParameter("name"),
+                    req.getParameter("login"),
+                    req.getParameter("email"),
+                    req.getParameter("password"),
+                    req.getParameter("role")
+                    )
             );
         }
         if ("delete".equals(action)) {
