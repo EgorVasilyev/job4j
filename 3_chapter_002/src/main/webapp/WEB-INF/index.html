@@ -28,6 +28,22 @@
                 & validate($('#lastname'))
                 & validate($('#description'));
         }
+        function addRow() {
+            var name = $('#name').val();
+            var lastname = $('#lastname').val();
+            var sex = this.document.getElementById("male").checked ?
+                this.document.getElementById("male").value : this.document.getElementById("female").value ;
+            var description = $('#description').val();
+
+            //получаем ссылку на последний элемент в таблице.
+            //и после него добавляем html
+            $('#table tr:last').after('<tr>' +
+                '<td>' + name +'</td>' +
+                '<td>' + lastname +'</td>' +
+                '<td>' + sex +'</td>' +
+                '<td>' + description +'</td>' +
+                '</tr>');
+        }
     </script>
 </head>
 <body>
@@ -44,22 +60,22 @@
         </div></br>
         <div class="text-field">
             <label>Sex:</label><br/>
-            <input type="radio" name="sex" checked>Male
-            <input type="radio" name="sex">Female
+            <input type="radio" name="sex" value="Male" checked id="male">Male
+            <input type="radio" name="sex" value="Female" id="female">Female
         </div>
         <br/>
         <div class="form-group">
-        <label>Description:</label><br/>
+            <label>Description:</label><br/>
             <textarea id="description" name="Description"></textarea>
-    </div>
+        </div>
         <div class="text-input">
-            <input type="button" value="Submit" onclick=" return checkInput();">
+            <input type="button" value="Submit" onclick=" return checkInput() & addRow();">
         </div>
     </form>
 </div>
 <div class="container">
     <h2>User table</h2>
-    <table class="table">
+    <table class="table" id='table'>
         <thead>
         <tr>
             <th>Name</th>
@@ -69,18 +85,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>Egor</td>
-            <td>Vasilyev</td>
-            <td>Male</td>
-            <td>He is studying Java</td>
-        </tr>
-        <tr>
-            <td>Vika</td>
-            <td>Boykova</td>
-            <td>Female</td>
-            <td>She is studying medicine</td>
-        </tr>
         </tbody>
     </table>
 </div>
