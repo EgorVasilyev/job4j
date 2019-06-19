@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/functions.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <form action="">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" value="NAME" id="name" name="Name">
+        </div>
+        <div class="text-field">
+            <label for="lastname">Last name:</label>
+            <input type="text" class="form-control" value="LASTNAME" id="lastname" name="Last name">
+        </div></br>
+        <div class="text-field">
+            <label>Sex:</label><br/>
+            <input type="radio" name="sex" value="Male" checked id="male">Male
+            <input type="radio" name="sex" value="Female" id="female">Female
+        </div>
+        <br/>
+        <div class="form-group">
+            <label>Description:</label><br/>
+            <textarea id="description" name="Description" value="DESC"></textarea>
+        </div>
+        <div class="text-input">
+            <input type="button" value="Add row" onclick=" return addRow();">
+            <input type="button" value="Add user" onclick=" return addUser();">
+        </div>
+    </form>
+</div>
+<div class="container">
+    <h2>User table</h2>
+    <table class="table" id='table'>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Last name</th>
+            <th>Sex</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

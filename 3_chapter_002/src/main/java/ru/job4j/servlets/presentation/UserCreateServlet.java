@@ -25,11 +25,6 @@ public class UserCreateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        /*System.out.println("name in add - " + req.getParameter("name"));
-        System.out.println("login in add - " + req.getParameter("login"));
-        System.out.println("email in add - " + req.getParameter("email"));
-        System.out.println("password in add - " + req.getParameter("password"));
-        System.out.println("role in add - " + req.getParameter("role"));*/
         this.logic.add(
                 new User(req.getParameter("name"),
                         req.getParameter("login"),
@@ -38,6 +33,6 @@ public class UserCreateServlet extends HttpServlet {
                         req.getParameter("role")
                 )
         );
-        resp.sendRedirect(String.format("%s/", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/create", req.getContextPath()));
     }
 }

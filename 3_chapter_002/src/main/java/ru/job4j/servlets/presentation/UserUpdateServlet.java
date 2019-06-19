@@ -30,12 +30,6 @@ public class UserUpdateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-/*        System.out.println("id in edit - " + Integer.valueOf(req.getParameter("id")));
-        System.out.println("name in edit - " + req.getParameter("name"));
-        System.out.println("login in edit - " + req.getParameter("login"));
-        System.out.println("email in edit - " + req.getParameter("email"));
-        System.out.println("password in edit - " + req.getParameter("password"));
-        System.out.println("role in edit - " + req.getParameter("role"));*/
         this.logic.update(
                 Integer.valueOf(req.getParameter("id")),
                 new User(

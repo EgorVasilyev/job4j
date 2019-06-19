@@ -37,17 +37,32 @@ public class ValidateService implements Validate {
 
     @Override
     public User add(User user) {
-        if (user.getName() != null && user.getLogin() != null && user.getEmail() != null && user.getPassword() != null) {
+        System.out.println("до - " + user);
+        if (checkUser(user)) {
+            System.out.println("внутри - " + user);
             this.persistent.add(user);
         }
         return user;
     }
+
     @Override
     public void update(int id, User user) {
-        if (user.getName() != null && user.getLogin() != null && user.getEmail() != null && user.getPassword() != null) {
+        if (checkUser(user)) {
             this.persistent.update(id, user);
         }
     }
+
+    private boolean checkUser(User user) {
+        return user.getName() != null
+                && user.getLogin() != null
+                && user.getEmail() != null
+                && user.getPassword() != null
+                && !user.getName().isEmpty()
+                && !user.getLogin().isEmpty()
+                && !user.getEmail().isEmpty()
+                && !user.getPassword().isEmpty();
+    }
+
     @Override
     public boolean delete(int id) {
         Optional<User> userOptional = Optional.ofNullable(this.findById(id));

@@ -1,3 +1,4 @@
+/*
 package ru.job4j.servlets.presentation;
 
 import org.junit.Before;
@@ -65,3 +66,4 @@ public class UsersServletTest {
         assertThat(list.size(), is(0));
     }
 }
+*/

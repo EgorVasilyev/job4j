@@ -1,3 +1,4 @@
+/*
 package ru.job4j.servlets.presentation;
 
 import org.junit.Test;
@@ -48,3 +49,4 @@ public class UserCreateServletTest {
         assertThat(list.get(0).getLogin(), is("testLogin"));
     }
 }
+*/

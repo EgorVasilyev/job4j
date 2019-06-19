@@ -1,5 +1,6 @@
 package ru.job4j.servlets.presentation;
 
+import ru.job4j.servlets.datamodel.User;
 import ru.job4j.servlets.logic.Validate;
 import ru.job4j.servlets.logic.ValidateService;
 
@@ -12,6 +13,9 @@ import java.io.IOException;
 
 public class SigninController extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
+    {
+        logic.add(new User("root", "root", "root", "root", "admin"));
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
