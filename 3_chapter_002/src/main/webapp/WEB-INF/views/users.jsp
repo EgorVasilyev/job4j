@@ -2,9 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <title>Show users</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>Show users</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        <%@include file="/WEB-INF/js/functions.js"%>
+    </script>
 </head>
 <body>
 <form action='${pageContext.servletContext.contextPath}/signin'>
@@ -30,6 +36,8 @@
             <th>Login</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Country</th>
+            <th>City</th>
 
             <c:if test="${error!=''}">
                 <div style="background-color: red" >
@@ -47,9 +55,24 @@
                 <td><c:out value="${user.login}"/></td>
                 <td><c:out value="${user.email}"/></td>
                 <td><c:out value="${user.role}"/></td>
+                <td>
+                    <c:forEach items="${countries}" var="country">
+                        <c:if test="${user.countryId == country.id}">
+                            ${country.name}
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach items="${cities}" var="city">
+                        <c:if test="${user.cityId == city.id}">
+                            ${city.name}
+                        </c:if>
+                    </c:forEach>
+                </td>
 
                 <c:if test="${activeUser.role=='admin'}">
-                    <td><form action='${pageContext.servletContext.contextPath}/edit?id=${user.id}' method='post'>
+                    <td><form action='${pageContext.servletContext.contextPath}/edit' method='post'>
+                        <input type='hidden' name='id' value='${user.id}'/>
                         <button type="submit" class="btn-success">
                             <span class="glyphicon glyphicon-pencil"></span> Edit
                         </button>
@@ -67,7 +90,8 @@
 
                 <c:if test="${activeUser.role!='admin'}">
                     <c:if test="${activeUser.id==user.id}">
-                        <td><form action='${pageContext.servletContext.contextPath}/edit?id=${user.id}' method='post'>
+                        <td><form action='${pageContext.servletContext.contextPath}/edit' method='post'>
+                            <input type='hidden' name='id' value='${user.id}'/>
                             <button type="submit" class="btn-success">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
                             </button>

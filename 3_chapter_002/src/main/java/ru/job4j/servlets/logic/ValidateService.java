@@ -37,9 +37,7 @@ public class ValidateService implements Validate {
 
     @Override
     public User add(User user) {
-        System.out.println("до - " + user);
         if (checkUser(user)) {
-            System.out.println("внутри - " + user);
             this.persistent.add(user);
         }
         return user;
@@ -47,7 +45,7 @@ public class ValidateService implements Validate {
 
     @Override
     public void update(int id, User user) {
-        if (checkUser(user)) {
+        if (id > 0 && checkUser(user)) {
             this.persistent.update(id, user);
         }
     }

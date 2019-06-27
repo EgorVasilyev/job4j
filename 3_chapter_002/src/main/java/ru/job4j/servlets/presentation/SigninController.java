@@ -6,15 +6,15 @@ import ru.job4j.servlets.logic.ValidateService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class SigninController extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
     {
-        logic.add(new User("root", "root", "root", "root", "admin"));
+        logic.add(new User("root", "root", "root", "root", "admin", 1, 1));
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,6 +31,7 @@ public class SigninController extends HttpServlet {
             synchronized (httpSession) {
                 httpSession.setAttribute("activeUser", this.logic.findById(id));
             }
+
             resp.sendRedirect(String.format("%s/users", req.getContextPath()));
         } else {
             req.setAttribute("error", "Invalid user");

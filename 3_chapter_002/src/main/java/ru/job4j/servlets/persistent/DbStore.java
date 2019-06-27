@@ -41,8 +41,18 @@ public class DbStore implements Store {
         SOURCE.setMinIdle(Integer.valueOf(this.properties.getProperty("minIdle")));
         SOURCE.setMaxIdle(Integer.valueOf(this.properties.getProperty("maxIdl")));
         SOURCE.setMaxOpenPreparedStatements(Integer.valueOf(this.properties.getProperty("MaxOpenPreparedStatements")));
-        this.createUsersTable();
+        this.doQuery("Try to create users table", "createUsersTable");
         this.id.set(this.getActualId());
+    }
+
+    private void doQuery(String logInfo, String queryName) {
+        LOG.info(logInfo);
+        try (Connection connection = SOURCE.getConnection();
+             Statement st = connection.createStatement()) {
+            st.execute(this.properties.getProperty(queryName));
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
     private int getActualId() {
@@ -65,16 +75,6 @@ public class DbStore implements Store {
         return singletonInstance;
     }
 
-    private void createUsersTable() {
-        LOG.info("Try to create users table");
-        try (Connection connection = SOURCE.getConnection();
-             Statement stForCreateItems = connection.createStatement()) {
-            stForCreateItems.execute(this.properties.getProperty("createUsersTable"));
-        } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
-        }
-    }
-
     @Override
     public void add(User user) {
         LOG.info(String.format("Try to add new %s", user));
@@ -88,6 +88,8 @@ public class DbStore implements Store {
             stAdd.setString(5, user.getPassword());
             stAdd.setInt(6, id.incrementAndGet());
             stAdd.setString(7, user.getRole());
+            stAdd.setInt(8, user.getCountryId());
+            stAdd.setInt(9, user.getCityId());
             stAdd.execute();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -104,7 +106,9 @@ public class DbStore implements Store {
             stUpdate.setString(3, user.getEmail());
             stUpdate.setString(4, user.getPassword());
             stUpdate.setString(5, user.getRole());
-            stUpdate.setInt(6, id);
+            stUpdate.setInt(6, user.getCountryId());
+            stUpdate.setInt(7, user.getCityId());
+            stUpdate.setInt(8, id);
             stUpdate.execute();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -152,7 +156,9 @@ public class DbStore implements Store {
                         "E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
                         .parse(result.getString("create_date")
                         );
-                User user = new User(name, login, email, password, role);
+                int country = result.getInt("country_id");
+                int city = result.getInt("city_id");
+                User user = new User(name, login, email, password, role, country, city);
                 user.setId(id);
                 user.setCreateDate(date);
                 users.put(user.getId(), user);
@@ -166,7 +172,7 @@ public class DbStore implements Store {
     @Override
     public User findById(int id) {
         LOG.info(String.format("Find user by id = %s", id));
-        User user = new User(null, null, null, null, null);
+        User user = new User(null, null, null, null, null, 1, 1);
         try (Connection connection = SOURCE.getConnection();
              PreparedStatement stForQuery = connection.prepareStatement(this.properties.getProperty("queryFindById"))) {
             stForQuery.setInt(1, id);
@@ -184,6 +190,8 @@ public class DbStore implements Store {
                                 .parse(result.getString("create_date")
                                 )
                 );
+                user.setCountryId(result.getInt("country_id"));
+                user.setCityId(result.getInt("city_id"));
             }
             result.close();
             if (user.getName() == null

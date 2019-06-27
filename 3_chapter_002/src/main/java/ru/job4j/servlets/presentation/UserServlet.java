@@ -69,25 +69,30 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         String action = req.getParameter("action");
+        String country = req.getParameter("country");
+        String city = req.getParameter("city");
         if ("add".equals(action)) {
             this.logic.add(
                     new User(req.getParameter("name"),
                             req.getParameter("login"),
                             req.getParameter("email"),
                             req.getParameter("password"),
-                            req.getParameter("role")
+                            req.getParameter("role"),
+                            country == null || country.equals("") ? 0 : Integer.parseInt(country),
+                            city == null ||  city.equals("") ? 0 : Integer.parseInt(city)
                     )
             );
         }
         if ("update".equals(action)) {
             this.logic.update(
                     Integer.valueOf(req.getParameter("id")),
-                    new User(
-                    req.getParameter("name"),
-                    req.getParameter("login"),
-                    req.getParameter("email"),
-                    req.getParameter("password"),
-                    req.getParameter("role")
+                    new User(req.getParameter("name"),
+                            req.getParameter("login"),
+                            req.getParameter("email"),
+                            req.getParameter("password"),
+                            req.getParameter("role"),
+                            country == null || country.equals("") ? 0 : Integer.parseInt(country),
+                            city == null ||  city.equals("") ? 0 : Integer.parseInt(city)
                     )
             );
         }
