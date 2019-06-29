@@ -31,13 +31,13 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>UserCreateServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/create</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>UserUpdateServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.presentation.UserUpdateServlet</servlet-class>
-        <load-on-startup>5</load-on-startup>
+        <load-on-startup>4</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserUpdateServlet</servlet-name>
@@ -47,7 +47,7 @@
     <servlet>
         <servlet-name>EchoServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.EchoServlet</servlet-class>
-        <load-on-startup>8</load-on-startup>
+        <load-on-startup>5</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>EchoServlet</servlet-name>
@@ -64,12 +64,36 @@
         <url-pattern>/signin</url-pattern>
     </servlet-mapping>
 
-        <filter>
-            <filter-name>AuthFilter</filter-name>
-            <filter-class>ru.job4j.servlets.presentation.AuthFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>AuthFilter</filter-name>
-            <url-pattern>*</url-pattern>
-        </filter-mapping>
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.servlets.presentation.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>JsonServlet</servlet-name>
+        <servlet-class>ru.job4j.servlets.presentation.JsonServlet</servlet-class>
+        <load-on-startup>8</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JsonServlet</servlet-name>
+        <url-pattern>/jsonCity</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CountryCityServlet</servlet-name>
+        <servlet-class>ru.job4j.servlets.presentation.CountryCityServlet</servlet-class>
+        <load-on-startup>9</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CountryCityServlet</servlet-name>
+        <url-pattern>/countryCity</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>ru.job4j.servlets.listeners.Countries</listener-class>
+    </listener>
 </web-app>

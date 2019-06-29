@@ -1,5 +1,7 @@
 package ru.job4j.servlets.presentation;
 
+import ru.job4j.servlets.datamodel.City;
+import ru.job4j.servlets.datamodel.Country;
 import ru.job4j.servlets.logic.Validate;
 import ru.job4j.servlets.logic.ValidateService;
 
@@ -8,15 +10,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UsersServlet extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
+
     /**
      * - doGet URL  /list - открывает таблицу со всеми пользователями.
      * В каждой строку должна быть колонка с кнопками (редактировать, удалить)
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        @SuppressWarnings("unchecked")
+        ConcurrentHashMap<Integer, Country> countriesMap = (ConcurrentHashMap<Integer, Country>) getServletContext()
+                .getAttribute("countriesMap");
+        CopyOnWriteArrayList<Country> countriesList = new CopyOnWriteArrayList<>(countriesMap.values());
+        @SuppressWarnings("unchecked")
+        CopyOnWriteArrayList<City> citiesList = (CopyOnWriteArrayList<City>) getServletContext()
+                .getAttribute("citiesList");
+        req.setAttribute("countries", countriesList);
+        req.setAttribute("cities", citiesList);
         req.setAttribute("users", this.logic.findAll().values());
         req.getRequestDispatcher("/WEB-INF/views/users.jsp").forward(req, resp);
     }
