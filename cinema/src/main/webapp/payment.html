@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        var pairs;
+        var finishPrice;
+        $(document).ready(function () {
+            pairs = JSON.parse(sessionStorage.getItem("pairs"));
+            var tBody = $("#tbody");
+            var result = "";
+            pairs.forEach(function (value) {
+                var range = value.toString().charAt(0);
+                var place = value.toString().charAt(1);
+                result += "<tr><td>Ряд " + range + ", Место " + place + "</td><td>500</td></tr>";
+            });
+            finishPrice = 500 * pairs.length;
+            result += "<tr><td><strong>Итого:</strong></td><td><strong>" + finishPrice + "</strong></td></tr>";
+            (tBody).append(result);
+        });
+        function toPay() {
+            var fio = $("#fio").val();
+            var phone = $("#phone").val();
+            $.ajax({
+                type: "POST",
+                url: "./hall",
+                data: {
+                    "fio": fio,
+                    "phone": phone,
+                    "hallNumber": sessionStorage.getItem("hallNumber"),
+                    "finishPrice": finishPrice,
+                    "blockedPlaces": JSON.stringify(pairs)
+                },
+                complete: function () {
+                    alert("Оплачено!");
+                    window.location.href = "http://localhost:8080/cinema/index.html";
+                }
+            });
+        }
+        function checkInput() {
+            return validate($('#fio'))
+                && validate($('#phone'));
+        }
+        function validate(id) {
+            var result = true;
+            var value = $(id);
+            if (value.val() === '') {
+                alert('Поле "' + value.attr('name').concat('" должно быть заполнено!'));
+                result = false;
+            }
+            return result;
+        }
+    </script>
+    <title>Payment</title>
+</head>
+<body>
+<div class="container">
+    <h4>
+        Вы выбрали:
+    </h4>
+    <div class="row pt-3">
+        <table class="table table-bordered">
+            <thead>
+            <tr id="trhead">
+                <th class="form-group">Ряд/место:</th>
+                <th class="form-group">Цена, руб:</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <form>
+            <div class="form-group">
+                <label for="fio">ФИО:</label>
+                <input type="text" class="form-control" id="fio" name="ФИО" placeholder="введите ФИО">
+            </div>
+            <div class="form-group">
+                <label for="phone">Номер телефона:</label>
+                <input type="text" class="form-control" id="phone" name="Номер телефона" placeholder="+7(977)123-45-67">
+            </div>
+            <div class="row float-right">
+                <button type="button" class="btn btn-success" onclick="return checkInput() && toPay()">Оплатить</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
