@@ -1,4 +1,4 @@
-package firstTask;
+package firsttask;
 
 import java.util.Calendar;
 import java.util.Objects;

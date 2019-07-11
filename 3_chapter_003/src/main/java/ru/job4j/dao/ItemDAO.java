@@ -5,7 +5,9 @@ import java.util.List;
 
 public interface ItemDAO {
     List<Item> getItems();
-    List<Item> getDoneItems();
+    List<Item> getNotDoneItems();
+    Item getById(int id);
     void save(Item item);
     void update(Item item);
+    void delete(Item item);
 }

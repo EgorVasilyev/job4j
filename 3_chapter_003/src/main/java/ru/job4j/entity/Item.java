@@ -1,5 +1,6 @@
 package ru.job4j.entity;
 
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -9,11 +10,9 @@ public class Item {
     private Timestamp created;
     private boolean done;
 
-    public Item(int id, String description, Timestamp created, boolean done) {
-        this.id = id;
-        this.description = description;
-        this.created = created;
-        this.done = done;
+    public Item() {
+        this.created = new Timestamp(new Date().getTime());
+        this.done = false;
     }
 
     public int getId() {
