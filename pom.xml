@@ -15,6 +15,7 @@
         <module>3_chapter_002</module>
         <module>cinema</module>-->
         <module>3_chapter_003_TODO_list</module>
+        <module>3_chapter_003_car_storage</module>
         <!--<module>3_chapter_002_json</module>
         <module>chapter_003</module>
         <module>chapter_004</module>
@@ -164,7 +165,7 @@
                             <finalName>tracker</finalName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ru.job4j.tracker.StartUI</mainClass>
+                                    <mainClass>ru.ru.job4j.tracker.StartUI</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

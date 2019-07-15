@@ -1,0 +1,8 @@
+<hibernate-mapping>
+    <class name="ru.job4j.entity.xml.Body" table="bodies_hibernate">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="name"/>
+    </class>
+</hibernate-mapping>

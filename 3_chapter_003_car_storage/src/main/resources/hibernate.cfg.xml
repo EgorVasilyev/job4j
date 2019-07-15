@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/car_fabric</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!--  xml mapping -->
+        <!--<mapping resource="ru/job4j/entity/xml/Engine.hbm.xml"/>
+        <mapping resource="ru/job4j/entity/xml/Transmission.hbm.xml"/>
+        <mapping resource="ru/job4j/entity/xml/Body.hbm.xml"/>
+        <mapping resource="ru/job4j/entity/xml/Car.hbm.xml"/>-->
+
+        <!--  annotation mapping -->
+        <mapping class="ru.job4j.entity.annotations.Engine"/>
+        <mapping class="ru.job4j.entity.annotations.Transmission"/>
+        <mapping class="ru.job4j.entity.annotations.Body"/>
+        <mapping class="ru.job4j.entity.annotations.Car"/>
+
+    </session-factory>
+</hibernate-configuration>
