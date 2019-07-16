@@ -13,13 +13,15 @@
         <module>2_chapter_004</module>
         <module>2_chapter_005</module>
         <module>3_chapter_002</module>
-        <module>cinema</module>-->
+        <module>cinema</module>
         <module>3_chapter_003_TODO_list</module>
-        <module>3_chapter_003_car_storage</module>
+        <module>3_chapter_003_car_storage</module>-->
+        <module>3_chapter_003_sale_car</module>
         <!--<module>3_chapter_002_json</module>
         <module>chapter_003</module>
         <module>chapter_004</module>
         <module>chess</module>-->
+
     </modules>
     <name>junior</name>
     <url>http://job4j.ru/</url>
@@ -165,7 +167,7 @@
                             <finalName>tracker</finalName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ru.ru.job4j.tracker.StartUI</mainClass>
+                                    <mainClass>ru.ru.ru.job4j.tracker.StartUI</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
