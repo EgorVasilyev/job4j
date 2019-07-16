@@ -15,11 +15,11 @@ import java.util.function.Function;
 
 public class ItemDAOImpl implements ItemDAO {
     private static final Logger LOG = LogManager.getLogger(ItemDAOImpl.class.getName());
-    private static ItemDAOImpl itemDAO = new ItemDAOImpl();
+    private static final ItemDAOImpl ITEM_DAO = new ItemDAOImpl();
     private final SessionFactory sessionFactory;
 
     public static ItemDAOImpl getInstance() {
-        return itemDAO;
+        return ITEM_DAO;
     }
 
     private ItemDAOImpl() {

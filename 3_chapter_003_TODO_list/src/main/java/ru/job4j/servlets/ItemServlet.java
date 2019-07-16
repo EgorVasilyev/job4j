@@ -20,7 +20,8 @@ import java.util.function.Function;
 
 public class ItemServlet extends HttpServlet {
     private static final Logger LOG = LogManager.getLogger(ItemServlet.class.getName());
-    private static ItemService itemService = ItemService.getInstance();
+    private static final ItemService ITEM_SERVICE = ItemService.getInstance();
+
     private static final Map<String, Function<ItemService, List<Item>>> ITEMS = new HashMap<>();
     private static final Map<String, Consumer<HttpServletRequest>> SERVICE = new HashMap<>();
 
@@ -37,34 +38,38 @@ public class ItemServlet extends HttpServlet {
     public Function<ItemService, List<Item>> showItems() {
         return ItemService::getItems;
     }
+
     public Function<ItemService, List<Item>> showNotDoneItems() {
         return ItemService::getNotDoneItems;
     }
+
     public void loadFunction(String action, Function<ItemService, List<Item>> handle) {
         ITEMS.put(action, handle);
     }
+
     public Consumer<HttpServletRequest> saveItem() {
         return req -> {
             String description = req.getParameter("description");
             Item item = new Item();
             item.setDescription(description);
-            itemService.save(item);
+            ITEM_SERVICE.save(item);
         };
     }
+
     public Consumer<HttpServletRequest> updateItem() {
         return req -> {
             int id = Integer.valueOf(req.getParameter("id"));
             boolean done = Boolean.valueOf(req.getParameter("done"));
-            Item item = itemService.getById(id);
+            Item item = ITEM_SERVICE.getById(id);
             item.setDone(done);
-            itemService.update(item);
+            ITEM_SERVICE.update(item);
         };
     }
     public Consumer<HttpServletRequest> deleteItem() {
         return req -> {
             int id = Integer.valueOf(req.getParameter("id"));
-            Item item = itemService.getById(id);
-            itemService.delete(item);
+            Item item = ITEM_SERVICE.getById(id);
+            ITEM_SERVICE.delete(item);
         };
     }
     public void loadConsumer(String action, Consumer<HttpServletRequest> handle) {
@@ -76,7 +81,7 @@ public class ItemServlet extends HttpServlet {
         resp.setContentType("text/json");
         ObjectMapper mapper = new ObjectMapper();
         try (Writer writer = new PrintWriter(resp.getOutputStream())) {
-            writer.write(mapper.writeValueAsString(ITEMS.get(req.getParameter("action")).apply(itemService)));
+            writer.write(mapper.writeValueAsString(ITEMS.get(req.getParameter("action")).apply(ITEM_SERVICE)));
         } catch (Exception ex) {
             LOG.error("Error", ex);
         }
