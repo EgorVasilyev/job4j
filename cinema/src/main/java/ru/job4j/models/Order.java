@@ -18,6 +18,9 @@ public class Order {
         this.price = price;
     }
 
+    public Order() {
+    }
+
     public String getFio() {
         return fio;
     }
