@@ -8,7 +8,6 @@ import ru.job4j.servlets.datamodel.User;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ValidateService.class)
 public class ValidateStub implements Validate {
@@ -40,8 +39,8 @@ public class ValidateStub implements Validate {
     }
 
     @Override
-    public ConcurrentHashMap<Integer, User> findAll() {
-        return new ConcurrentHashMap<>(store);
+    public Map<Integer, User> findAll() {
+        return new HashMap<>(store);
     }
 
     @Override

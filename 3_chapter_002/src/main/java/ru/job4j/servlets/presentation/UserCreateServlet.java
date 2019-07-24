@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UserCreateServlet extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
@@ -23,8 +25,8 @@ public class UserCreateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         @SuppressWarnings("unchecked")
-        ConcurrentHashMap<Integer, Country> countriesMap = (ConcurrentHashMap<Integer, Country>) getServletContext().getAttribute("countriesMap");
-        CopyOnWriteArrayList<Country> countriesList = new CopyOnWriteArrayList<>(countriesMap.values());
+        Map<Integer, Country> countriesMap = (HashMap<Integer, Country>) getServletContext().getAttribute("countriesMap");
+        List<Country> countriesList = new ArrayList<>(countriesMap.values());
         req.setAttribute("countries", countriesList);
         req.getRequestDispatcher("/WEB-INF/views/create.jsp").forward(req, resp);
     }

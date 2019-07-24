@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UsersServlet extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
@@ -23,11 +24,11 @@ public class UsersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         @SuppressWarnings("unchecked")
-        ConcurrentHashMap<Integer, Country> countriesMap = (ConcurrentHashMap<Integer, Country>) getServletContext()
+        Map<Integer, Country> countriesMap = (Map<Integer, Country>) getServletContext()
                 .getAttribute("countriesMap");
-        CopyOnWriteArrayList<Country> countriesList = new CopyOnWriteArrayList<>(countriesMap.values());
+        List<Country> countriesList = new ArrayList<>(countriesMap.values());
         @SuppressWarnings("unchecked")
-        CopyOnWriteArrayList<City> citiesList = (CopyOnWriteArrayList<City>) getServletContext()
+        List<City> citiesList = (ArrayList<City>) getServletContext()
                 .getAttribute("citiesList");
         req.setAttribute("countries", countriesList);
         req.setAttribute("cities", citiesList);
@@ -42,5 +43,10 @@ public class UsersServlet extends HttpServlet {
             this.logic.delete(id);
         }
         doGet(req, resp);
+    }
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
     }
 }

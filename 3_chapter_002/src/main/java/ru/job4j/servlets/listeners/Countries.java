@@ -15,9 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Countries implements ServletContextListener {
@@ -56,21 +54,20 @@ public class Countries implements ServletContextListener {
         }
     }
 
-    public ConcurrentHashMap<Integer, Country> findAllCountries() {
+    public Map<Integer, Country> findAllCountries() {
         LOG.info("find all countries");
-        ConcurrentHashMap<Integer, Country> countries = new ConcurrentHashMap<>();
+        Map<Integer, Country> countries = new HashMap<>();
         try (Connection connection = SOURCE.getConnection();
-             Statement stFindAll = connection.createStatement()) {
-            ResultSet result = stFindAll.executeQuery(this.properties.getProperty("queryAllCountries"));
+             Statement stFindAll = connection.createStatement();
+             ResultSet result = stFindAll.executeQuery(this.properties.getProperty("queryAllCountries"))) {
             countries = this.findCountries(result);
-            result.close();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
         return countries;
     }
-    private ConcurrentHashMap<Integer, Country> findCountries(ResultSet result) {
-        ConcurrentHashMap<Integer, Country> countries = new ConcurrentHashMap<>();
+    private Map<Integer, Country> findCountries(ResultSet result) {
+        Map<Integer, Country> countries = new HashMap<>();
         try {
             while (result.next()) {
                 int id = result.getInt("id");
@@ -82,12 +79,11 @@ public class Countries implements ServletContextListener {
         }
         return countries;
     }
-    private CopyOnWriteArrayList<City> findCitiesByCountryId(int id) {
+    private List<City> findCitiesByCountryId(int id) {
         LOG.info("find all cities by country id = " + id);
-        CopyOnWriteArrayList<City> cities = new CopyOnWriteArrayList<>();
+        List<City> cities = new ArrayList<>();
         try (Connection connection = SOURCE.getConnection(); PreparedStatement stFindAll =
-                connection.prepareStatement(this.properties.getProperty("queryAllCitiesByCountryId"))
-        ) {
+                connection.prepareStatement(this.properties.getProperty("queryAllCitiesByCountryId"))) {
             stFindAll.setInt(1, id);
             ResultSet result = stFindAll.executeQuery();
             cities = this.findCities(result);
@@ -97,8 +93,8 @@ public class Countries implements ServletContextListener {
         }
         return cities;
     }
-    private CopyOnWriteArrayList<City> findCities(ResultSet result) {
-        CopyOnWriteArrayList<City> cities = new CopyOnWriteArrayList<>();
+    private List<City> findCities(ResultSet result) {
+        List<City> cities = new ArrayList<>();
         try {
             while (result.next()) {
                 int id = result.getInt("id");
@@ -114,10 +110,10 @@ public class Countries implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
-        ConcurrentHashMap<Integer, Country> countries = findAllCountries();
-        CopyOnWriteArrayList<City> cities = countries.values().stream()
+        Map<Integer, Country> countries = findAllCountries();
+        List<City> cities = countries.values().stream()
                 .flatMap(country -> country.getCities().stream())
-                .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
         sc.setAttribute("countriesMap", countries);
         sc.setAttribute("citiesList", cities);
     }

@@ -4,8 +4,8 @@ import ru.job4j.servlets.datamodel.User;
 import ru.job4j.servlets.persistent.DbStore;
 import ru.job4j.servlets.persistent.Store;
 
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Logic Layout
@@ -71,7 +71,7 @@ public class ValidateService implements Validate {
         return result;
     }
     @Override
-    public ConcurrentHashMap<Integer, User> findAll() {
+    public Map<Integer, User> findAll() {
         return this.persistent.findAll();
     }
     @Override

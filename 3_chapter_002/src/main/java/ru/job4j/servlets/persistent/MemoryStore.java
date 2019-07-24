@@ -2,6 +2,7 @@ package ru.job4j.servlets.persistent;
 
 import ru.job4j.servlets.datamodel.User;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,7 +66,7 @@ public class MemoryStore implements Store {
     }
 
     @Override
-    public ConcurrentHashMap<Integer, User> findAll() {
+    public Map<Integer, User> findAll() {
         return this.users;
     }
 

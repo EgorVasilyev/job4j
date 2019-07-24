@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class JsonServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(JsonServlet.class);
@@ -23,14 +24,14 @@ public class JsonServlet extends HttpServlet {
         String param = req.getParameter("countryId");
         Integer countryId = param.equals("") ? null : Integer.parseInt(param);
         @SuppressWarnings("unchecked")
-        ConcurrentHashMap<Integer, Country> countries =
-                (ConcurrentHashMap<Integer, Country>) getServletContext().getAttribute("countriesMap");
-        CopyOnWriteArrayList<City> cityList;
+        Map<Integer, Country> countries =
+                (Map<Integer, Country>) getServletContext().getAttribute("countriesMap");
+        List<City> cityList;
         if (countryId == null) {
-            cityList = new CopyOnWriteArrayList<>(); //returns an empty CopyOnWriteArrayList for creating an empty select
+            cityList = new ArrayList<>(); //returns an empty ArrayList for creating an empty select
         } else {
             Country country = countries.get(countryId);
-            cityList = new CopyOnWriteArrayList<>(country.getCities());
+            cityList = new ArrayList<>(country.getCities());
         }
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(cityList);

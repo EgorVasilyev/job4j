@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UserUpdateServlet extends HttpServlet {
     private final Validate logic = ValidateService.getSingletonInstance();
@@ -29,11 +30,10 @@ public class UserUpdateServlet extends HttpServlet {
         User user = ValidateService.getSingletonInstance().findById(id);
         req.setAttribute("user", user);
         @SuppressWarnings("unchecked")
-        ConcurrentHashMap<Integer, Country> countriesMap =
-                (ConcurrentHashMap<Integer, Country>) getServletContext().getAttribute("countriesMap");
-        CopyOnWriteArrayList<Country> countriesList = new CopyOnWriteArrayList<>(countriesMap.values());
-        CopyOnWriteArrayList<City> cities =
-                (CopyOnWriteArrayList<City>) countriesMap.get(user.getCountryId()).getCities();
+        Map<Integer, Country> countriesMap =
+                (Map<Integer, Country>) getServletContext().getAttribute("countriesMap");
+        List<Country> countriesList = new ArrayList<>(countriesMap.values());
+        List<City> cities = countriesMap.get(user.getCountryId()).getCities();
         req.setAttribute("user", user);
         req.setAttribute("countries", countriesList);
         req.setAttribute("cities", cities);

@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
+
+    <listener>
+        <listener-class>ru.job4j.servlets.listeners.Countries</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>ru.job4j.servlets.presentation.UserServlet</servlet-class>
@@ -82,18 +87,4 @@
         <servlet-name>JsonServlet</servlet-name>
         <url-pattern>/jsonCity</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <servlet-name>CountryCityServlet</servlet-name>
-        <servlet-class>ru.job4j.servlets.presentation.CountryCityServlet</servlet-class>
-        <load-on-startup>9</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CountryCityServlet</servlet-name>
-        <url-pattern>/countryCity</url-pattern>
-    </servlet-mapping>
-
-    <listener>
-        <listener-class>ru.job4j.servlets.listeners.Countries</listener-class>
-    </listener>
 </web-app>

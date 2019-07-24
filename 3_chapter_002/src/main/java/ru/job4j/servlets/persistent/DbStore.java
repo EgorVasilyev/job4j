@@ -11,10 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -24,12 +21,12 @@ public class DbStore implements Store {
     private static Store singletonInstance =
             new DbStore();
     private final AtomicInteger id = new AtomicInteger(0);
-    private Properties properties;
+    private final Properties properties;
 
     public DbStore() {
         LOG.info("Constructor DbStore()");
+        this.properties = new Properties();
         try (InputStream in = DbStore.class.getClassLoader().getResourceAsStream("db.properties")) {
-            this.properties = new Properties();
             this.properties.load(in);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -129,21 +126,20 @@ public class DbStore implements Store {
     }
 
     @Override
-    public ConcurrentHashMap<Integer, User> findAll() {
+    public Map<Integer, User> findAll() {
         LOG.info("Show users");
-        ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
+        Map<Integer, User> users = new HashMap<>();
         try (Connection connection = SOURCE.getConnection();
-             Statement stFindAll = connection.createStatement()) {
-            ResultSet result = stFindAll.executeQuery(this.properties.getProperty("queryFindAll"));
+             Statement stFindAll = connection.createStatement();
+             ResultSet result = stFindAll.executeQuery(this.properties.getProperty("queryFindAll"))) {
             users = this.findUsers(result);
-            result.close();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
         return users;
     }
-    private ConcurrentHashMap<Integer, User> findUsers(ResultSet result) {
-        ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
+    private Map<Integer, User> findUsers(ResultSet result) {
+        Map<Integer, User> users = new HashMap<>();
         try {
             while (result.next()) {
                 String name = result.getString("name_u");
