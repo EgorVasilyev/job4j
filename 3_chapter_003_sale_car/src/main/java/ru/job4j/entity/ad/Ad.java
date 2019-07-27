@@ -129,7 +129,7 @@ public class Ad {
         sb.append(", user=").append(user.getLogin());
         sb.append(", closed=").append(closed);
         sb.append(", created=").append(new SimpleDateFormat("d MMM yy, H:m").format(created));
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

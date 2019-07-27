@@ -61,25 +61,21 @@ function showAdditionalField(select) {
         }
     }
 }
-function setValue(checkbox) {
+function setValueYesNo(checkbox, param) {
     if ($(checkbox).is(':checked')) {
-        $("#send").val("showAllAds");
+        $(param).val("yes");
     } else {
-        $("#send").val("showActualAds");
+        $(param).val("");
     }
-    return true;
 }
-$(document).ready(function(){
-    let content = document.getElementById("content")
-    let show = document.getElementById("showContent")
-    let hide = document.getElementById("hideContent")
+function clearFilters() {
+    document.getElementById('checkboxActual').checked = false;
+    document.getElementById('checkboxCurrentDay').checked = false;
+    document.getElementById('checkboxWithPhoto').checked = false;
+    document.getElementById('byName').value = '';
 
-    show.addEventListener("click", () => {
-        content.style.display = "block"
-    })
-
-    hide.addEventListener("click", () => {
-        content.style.display = "none"
-    })
-});
+    setValueYesNo($('#checkboxActual'), $('#actual'));
+    setValueYesNo($('#checkboxCurrentDay'), $('#currentDay'));
+    setValueYesNo($('#checkboxWithPhoto'), $('#withPhoto'));
+}
 

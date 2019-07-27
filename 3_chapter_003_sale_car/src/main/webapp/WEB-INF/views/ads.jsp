@@ -90,15 +90,51 @@
 
 <div class="container-my">
     <form id="refreshAds" action='${pageContext.servletContext.contextPath}/ads' method="get">
-        <div class="form-check">
-            <input type='hidden' name='action' value='showAds'>
-            <input type='hidden' name='fromAds' value='ads'>
-            <input type='hidden' name='send' id='send' value="showActualAds" >
-            <input type="checkbox" class="form-check-input" id="checkbox"
-            <c:if test="${checked == true}"> checked</c:if>
-                   onchange="setValue(this) && $('#refreshAds').submit();"
-            >All / Actual
-        </div>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <input type='hidden' name='action' value='showAds'>
+                        <input type='hidden' name='actual' id='actual' value="" >
+                        <input type='hidden' name='currentDay' id='currentDay' value="" >
+                        <input type='hidden' name='withPhoto' id='withPhoto' value="" >
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#filter">
+                            <span class="glyphicon glyphicon-filter"></span> Show / hide filters</button>
+                    </div>
+                </td>
+                <td>
+                    <div id="filter" class="form-group collapse">
+                        <input type="checkbox" class="form-check-input" id="checkboxActual"
+                        <c:if test="${checkedActual == true}"> checked</c:if>
+                               onchange="setValueYesNo(this, $('#actual'));">
+                        Actual
+                        <script>setValueYesNo($('#checkboxActual'), $('#actual'));</script>
+                        <input type="checkbox" class="form-check-input" id="checkboxCurrentDay"
+                        <c:if test="${checkedCurrentDay == true}"> checked</c:if>
+                               onchange="setValueYesNo(this, $('#currentDay'));">
+                        Last day
+                        <script>setValueYesNo($('#checkboxCurrentDay'), $('#currentDay'));</script>
+                        <input type="checkbox" class="form-check-input" id="checkboxWithPhoto"
+                        <c:if test="${checkedWithPhoto == true}"> checked</c:if>
+                               onchange="setValueYesNo(this, $('#withPhoto'));">
+                        With photo
+                        <script>setValueYesNo($('#checkboxWithPhoto'), $('#withPhoto'));</script>
+                        <div class="col-sm-3">
+                            <input class="form-control" type='text' placeholder='Search by model'
+                                   name='byName' id='byName' value="${model}">
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <span class="glyphicon glyphicon-ok"></span> Apply filters
+                        </button>
+                        <button type="submit" class="btn btn-danger" onclick="clearFilters()">
+                            <span class="glyphicon glyphicon-trash"></span> Clear filters
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </form>
     <h4><span class="glyphicon glyphicon-list"></span>&ensp;List of ads:</h4>
     <table class="table" id='table'>

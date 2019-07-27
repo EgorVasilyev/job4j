@@ -58,7 +58,7 @@ public class Engine {
         final StringBuilder sb = new StringBuilder("Engine{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

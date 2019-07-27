@@ -14,10 +14,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @MultipartConfig
 public class AdsServlet extends HttpServlet {
@@ -31,20 +33,9 @@ public class AdsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("action").equals("showAds")) {
-            List<Ad> ads = new ArrayList<>();
-            if (req.getParameter("fromAds") != null) {
-                if (req.getParameter("send").equals("showAllAds")) {
-                    ads = AD_SERVICE.getAds();
-                    req.setAttribute("checked", true);
-                }
-                if (req.getParameter("send").equals("showActualAds")) {
-                    ads = AD_SERVICE.getNotClosedAds();
-                    req.setAttribute("checked", false);
-                }
-            } else {
-                ads = AD_SERVICE.getNotClosedAds();
-                req.setAttribute("checked", false);
-            }
+            Map<String, String> filter = new HashMap<>();
+            this.fillFilterAndSetAttr(req, filter);
+            List<Ad> ads = AD_SERVICE.getAdsByFilter(filter);
             req.setAttribute("ads", ads);
             HashMap<Integer, String> picturesBase64 = new HashMap<>(ads.size());
             ads.forEach(ad -> {
@@ -82,6 +73,34 @@ public class AdsServlet extends HttpServlet {
             });
             req.setAttribute("pictures", picturesBase64);
             req.getRequestDispatcher("/WEB-INF/views/userAds.jsp").forward(req, resp);
+        }
+    }
+
+    private void fillFilterAndSetAttr(HttpServletRequest req, Map<String, String> filter) {
+        if (req.getParameter("actual") != null && !req.getParameter("actual").equals("")) {
+            filter.put("actual", null);
+            req.setAttribute("checkedActual", true);
+        } else {
+            req.setAttribute("checkedActual", false);
+        }
+
+        if (req.getParameter("currentDay") != null && !req.getParameter("currentDay").equals("")) {
+            filter.put("currentDay", null);
+            req.setAttribute("checkedCurrentDay", true);
+        } else {
+            req.setAttribute("checkedCurrentDay", false);
+        }
+        String byName = req.getParameter("byName");
+        if (byName != null && !byName.equals("")) {
+            filter.put("byName", byName);
+            req.setAttribute("model", byName);
+        }
+
+        if (req.getParameter("withPhoto") != null && !req.getParameter("withPhoto").equals("")) {
+            filter.put("withPhoto", null);
+            req.setAttribute("checkedWithPhoto", true);
+        } else {
+            req.setAttribute("checkedWithPhoto", false);
         }
     }
 

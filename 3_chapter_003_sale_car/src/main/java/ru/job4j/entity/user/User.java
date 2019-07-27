@@ -95,7 +95,7 @@ public class User {
         sb.append(", login='").append(login).append('\'');
         sb.append(", phone='").append(phone).append('\'');
         sb.append(", role='").append(role).append('\'');
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

@@ -7,6 +7,7 @@ import ru.job4j.dao.car.EngineDaoImpl;
 import ru.job4j.entity.ad.Ad;
 
 import java.util.List;
+import java.util.Map;
 
 public class AdService {
     private static final Logger LOG = LogManager.getLogger(EngineDaoImpl.class.getName());
@@ -40,15 +41,15 @@ public class AdService {
         return AD_DAO.getEntities();
     }
 
-    public List<Ad> getNotClosedAds() {
-        return AD_DAO.getNotClosedAds();
-    }
-
     public List<Ad> getAdsByUserId(int userId) {
         return AD_DAO.getAdsByUserId(userId);
     }
 
     public Ad getAdById(int id) {
         return AD_DAO.getAdById(id);
+    }
+
+    public List<Ad> getAdsByFilter(Map<String, String> filter) {
+        return AD_DAO.getAdsByFilter(filter);
     }
 }

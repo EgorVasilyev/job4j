@@ -146,7 +146,7 @@ public class Car {
         sb.append(", year=").append(year);
         sb.append(", color=").append(color);
         sb.append(", user=").append(user);
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

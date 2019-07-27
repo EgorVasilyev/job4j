@@ -59,7 +59,7 @@ public class Color {
         final StringBuilder sb = new StringBuilder("Color{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

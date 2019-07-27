@@ -58,7 +58,7 @@ public class Body {
         final StringBuilder sb = new StringBuilder("Body{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }

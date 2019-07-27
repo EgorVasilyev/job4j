@@ -59,7 +59,7 @@ public class Year {
         final StringBuilder sb = new StringBuilder("Year{");
         sb.append("id=").append(id);
         sb.append(", value='").append(value).append('\'');
-        sb.append('}');
+        sb.append("}\n");
         return sb.toString();
     }
 }
