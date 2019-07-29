@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--first way - description of the bean with specifying the class:-->
+    <bean id="xmlBean"
+          class="ru.job4j.beans.XmlBean">
+        <constructor-arg value="xml bean"/>
+    </bean>
+
+    <!--second way - specifying an annotation scanner to search for beans in a package:-->
+    <context:component-scan base-package="ru.job4j.beans"/>
+
+    <!--third way - creating java based configuration with annotation @Configuration above
+    configuration class and annotation @Bean(for example) above method of return of bean-->
+
+</beans>
