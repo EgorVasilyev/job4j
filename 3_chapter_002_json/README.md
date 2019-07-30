@@ -1,0 +1,1 @@
+![alt text](https://s8.wampi.ru/2019/07/30/SNIMOK.jpg)
