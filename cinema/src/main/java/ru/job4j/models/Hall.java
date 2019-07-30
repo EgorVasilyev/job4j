@@ -17,6 +17,9 @@ public class Hall {
         this.blockedPlaces = blockedPlaces;
     }
 
+    public Hall() {
+    }
+
     public int getId() {
         return id;
     }
