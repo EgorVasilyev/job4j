@@ -5,21 +5,21 @@
     <packaging>pom</packaging>
     <version>2.0</version>
     <modules>
-<!--        <module>2_chapter_001</module>
-        <module>2_chapter_002</module>
-        <module>2_chapter_003</module>
-        <module>chapter_001</module>
-        <module>chapter_002</module>
-        <module>2_chapter_004</module>
+        <!--<module>1_chapter_001</module>
+        <module>1_chapter_002</module>
+        <module>1_chapter_003</module>
+        <module>1_chapter_004</module>
+         <module>2_chapter_001</module>
+         <module>2_chapter_002</module>
+         <module>2_chapter_003</module>
+         <module>2_chapter_004</module>
         <module>2_chapter_005</module>
         <module>3_chapter_002</module>
+        <module>3_chapter_002_json</module>
         <module>cinema</module>
         <module>3_chapter_003_TODO_list</module>
-        <module>3_chapter_003_car_storage</module>-->
+        <module>3_chapter_003_car_storage</module>
         <module>3_chapter_003_sale_car</module>
-        <!--<module>3_chapter_002_json</module>
-        <module>chapter_003</module>
-        <module>chapter_004</module>
         <module>chess</module>-->
 
     </modules>
