@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TODO list</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <!--<script src="WEB-INF/js/functions.js"></script>-->
+    <script>
+        $(document).ready(function () {
+            showItems("showNotDoneItems");
+        });
+        function showItems(param) {
+            $(
+                $.ajax({
+                    type: "GET",
+                    url: "./item",
+                    data: "action=" + param.toString(),
+                    complete: function (data) {
+                        var items = JSON.parse(data.responseText);
+                        var tBody = $("#tBody");
+                        for (var i = 0; i < items.length; i++) {
+                            var id = items[i].id;
+                            (tBody).append(
+                                "<tr><td>" + id + "</td>" +
+                                "<td>" + items[i].description + "</td>" +
+                                "<td>" + new Date(items[i].created) + "</td>" +
+                                "<td><div class=\"form-check\">" +
+                                "<input type=\"checkbox\" class=\"form-check-input\"" +
+                                " id=\"" + id + "\" onchange=\"updateItem(id, this)\"" + (items[i].done ? 'checked' : '') +
+                                "></div></td>" +
+                                "<td><input type=\"button\" class=\"btn-danger\" value=\"Delete\"" +
+                                " id=\"" + id + "\" onclick=\"deleteItem(id)\"></td></tr>"
+                            );
+                        }
+                    }
+                })
+            );
+        }
+        function updateItem(id, obj) {
+            $(
+                $.ajax({
+                    type: "POST",
+                    url: "./item",
+                    data: {
+                        "action": "updateItem",
+                        "id": id,
+                        "done": obj.checked
+                    },
+                    complete: function () {
+                        showNotDoneOrAllItems()
+                    }
+                })
+            );
+        }
+        function deleteItem(id) {
+            $(
+                $.ajax({
+                    type: "POST",
+                    url: "./item",
+                    data: {
+                        "action": "deleteItem",
+                        "id": id
+                    },
+                    complete: function () {
+                        showNotDoneOrAllItems()
+                    }
+                })
+            );
+        }
+        function showNotDoneOrAllItems() {
+            $("#tBody").empty();
+            if ($("#select").is(':checked')) {
+                showItems("showItems")
+            } else {
+                showItems("showNotDoneItems")
+            }
+        }
+        function sendNewItem() {
+            var description = $("#description");
+            $(
+                $.ajax({
+                    type: "POST",
+                    url: "./item",
+                    data: {
+                        "action": "sendNewItem",
+                        "description": description.val()
+                    },
+                    complete: function () {
+                        document.getElementById('description').value='';
+                        showNotDoneOrAllItems()
+                    }
+                })
+            );
+        }
+        function validate(id) {
+            var result = true;
+            var value = $(id);
+            if (value.val() === '') {
+                alert('Field "' + value.attr('name').concat('" mustn\'t be empty.'));
+                result = false;
+            }
+            return result;
+        }
+        function checkInput() {
+            return validate($('#description'));
+        }
+    </script>
+    <style>
+        .jumbotron {
+            padding: 1rem 1rem;
+            margin-bottom: 2rem;
+            background-color: whitesmoke;
+            border-radius: .10rem;
+        }
+    </style>
+</head>
+<body>
+<div class="jumbotron text-center">
+    <h6><label>Description of new item:</label></h6>
+    <p><label>
+        <textarea id="description" name="description"></textarea>
+    </label></p>
+    <h6>
+        <input type="button" class="btn-primary" value="Create"
+               onclick="checkInput() && sendNewItem()">
+    </h6>
+</div>
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input"
+                           id="select" onchange="showNotDoneOrAllItems();">All / Not done
+                </div>
+            </th>
+        </tr>
+        </thead>
+    </table>
+
+
+    <table class="table" id='table'>
+        <thead>
+        <tr>
+            <th class="col-xs-1">Id</th>
+            <th class="col-xs-5">Description</th>
+            <th class="col-xs-3">Created</th>
+            <th class="col-xs-1">Done</th>
+        </tr>
+        </thead>
+        <tbody id="tBody">
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
