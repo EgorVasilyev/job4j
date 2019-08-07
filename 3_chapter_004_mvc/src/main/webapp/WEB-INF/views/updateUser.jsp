@@ -28,22 +28,20 @@
                 <span class="glyphicon glyphicon-user"></span>&ensp;<c:out value="${activeUser.login} "></c:out>
                 , you are on the page of user profile updating
             </form>
-            <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                <input type='hidden' name='action' value='showAds'/>
+            <form action='${pageContext.servletContext.contextPath}/ads/show' method="get">
                 <button type="submit" class="btn-info">
                     <span class="glyphicon glyphicon-list"></span> Show all ads
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                <input type='hidden' name='action' value='goToUserAds'/>
-                <input type='hidden' name='userId' value='${activeUser.id}'/>
+            <form action='${pageContext.servletContext.contextPath}/ads/userAds' method="get">
+                <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-info">
-                    <span class="glyphicon glyphicon-list"></span> Show my ads
+                    <span class="glyphicon glyphicon-list"></span> My ads
                 </button>
             </form>
             <c:if test="${activeUser.role=='user'}">
                 <div class="form-group">
-                    <form action='${pageContext.servletContext.contextPath}/users' method='post'>
+                    <form action='${pageContext.servletContext.contextPath}/users/delete' method='post'>
                         <input type='hidden' name='action' value='deleteFromProfile'>
                         <input type='hidden' name='id' value='${user.id}'/>
                         <button type="submit" class="btn-danger">
@@ -60,8 +58,7 @@
         </h6>
     </blockquote>
     <div class="container">
-        <form class="form-horizontal" action='${pageContext.servletContext.contextPath}/users' method='post'>
-            <input type='hidden' name='action' value='update'/>
+        <form class="form-horizontal" action='${pageContext.servletContext.contextPath}/users/update' method='post'>
             <input type='hidden' name='id' value='${user.id}'/>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Password:</label>

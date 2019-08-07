@@ -43,15 +43,13 @@
         </form>
         <c:if test="${activeUser.role=='admin' || activeUser.role=='user'}">
             <c:if test="${activeUser.role=='admin'}">
-                <form action='${pageContext.servletContext.contextPath}/users' method="get">
-                    <input type='hidden' name='action' value='showUsers'/>
+                <form action='${pageContext.servletContext.contextPath}/users/show' method="get">
                     <button type="submit" class="btn-primary">
                         <span class="glyphicon glyphicon-align-justify"></span> Show all users
                     </button>
                 </form>
             </c:if>
-            <form action='${pageContext.servletContext.contextPath}/users' method="get">
-                <input type='hidden' name='action' value='goUpdateUser'/>
+            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="get">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> Edit my profile

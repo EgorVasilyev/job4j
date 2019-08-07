@@ -5,20 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.entity.ad.Ad;
-import ru.job4j.entity.car.*;
 import ru.job4j.entity.user.User;
 import ru.job4j.service.ad.AdService;
 import ru.job4j.service.car.*;
-import ru.job4j.service.user.UserService;
 
-import javax.servlet.http.Part;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +19,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/ads")
 public class AdsController {
-    @Autowired
-    private UserService USER_SERVICE;
+    //@Autowired
+    //private UserService USER_SERVICE;
     @Autowired
     private AdService AD_SERVICE;
     @Autowired
@@ -53,7 +46,7 @@ public class AdsController {
             @RequestParam(value = "withPhoto", required = false, defaultValue = "") String withPhoto,
             ModelMap modelMap) {
 
-        activeUser = USER_SERVICE.getUserById(2);//=======================================================================
+        activeUser = new User(2,"admin","ngasu2015","000000000", "admin");//USER_SERVICE.getUserById(2);//=======================================================================
         modelMap.addAttribute("activeUser", activeUser);//=======================================================================
 
         Map<String, String> filter = new HashMap<>();
@@ -79,14 +72,17 @@ public class AdsController {
         } else {
             modelMap.addAttribute("checkedWithPhoto", false);
         }
-        List<Ad> ads = AD_SERVICE.getAdsByFilter(filter);
+        List<Ad> ads = AD_SERVICE.getAds();
+
+        //List<Ad> ads = AD_SERVICE.getAdsByFilter(filter);
+
         HashMap<Integer, String> picturesBase64 = new HashMap<>(ads.size());
         ads.forEach(ad -> picturesBase64.put(ad.getId(), Base64.encode(ad.getPicture())));
         modelMap.addAttribute("ads", ads);
         modelMap.addAttribute("pictures", picturesBase64);
         return "ads";
     }
-    @GetMapping("/update")
+    /*@GetMapping("/update")
     public String editAd(
             @RequestParam(value = "id") String adId,
             ModelMap modelMap) {
@@ -146,30 +142,13 @@ public class AdsController {
             @RequestParam(value = "engineAddit", required = false) String engineAddit,
             @RequestParam(value = "id", required = false) String id,
             @RequestParam(value = "adId", required = false) String adId,
-            @RequestParam(value = "file", required = false) Part file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             ModelMap modelMap) {
 
         modelMap.addAttribute("activeUser", activeUser);//=======================================================================
 
-        int userId = Integer.valueOf(id);
-        System.out.println();
-        System.out.println("action - " + action);
-        System.out.println("model - " + model);
-        System.out.println("description - " + description);
-        System.out.println("status - " + status);
-        System.out.println("year - " + year);
-        System.out.println("yearAddit - " + yearAddit);
-        System.out.println("body - " + body);
-        System.out.println("bodyAddit - " + bodyAddit);
-        System.out.println("color - " + color);
-        System.out.println("colorAddit - " + colorAddit);
-        System.out.println("engine - " + engine);
-        System.out.println("engineAddit - " + engineAddit);
-        System.out.println("id - " + id);
-        System.out.println("adId - " + adId);
-        System.out.println("file - " + file);
-        System.out.println();
 
+        int userId = Integer.valueOf(id);
         User user = USER_SERVICE.getUserById(userId);
 
         int valueYear = Integer.valueOf(year.equals("other...")
@@ -268,7 +247,7 @@ public class AdsController {
         }
         return "redirect:show";
     }
-    private byte[] getPicture(Part file) {
+    private byte[] getPicture(MultipartFile file) {
         byte[] buffer = new byte[0];
         if (file != null) {
             try (InputStream fileContent = file.getInputStream();
@@ -298,8 +277,8 @@ public class AdsController {
 
         if (action.equals("deleteFromMine")) {
             int userId = ad.getUser().getId();
-            return "redirect:userAds&id=" + userId;
+            return "redirect:userAds?id=" + userId;
     }
         return "ads";
-    }
+    }*/
 }

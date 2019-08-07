@@ -122,7 +122,7 @@
                         <td>
                             <form action='${pageContext.servletContext.contextPath}/ads/update' method='get'>
                                 <input type='hidden' name='id' value='${ad.id}'/>
-                                <button type="submit" class="btn-success">
+                                <button type="submit" class="btn btn-success">
                                     <span class="glyphicon glyphicon-pencil"></span> Edit
                                 </button>
                             </form>

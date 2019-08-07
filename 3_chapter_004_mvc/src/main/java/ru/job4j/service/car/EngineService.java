@@ -3,12 +3,12 @@ package ru.job4j.service.car;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.job4j.dao.car.EngineDaoImpl;
 import ru.job4j.entity.car.Engine;
 
 import java.util.List;
-@Component
+@Service
 public class EngineService {
     private static final Logger LOG = LogManager.getLogger(EngineDaoImpl.class.getName());
     private final EngineDaoImpl ENGINE_DAO;

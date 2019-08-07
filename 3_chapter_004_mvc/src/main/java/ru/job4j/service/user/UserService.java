@@ -3,12 +3,12 @@ package ru.job4j.service.user;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.job4j.dao.user.UserDaoImpl;
 import ru.job4j.entity.user.User;
 
 import java.util.List;
-@Component
+@Service
 public class UserService {
     private static final Logger LOG = LogManager.getLogger(UserService.class.getName());
     private final UserDaoImpl USER_DAO;
@@ -53,4 +53,3 @@ public class UserService {
         return USER_DAO.getUserById(id);
     }
 }
-

@@ -1,3 +1,4 @@
+/*
 package ru.job4j.persistent;
 
 import org.hibernate.Session;
@@ -54,4 +55,4 @@ public class DbProvider {
     public void close() {
         this.sessionFactory.close();
     }
-}
+}*/

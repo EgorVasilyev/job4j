@@ -40,7 +40,7 @@
                 </button>
             </form>
             <form action='${pageContext.servletContext.contextPath}/ads/userAds' method="get">
-                <input type='hidden' name='userId' value='${activeUser.id}'/>
+                <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-info">
                     <span class="glyphicon glyphicon-list"></span> Show my ads
                 </button>

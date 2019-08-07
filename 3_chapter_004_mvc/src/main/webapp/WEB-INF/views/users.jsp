@@ -19,29 +19,25 @@
             <form>
                 <span class="glyphicon glyphicon-user"></span>&ensp;Hello, <c:out value="${activeUser.login}"></c:out>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/users' method="get">
-                <input type='hidden' name='action' value='goUpdateUser'/>
+            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="get">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> My profile
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                <input type='hidden' name='action' value='goToCreateAd'/>
+            <form action='${pageContext.servletContext.contextPath}/ads/create' method="get">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-primary">
                     <span class="glyphicon glyphicon-plus-sign"></span> Create new ad
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                <input type='hidden' name='action' value='goToUserAds'/>
-                <input type='hidden' name='userId' value='${activeUser.id}'/>
+            <form action='${pageContext.servletContext.contextPath}/ads/userAds' method="get">
+                <input type='hidden' name='id' value='${activeUser.id}'/>
                 <button type="submit" class="btn-info">
                     <span class="glyphicon glyphicon-list"></span> My ads
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                <input type='hidden' name='action' value='showAds'/>
+            <form action='${pageContext.servletContext.contextPath}/ads/show' method="get">
                 <button type="submit" class="btn-info">
                     <span class="glyphicon glyphicon-list"></span> Show all ads
                 </button>
@@ -60,26 +56,21 @@
         <h2><strong>Only admin can see all users!</strong></h2><br/>
         <blockquote>
             <h5>
-                <form action='${pageContext.servletContext.contextPath}/ads' method="get">
-                    <input type='hidden' name='action' value='showAds'/>
+                <form action='${pageContext.servletContext.contextPath}/ads/show' method="get">
                     <button type="submit" class="btn-info">
                         <span class="glyphicon glyphicon-list"></span> Show all ads
                     </button>
                 </form>
-                <c:if test="${activeUser.role=='user'}">
-                    <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
-                        <button type="submit" class="btn-danger">
+                <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+                    <button type="submit" class="btn-danger">
+                        <c:if test="${activeUser.role=='user'}">
                             <span class="glyphicon glyphicon-log-out"></span> Exit
-                        </button>
-                    </form>
-                </c:if>
-                <c:if test="${activeUser.role=='guest'}">
-                    <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
-                        <button type="submit" class="btn-info">
+                        </c:if>
+                        <c:if test="${activeUser.role=='guest'}">
                             <span class="glyphicon glyphicon-log-in"></span> Sign in / Sign up
-                        </button>
-                    </form>
-                </c:if>
+                        </c:if>
+                    </button>
+                </form>
             </h5>
         </blockquote>
     </div>
@@ -104,21 +95,20 @@
                     <td><c:out value="${user.phone}"/></td>
                     <td><c:out value="${user.role}"/></td>
                     <c:if test="${user.login!='admin' && user.login!='guest'}">
-                    <td><form action='${pageContext.servletContext.contextPath}/users' method='get'>
-                        <input type='hidden' name='action' value='goUpdateUser'/>
-                        <input type='hidden' name='id' value='${user.id}'/>
-                        <button type="submit" class="btn-success">
-                            <span class="glyphicon glyphicon-pencil"></span> Edit
-                        </button>
-                    </form></td>
-                    <td><form action='${pageContext.servletContext.contextPath}/users' method='post'>
-                        <input type='hidden' name='action' value='deleteFromAll'>
-                        <input type='hidden' name='id' value='${user.id}'/>
-                        <button type="submit" class="btn-danger">
-                            <span class="glyphicon glyphicon-remove"></span> Delete user and all his ads
-                        </button>
-                    </form>
-                    </td>
+                        <td><form action='${pageContext.servletContext.contextPath}/users/updateUser' method='get'>
+                            <input type='hidden' name='id' value='${user.id}'/>
+                            <button type="submit" class="btn-success">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </button>
+                        </form></td>
+                        <td><form action='${pageContext.servletContext.contextPath}/users/delete' method='post'>
+                            <input type='hidden' name='action' value='deleteFromAll'>
+                            <input type='hidden' name='id' value='${user.id}'/>
+                            <button type="submit" class="btn-danger">
+                                <span class="glyphicon glyphicon-remove"></span> Delete user and all his ads
+                            </button>
+                        </form>
+                        </td>
                     </c:if>
                 </tr>
             </c:forEach>
