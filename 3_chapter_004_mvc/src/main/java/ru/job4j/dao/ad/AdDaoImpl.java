@@ -4,11 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.dao.EntityDao;
 import ru.job4j.entity.ad.Ad;
@@ -21,70 +19,61 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-@Component
+@Repository
 public class AdDaoImpl implements EntityDao<Ad> {
     private static final Logger LOG = LogManager.getLogger(AdDaoImpl.class.getName());
     @Autowired
-    private SessionFactory sessionFactory;
-
-    private AdDaoImpl() {
-
-    }
+    public SessionFactory sessionFactory;
 
     private Session session() {
         return sessionFactory.getCurrentSession();
     }
+
+    @Override
+    public List<Ad> getEntities() {
+        return (List<Ad>) session().createQuery("from Ad order by id").list();
+    }
+
     @Override
     public int save(Ad ad) {
-        session().save(ad);
         LOG.info("save - " + ad);
-        return ad.getId();
+        return (int) session().save(ad);
     }
-    @Transactional
+
     @Override
     public void update(Ad ad) {
         session().update(ad);
         LOG.info("update - " + ad);
     }
-    @Transactional
+
     @Override
     public void delete(Ad ad) {
         session().delete(ad);
         LOG.info("delete - " + ad);
-    }
-    @Transactional
-    @Override
-    public List<Ad> getEntities() {
-        return (List<Ad>) this.session().createQuery("from Ad order by id").list();
-    }
 
+    }
     public List<Ad> getAdsByUserId(int userId) {
-        Query<Ad> query = this.session().createQuery("from Ad where client = :userId order by id", Ad.class);
+        Query<Ad> query = session().createQuery("from Ad where client = :userId order by id", Ad.class);
         query.setParameter("userId", userId);
         return query.getResultList();
     }
 
     public Ad getAdById(int id) {
-        Query<Ad> query = this.session().createQuery("from Ad where id = :id", Ad.class);
+        Query<Ad> query = session().createQuery("from Ad where id = :id", Ad.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
 
-    public List<Ad> getNotClosedAds() {
-        return (List<Ad>) this.session().createQuery("from Ad where closed = false order by id").list();
-    }
-
     public List<Ad> getAdsByFilter(Map<String, String> filter) {
-        CriteriaBuilder builder = this.session().getCriteriaBuilder();
+        CriteriaBuilder builder = session().getCriteriaBuilder();
         CriteriaQuery<Ad> criteriaQuery = builder.createQuery(Ad.class);
         Root<Ad> ads = criteriaQuery.from(Ad.class);
 
         criteriaQuery.where(getPredicates(builder, ads, filter));
         criteriaQuery.orderBy(builder.asc(ads.get("id")));
 
-        return this.session().createQuery(criteriaQuery).getResultList();
+        return session().createQuery(criteriaQuery).getResultList();
     }
-
     private Predicate[] getPredicates(CriteriaBuilder builder, Root<Ad> ads, Map<String, String> filter) {
         List<Predicate> predicateList = new ArrayList<>();
         for (String key : filter.keySet()) {
@@ -121,5 +110,9 @@ public class AdDaoImpl implements EntityDao<Ad> {
         Predicate[] predicates = new Predicate[predicateList.size()];
         predicateList.toArray(predicates);
         return predicates;
+    }
+
+    public List<Ad> getNotClosedAds() {
+        return (List<Ad>) session().createQuery("from Ad where closed = false order by id").list();
     }
 }

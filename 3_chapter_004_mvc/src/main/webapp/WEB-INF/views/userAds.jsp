@@ -12,6 +12,20 @@
         <%@include file="/WEB-INF/js/functions.js"%>
     </script>
     <style>
+        .table {
+            table-layout: fixed;
+        }
+        td {
+            word-wrap:break-word;
+        }
+        .container-my {
+            max-width: 95%;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
         blockquote {
             background: url(https://www.axa.de/site/axa-de/get/params_E-35817624/8222246/geparkte-autos-in-reihe.jpg.pagespeed.ce.7CTHh14teL.jpg); /* Фоновый цвет и фоновый рисунок*/
             background-repeat: no-repeat;
@@ -57,7 +71,7 @@
 </blockquote>
 
 <c:if test="${activeUser.role=='admin' || activeUser.role=='user'}">
-    <div class="container">
+    <div class="container-my">
         <h4><span class="glyphicon glyphicon-list"></span>&ensp;List of my ads:</h4>
         <table class="table" id='table'>
             <tbody>
@@ -117,25 +131,23 @@
                          </c:forEach>
                     "/>
                     </td>
-
-                    <c:if test="${activeUser.role=='admin' || (activeUser.role=='user' && activeUser.id==ad.user.id)}">
-                        <td>
+                    <td align="center">
+                        <c:if test="${activeUser.role=='admin' || (activeUser.role=='user' && activeUser.id==ad.user.id)}">
                             <form action='${pageContext.servletContext.contextPath}/ads/update' method='get'>
                                 <input type='hidden' name='id' value='${ad.id}'/>
                                 <button type="submit" class="btn btn-success">
                                     <span class="glyphicon glyphicon-pencil"></span> Edit
                                 </button>
                             </form>
-                        </td>
-                        <td><form action='${pageContext.servletContext.contextPath}/ads/delete' method='post'>
-                            <input type='hidden' name='action' value='deleteFromMine'>
-                            <input type='hidden' name='id' value='${ad.id}'/>
-                            <button type="submit" class="btn-danger">
-                                <span class="glyphicon glyphicon-remove"></span> Delete
-                            </button>
-                        </form>
-                        </td>
-                    </c:if>
+                            <form action='${pageContext.servletContext.contextPath}/ads/delete' method='post'>
+                                <input type='hidden' name='action' value='deleteFromMine'>
+                                <input type='hidden' name='id' value='${ad.id}'/>
+                                <button type="submit" class="btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span> Delete
+                                </button>
+                            </form>
+                        </c:if>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

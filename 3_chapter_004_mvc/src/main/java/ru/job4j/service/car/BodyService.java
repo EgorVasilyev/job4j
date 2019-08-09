@@ -12,7 +12,7 @@ import java.util.List;
 public class BodyService {
     private static final Logger LOG = LogManager.getLogger(BodyService.class.getName());
     private final BodyDaoImpl BODY_DAO;
-@Autowired
+    @Autowired
     public BodyService(BodyDaoImpl body_dao) {
         BODY_DAO = body_dao;
     }

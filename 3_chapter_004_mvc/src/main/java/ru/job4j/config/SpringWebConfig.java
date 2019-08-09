@@ -12,14 +12,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
-@ComponentScan("ru.job4j.controller")
+@ComponentScan("ru.job4j")
 @EnableWebMvc
 public class SpringWebConfig implements WebMvcConfigurer {
-    static {
-        System.out.println();
-        System.out.println(22222222);
-        System.out.println();
-    }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")

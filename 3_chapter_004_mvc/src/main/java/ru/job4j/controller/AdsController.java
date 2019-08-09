@@ -5,13 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.entity.ad.Ad;
+import ru.job4j.entity.car.*;
 import ru.job4j.entity.user.User;
 import ru.job4j.service.ad.AdService;
 import ru.job4j.service.car.*;
+import ru.job4j.service.user.UserService;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +26,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("/ads")
 public class AdsController {
-    //@Autowired
-    //private UserService USER_SERVICE;
     @Autowired
     private AdService AD_SERVICE;
     @Autowired
@@ -33,6 +38,8 @@ public class AdsController {
     private YearService YEAR_SERVICE;
     @Autowired
     private CarService CAR_SERVICE;
+    @Autowired
+    private UserService USER_SERVICE;
 
 
     User activeUser;//=======================================================================
@@ -46,7 +53,8 @@ public class AdsController {
             @RequestParam(value = "withPhoto", required = false, defaultValue = "") String withPhoto,
             ModelMap modelMap) {
 
-        activeUser = new User(2,"admin","ngasu2015","000000000", "admin");//USER_SERVICE.getUserById(2);//=======================================================================
+        activeUser = USER_SERVICE.getUserById(2);//=======================================================================
+        //activeUser = new User(2, "admin", "ngasu2015", "0000000000", "admin");
         modelMap.addAttribute("activeUser", activeUser);//=======================================================================
 
         Map<String, String> filter = new HashMap<>();
@@ -72,17 +80,14 @@ public class AdsController {
         } else {
             modelMap.addAttribute("checkedWithPhoto", false);
         }
-        List<Ad> ads = AD_SERVICE.getAds();
-
-        //List<Ad> ads = AD_SERVICE.getAdsByFilter(filter);
-
+        List<Ad> ads = AD_SERVICE.getAdsByFilter(filter);
         HashMap<Integer, String> picturesBase64 = new HashMap<>(ads.size());
         ads.forEach(ad -> picturesBase64.put(ad.getId(), Base64.encode(ad.getPicture())));
         modelMap.addAttribute("ads", ads);
         modelMap.addAttribute("pictures", picturesBase64);
         return "ads";
     }
-    /*@GetMapping("/update")
+    @GetMapping("/update")
     public String editAd(
             @RequestParam(value = "id") String adId,
             ModelMap modelMap) {
@@ -217,7 +222,6 @@ public class AdsController {
         }
 
         byte[] picture = getPicture(file);
-        System.out.println("action ДО- " + action);
         if (action.equals("update")) {
             boolean closed = Boolean.valueOf(status);
             int idOfAd = Integer.valueOf(adId);
@@ -280,5 +284,5 @@ public class AdsController {
             return "redirect:userAds?id=" + userId;
     }
         return "ads";
-    }*/
+    }
 }

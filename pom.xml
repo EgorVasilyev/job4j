@@ -19,8 +19,8 @@
         <module>3_chapter_002_json</module>
         <module>cinema</module>
         <module>3_chapter_003_TODO_list</module>
-        <module>3_chapter_003_car_storage</module>
-        <module>3_chapter_003_sale_car</module>-->
+        <module>3_chapter_003_car_storage</module>-->
+        <module>3_chapter_003_sale_car</module>
         <module>3_chapter_004_IoC</module>
         <module>3_chapter_004_mvc</module>
 

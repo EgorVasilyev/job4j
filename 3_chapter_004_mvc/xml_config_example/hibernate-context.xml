@@ -1,3 +1,4 @@
+<!--
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,6 +24,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="ru.job4j" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${dialect}</prop>
@@ -31,19 +33,13 @@
                 <prop key="show_sql">true</prop>
             </props>
         </property>
-        <property name="packagesToScan" value="ru.job4j.entity" />
     </bean>
-
-<!--    <bean id="template" class="org.springframework.orm.hibernate5.HibernateTemplate">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>-->
 
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
+    <tx:annotation-driven proxy-target-class="true"/>
     <context:component-scan base-package="ru.job4j"/>
-    <context:annotation-config/>
-    <tx:annotation-driven/>
 </beans>
+-->

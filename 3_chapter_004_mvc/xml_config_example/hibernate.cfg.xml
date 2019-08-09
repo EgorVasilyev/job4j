@@ -1,3 +1,4 @@
+<!--
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-configuration>
     <session-factory>
@@ -9,7 +10,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.current_session_context_class">thread</property>
 
-        <!--  annotation mapping -->
+        &lt;!&ndash;  annotation mapping &ndash;&gt;
         <mapping class="ru.job4j.entity.car.Color"/>
         <mapping class="ru.job4j.entity.car.Engine"/>
         <mapping class="ru.job4j.entity.car.Year"/>
@@ -19,4 +20,4 @@
         <mapping class="ru.job4j.entity.ad.Ad"/>
 
     </session-factory>
-</hibernate-configuration>
+</hibernate-configuration>-->

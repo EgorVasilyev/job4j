@@ -2,52 +2,53 @@ package ru.job4j.dao.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Component;
 import ru.job4j.dao.EntityDao;
+import ru.job4j.entity.ad.Ad;
+import ru.job4j.entity.car.Year;
 import ru.job4j.entity.user.User;
 
 import java.util.List;
 @Component
 public class UserDaoImpl implements EntityDao<User> {
     private static final Logger LOG = LogManager.getLogger(UserDaoImpl.class.getName());
-    private final HibernateTemplate template;
-
     @Autowired
-    private UserDaoImpl(HibernateTemplate template) {
-        this.template = template;
+    public SessionFactory sessionFactory;
+
+    private Session session() {
+        return sessionFactory.getCurrentSession();
     }
+
     @Override
     public List<User> getEntities() {
-        return this.template.loadAll(User.class);
+        return (List<User>) session().createQuery("from User order by id").list();
     }
-
-    public User getUserById(int id) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
-        criteria.add(Restrictions.eq("id", id));
-        return (User) this.template.findByCriteria(criteria);
-    }
-
 
     @Override
     public int save(User user) {
-        template.save(user);
         LOG.info("save - " + user);
-        return user.getId();
+        return (int) session().save(user);
     }
 
     @Override
     public void update(User user) {
-        template.update(user);
+        session().update(user);
         LOG.info("update - " + user);
     }
 
     @Override
     public void delete(User user) {
-        template.delete(user);
+        session().delete(user);
         LOG.info("delete - " + user);
+    }
+
+    public User getUserById(int id) {
+        Query<User> query = session().createQuery("from User where id = :id", User.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 }

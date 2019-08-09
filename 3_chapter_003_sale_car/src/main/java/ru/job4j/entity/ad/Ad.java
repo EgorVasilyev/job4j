@@ -17,7 +17,7 @@ public class Ad {
 
     @Column(name = "description")
     private String description;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "car", foreignKey = @ForeignKey(name = "carId"))
     private Car car;
     @ManyToOne(fetch = FetchType.EAGER)

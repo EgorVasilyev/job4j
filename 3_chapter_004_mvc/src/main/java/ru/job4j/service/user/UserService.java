@@ -20,7 +20,7 @@ public class UserService {
     public int save(User user) {
         int id = 0;
         if (user != null) {
-             id = USER_DAO.save(user);
+            id = USER_DAO.save(user);
         }
         return id;
     }
@@ -40,7 +40,7 @@ public class UserService {
                 .findFirst()
                 .orElse(null);
     }
-    
+
     public boolean contains(String login) {
         return this.getUsers().stream().anyMatch(user -> user.getLogin().equals(login));
     }

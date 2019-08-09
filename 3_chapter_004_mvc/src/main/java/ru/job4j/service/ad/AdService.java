@@ -6,6 +6,7 @@ import ru.job4j.dao.ad.AdDaoImpl;
 import ru.job4j.entity.ad.Ad;
 
 import java.util.List;
+import java.util.Map;
 @Service
 public class AdService {
     private final AdDaoImpl AD_DAO;
@@ -35,7 +36,7 @@ public class AdService {
         return AD_DAO.getEntities();
     }
 
-    /*public List<Ad> getAdsByUserId(int userId) {
+    public List<Ad> getAdsByUserId(int userId) {
         return AD_DAO.getAdsByUserId(userId);
     }
 
@@ -45,5 +46,5 @@ public class AdService {
 
     public List<Ad> getAdsByFilter(Map<String, String> filter) {
         return AD_DAO.getAdsByFilter(filter);
-    }*/
+    }
 }

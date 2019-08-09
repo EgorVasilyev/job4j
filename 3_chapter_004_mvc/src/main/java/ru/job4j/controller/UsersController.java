@@ -1,4 +1,3 @@
-/*
 package ru.job4j.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +23,6 @@ public class UsersController {
     private UserService USER_SERVICE;
     @Autowired
     private AdService AD_SERVICE;
-    @Autowired
-    private EngineService ENGINE_SERVICE;
-    @Autowired
-    private BodyService BODY_SERVICE;
-    @Autowired
-    private ColorService COLOR_SERVICE;
-    @Autowired
-    private YearService YEAR_SERVICE;
     @Autowired
     private CarService CAR_SERVICE;
 
@@ -115,4 +106,3 @@ public class UsersController {
         return "redirect:updateUser?id=" + userId;
     }
 }
-*/
