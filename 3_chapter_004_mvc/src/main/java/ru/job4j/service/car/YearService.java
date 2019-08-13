@@ -1,41 +1,39 @@
 package ru.job4j.service.car;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.dao.car.YearDaoImpl;
 import ru.job4j.entity.car.Year;
+import ru.job4j.repository.car.YearDataRepository;
 
 import java.util.List;
 @Service
 public class YearService {
-    private static final Logger LOG = LogManager.getLogger(YearService.class.getName());
-    private final YearDaoImpl YEAR_DAO;
+    private final YearDataRepository yearDataRepository;
     @Autowired
-    public YearService(YearDaoImpl year_dao) {
-        YEAR_DAO = year_dao;
+    public YearService(YearDataRepository yearDataRepository) {
+        this.yearDataRepository = yearDataRepository;
     }
 
     public int save(Year year) {
         int id = 0;
         if (year != null) {
-            id = YEAR_DAO.save(year);
+            yearDataRepository.save(year);
+            id = year.getId();
         }
         return id;
     }
     public void update(Year year) {
         if (year != null) {
-            YEAR_DAO.update(year);
+            yearDataRepository.save(year);
         }
     }
     public void delete(Year year) {
         if (year != null) {
-            YEAR_DAO.delete(year);
+            yearDataRepository.delete(year);
         }
     }
     public List<Year> getYears() {
-        return YEAR_DAO.getEntities();
+        return yearDataRepository.findAllByOrderByIdAsc();
     }
     public boolean contains(int yearValue) {
         return this.getYears().stream().anyMatch(yearHas -> yearHas.getValue() == yearValue);

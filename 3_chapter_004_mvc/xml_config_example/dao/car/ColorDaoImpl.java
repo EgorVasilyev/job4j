@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.car;
 
 import org.apache.logging.log4j.LogManager;
@@ -43,4 +44,4 @@ public class ColorDaoImpl implements EntityDao<Color> {
         session().delete(color);
         LOG.info("delete - " + color);
     }
-}
+}*/

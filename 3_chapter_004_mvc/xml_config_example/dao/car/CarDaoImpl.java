@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.car;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,4 +53,4 @@ public class CarDaoImpl implements EntityDao<Car> {
         query.setParameter("userId", userId);
         return query.getResultList();
     }
-}
+}*/

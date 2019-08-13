@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.ad;
 
 import org.apache.logging.log4j.LogManager;
@@ -115,4 +116,4 @@ public class AdDaoImpl implements EntityDao<Ad> {
     public List<Ad> getNotClosedAds() {
         return (List<Ad>) session().createQuery("from Ad where closed = false order by id").list();
     }
-}
+}*/

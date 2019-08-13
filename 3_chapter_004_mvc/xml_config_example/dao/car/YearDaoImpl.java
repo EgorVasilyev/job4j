@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.car;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,4 +43,4 @@ public class YearDaoImpl implements EntityDao<Year> {
         session().delete(year);
         LOG.info("delete - " + year);
     }
-}
+}*/

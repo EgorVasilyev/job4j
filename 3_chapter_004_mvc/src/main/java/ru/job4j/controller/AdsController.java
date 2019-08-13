@@ -26,23 +26,30 @@ import java.util.Map;
 @Controller
 @RequestMapping("/ads")
 public class AdsController {
-    @Autowired
-    private AdService AD_SERVICE;
-    @Autowired
-    private EngineService ENGINE_SERVICE;
-    @Autowired
-    private BodyService BODY_SERVICE;
-    @Autowired
-    private ColorService COLOR_SERVICE;
-    @Autowired
-    private YearService YEAR_SERVICE;
-    @Autowired
-    private CarService CAR_SERVICE;
-    @Autowired
-    private UserService USER_SERVICE;
+    private final AdService AD_SERVICE;
+    private final EngineService ENGINE_SERVICE;
+    private final BodyService BODY_SERVICE;
+    private final ColorService COLOR_SERVICE;
+    private final YearService YEAR_SERVICE;
+    private final CarService CAR_SERVICE;
+    private final UserService USER_SERVICE;
 
 
     User activeUser;//=======================================================================
+
+    @Autowired
+    public AdsController(AdService AD_SERVICE,
+                         EngineService ENGINE_SERVICE, BodyService BODY_SERVICE,
+                         ColorService COLOR_SERVICE, YearService YEAR_SERVICE,
+                         CarService CAR_SERVICE, UserService USER_SERVICE) {
+        this.AD_SERVICE = AD_SERVICE;
+        this.ENGINE_SERVICE = ENGINE_SERVICE;
+        this.BODY_SERVICE = BODY_SERVICE;
+        this.COLOR_SERVICE = COLOR_SERVICE;
+        this.YEAR_SERVICE = YEAR_SERVICE;
+        this.CAR_SERVICE = CAR_SERVICE;
+        this.USER_SERVICE = USER_SERVICE;
+    }
 
 
     @GetMapping("/show")
@@ -54,7 +61,7 @@ public class AdsController {
             ModelMap modelMap) {
 
         activeUser = USER_SERVICE.getUserById(2);//=======================================================================
-        //activeUser = new User(2, "admin", "ngasu2015", "0000000000", "admin");
+       // activeUser = new User(2, "admin", "ngasu2015", "0000000000", "admin");
         modelMap.addAttribute("activeUser", activeUser);//=======================================================================
 
         Map<String, String> filter = new HashMap<>();
@@ -200,33 +207,21 @@ public class AdsController {
             currentEngine = ENGINE_SERVICE.getByName(nameEngine);
         }
 
-        Car car = new Car();
-        car.setName(model);
-        car.setBody(currentBody);
-        car.setColor(currentColor);
-        car.setEngine(currentEngine);
-        car.setYear(currentYear);
-        car.setUser(user);
-
-        if (action.equals("update")) {
-            List<Car> userCars = CAR_SERVICE.getCarsByUserId(userId);
-            userCars.forEach(car1 -> {
-                if (car1.equalsWithoutId(car)) {
-                    car.setId(car1.getId());
-                }
-            });
-        }
-
-        if (action.equals("save") || car.getId() == 0) {
-            car.setId(CAR_SERVICE.save(car));
-        }
-
         byte[] picture = getPicture(file);
         if (action.equals("update")) {
             boolean closed = Boolean.valueOf(status);
             int idOfAd = Integer.valueOf(adId);
             Ad ad = AD_SERVICE.getAdById(idOfAd);
             ad.setDescription(description);
+
+            Car car = ad.getCar();
+            car.setName(model);
+            car.setBody(currentBody);
+            car.setColor(currentColor);
+            car.setEngine(currentEngine);
+            car.setYear(currentYear);
+            car.setUser(user);
+
             ad.setCar(car);
             if (picture.length != 0) {
                 ad.setPicture(picture);
@@ -241,6 +236,17 @@ public class AdsController {
             Ad ad = new Ad();
             ad.setDescription(description);
             ad.setUser(user);
+
+            Car car = new Car();
+            car.setName(model);
+            car.setBody(currentBody);
+            car.setColor(currentColor);
+            car.setEngine(currentEngine);
+            car.setYear(currentYear);
+            car.setUser(user);
+
+            car.setId(CAR_SERVICE.save(car));
+
             ad.setCar(car);
             if (picture.length != 0) {
                 ad.setPicture(picture);

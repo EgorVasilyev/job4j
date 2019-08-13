@@ -1,38 +1,39 @@
 package ru.job4j.service.user;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.dao.user.UserDaoImpl;
 import ru.job4j.entity.user.User;
+import ru.job4j.repository.user.UserDataRepository;
 
 import java.util.List;
 @Service
 public class UserService {
-    private static final Logger LOG = LogManager.getLogger(UserService.class.getName());
-    private final UserDaoImpl USER_DAO;
+    private final UserDataRepository userDataRepository;
     @Autowired
-    public UserService(UserDaoImpl user_dao) {
-        USER_DAO = user_dao;
+    public UserService(UserDataRepository userDataRepository) {
+        this.userDataRepository = userDataRepository;
     }
 
     public int save(User user) {
         int id = 0;
         if (user != null) {
-            id = USER_DAO.save(user);
+            userDataRepository.save(user);
+            id = user.getId();
         }
         return id;
     }
     public void update(User user) {
         if (user != null) {
-            USER_DAO.update(user);
+            userDataRepository.save(user);
         }
     }
     public void delete(User user) {
         if (user != null) {
-            USER_DAO.delete(user);
+            userDataRepository.delete(user);
         }
+    }
+    public List<User> getUsers() {
+        return userDataRepository.findAllByOrderByIdAsc();
     }
     public User isCredential(String login, String password) {
         return this.getUsers().stream()
@@ -45,11 +46,8 @@ public class UserService {
         return this.getUsers().stream().anyMatch(user -> user.getLogin().equals(login));
     }
 
-    public List<User> getUsers() {
-        return USER_DAO.getEntities();
-    }
 
     public User getUserById(int id) {
-        return USER_DAO.getUserById(id);
+        return userDataRepository.findUserById(id);
     }
 }

@@ -1,41 +1,39 @@
 package ru.job4j.service.car;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.dao.car.BodyDaoImpl;
 import ru.job4j.entity.car.Body;
+import ru.job4j.repository.car.BodyDataRepository;
 
 import java.util.List;
 @Service
 public class BodyService {
-    private static final Logger LOG = LogManager.getLogger(BodyService.class.getName());
-    private final BodyDaoImpl BODY_DAO;
+    private final BodyDataRepository bodyDataRepository;
     @Autowired
-    public BodyService(BodyDaoImpl body_dao) {
-        BODY_DAO = body_dao;
+    public BodyService(BodyDataRepository bodyDataRepository) {
+        this.bodyDataRepository = bodyDataRepository;
     }
 
     public int save(Body body) {
         int id = 0;
         if (body != null) {
-            id = BODY_DAO.save(body);
+            bodyDataRepository.save(body);
+            id = body.getId();
         }
         return id;
     }
     public void update(Body body) {
         if (body != null) {
-            BODY_DAO.update(body);
+            bodyDataRepository.save(body);
         }
     }
     public void delete(Body body) {
         if (body != null) {
-            BODY_DAO.delete(body);
+            bodyDataRepository.delete(body);
         }
     }
     public List<Body> getBodies() {
-        return BODY_DAO.getEntities();
+        return bodyDataRepository.findAllByOrderByIdAsc();
     }
     public boolean contains(String name) {
         return this.getBodies().stream().anyMatch(bodyHas -> bodyHas.getName().toLowerCase().equals(name.toLowerCase()));

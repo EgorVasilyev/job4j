@@ -1,41 +1,39 @@
 package ru.job4j.service.car;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.dao.car.EngineDaoImpl;
 import ru.job4j.entity.car.Engine;
+import ru.job4j.repository.car.EngineDataRepository;
 
 import java.util.List;
 @Service
 public class EngineService {
-    private static final Logger LOG = LogManager.getLogger(EngineDaoImpl.class.getName());
-    private final EngineDaoImpl ENGINE_DAO;
+    private final EngineDataRepository engineDataRepository;
     @Autowired
-    public EngineService(EngineDaoImpl engine_dao) {
-        ENGINE_DAO = engine_dao;
+    public EngineService(EngineDataRepository engineDataRepository) {
+        this.engineDataRepository = engineDataRepository;
     }
 
     public int save(Engine engine) {
         int id = 0;
         if (engine != null) {
-            id = ENGINE_DAO.save(engine);
+            engineDataRepository.save(engine);
+            id = engine.getId();
         }
         return id;
     }
     public void update(Engine engine) {
         if (engine != null) {
-            ENGINE_DAO.update(engine);
+            engineDataRepository.save(engine);
         }
     }
     public void delete(Engine engine) {
         if (engine != null) {
-            ENGINE_DAO.delete(engine);
+            engineDataRepository.delete(engine);
         }
     }
     public List<Engine> getEngines() {
-        return ENGINE_DAO.getEntities();
+        return engineDataRepository.findAllByOrderByIdAsc();
     }
     public boolean contains(String name) {
         return this.getEngines().stream().anyMatch(engineHas -> engineHas.getName().toLowerCase().equals(name.toLowerCase()));

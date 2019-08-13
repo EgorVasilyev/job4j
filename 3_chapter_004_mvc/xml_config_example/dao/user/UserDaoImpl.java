@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.user;
 
 import org.apache.logging.log4j.LogManager;
@@ -51,4 +52,4 @@ public class UserDaoImpl implements EntityDao<User> {
         query.setParameter("id", id);
         return query.getSingleResult();
     }
-}
+}*/

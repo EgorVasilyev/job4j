@@ -1,3 +1,4 @@
+/*
 package ru.job4j.dao.car;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,4 +45,4 @@ public class EngineDaoImpl implements EntityDao<Engine> {
         session().delete(engine);
         LOG.info("delete - " + engine);
     }
-}
+}*/

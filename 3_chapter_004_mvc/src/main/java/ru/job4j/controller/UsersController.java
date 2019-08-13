@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.entity.ad.Ad;
-import ru.job4j.entity.car.Car;
 import ru.job4j.entity.user.User;
 import ru.job4j.service.ad.AdService;
-import ru.job4j.service.car.*;
+import ru.job4j.service.car.CarService;
 import ru.job4j.service.user.UserService;
 
 import java.util.List;
@@ -67,11 +66,6 @@ public class UsersController {
         List<Ad> userAds = AD_SERVICE.getAdsByUserId(id);
         for (int i = 0; i < userAds.size(); i++) {
             AD_SERVICE.delete(userAds.get(i));
-        }
-
-        List<Car> userCars = CAR_SERVICE.getCarsByUserId(id);
-        for (int i = 0; i < userCars.size(); i++) {
-            CAR_SERVICE.delete(userCars.get(i));
         }
 
         User user = USER_SERVICE.getUserById(id);
