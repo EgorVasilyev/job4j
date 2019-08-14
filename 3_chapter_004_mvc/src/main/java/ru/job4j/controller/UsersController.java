@@ -3,14 +3,11 @@ package ru.job4j.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.job4j.entity.ad.Ad;
 import ru.job4j.entity.user.User;
 import ru.job4j.service.ad.AdService;
-import ru.job4j.service.car.CarService;
 import ru.job4j.service.user.UserService;
 
 import java.util.List;
@@ -18,41 +15,34 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    @Autowired
-    private UserService USER_SERVICE;
-    @Autowired
-    private AdService AD_SERVICE;
-    @Autowired
-    private CarService CAR_SERVICE;
+    private final UserService USER_SERVICE;
+    private final AdService AD_SERVICE;
 
+    User activeUser;//=====временно, заменю в задании security===========
 
-    User activeUser;//=======================================================================
-
+    @Autowired
+    public UsersController(UserService USER_SERVICE, AdService AD_SERVICE) {
+        this.USER_SERVICE = USER_SERVICE;
+        this.AD_SERVICE = AD_SERVICE;
+    }
 
     @GetMapping("/show")
-    public String show(
-            ModelMap modelMap) {
+    public String show(ModelMap modelMap) {
 
-        activeUser = USER_SERVICE.getUserById(2);//=======================================================================
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        activeUser = USER_SERVICE.getUserById(2);//=====временно, заменю в задании security===========
+        modelMap.addAttribute("activeUser", activeUser);//=====временно, заменю в задании security===========
 
         modelMap.addAttribute("users", USER_SERVICE.getUsers());
 
         return "users";
     }
-    @GetMapping("/updateUser")
-    public String updateUser(
-            @RequestParam(value = "id") String id,
-            ModelMap modelMap) {
+    @PostMapping("/updateUser")
+    public ModelAndView updateUser(@ModelAttribute User user) {
+        ModelAndView modelAndView = new ModelAndView("updateUser");
 
-        activeUser = USER_SERVICE.getUserById(2);//=======================================================================
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelAndView.addObject("activeUser", activeUser);//=====временно, заменю в задании security===========
 
-        int userId = Integer.valueOf(id);
-        User user = USER_SERVICE.getUserById(userId);
-        modelMap.addAttribute("user", user);
-
-        return "updateUser";
+        return modelAndView;
     }
     @PostMapping("/delete")
     public String delete(
@@ -60,7 +50,7 @@ public class UsersController {
             @RequestParam(value = "id") String userId,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelMap.addAttribute("activeUser", activeUser);//=====временно, заменю в задании security===========
 
         int id = Integer.valueOf(userId);
         List<Ad> userAds = AD_SERVICE.getAdsByUserId(id);
@@ -80,23 +70,12 @@ public class UsersController {
         return "";
     }
     @PostMapping("/update")
-    public String update(
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "phone") String phone,
-            @RequestParam(value = "role") String role,
-            @RequestParam(value = "id") String id,
-            ModelMap modelMap) {
-
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
-
-        int userId = Integer.valueOf(id);
-        User user = USER_SERVICE.getUserById(userId);
-        user.setPassword(password);
-        user.setPhone(phone);
-        user.setRole(role);
-
+    public ModelAndView update(@ModelAttribute User user) {
         USER_SERVICE.update(user);
+        ModelAndView model = new ModelAndView("updateUser");
 
-        return "redirect:updateUser?id=" + userId;
+        model.addObject("activeUser", activeUser);//=====временно, заменю в задании security===========
+
+        return model;
     }
 }

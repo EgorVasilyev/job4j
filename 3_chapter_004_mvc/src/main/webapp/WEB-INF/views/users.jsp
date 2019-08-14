@@ -19,10 +19,14 @@
             <form>
                 <span class="glyphicon glyphicon-user"></span>&ensp;Hello, <c:out value="${activeUser.login}"></c:out>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="get">
+            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="post">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
+                <input type='hidden' name='login' value='${activeUser.login}'/>
+                <input type='hidden' name='password' value='${activeUser.password}'/>
+                <input type='hidden' name='phone' value='${activeUser.phone}'/>
+                <input type='hidden' name='role' value='${activeUser.role}'/>
                 <button type="submit" class="btn-primary">
-                    <span class="glyphicon glyphicon-edit"></span> My profile
+                    <span class="glyphicon glyphicon-edit"></span> Edit my profile
                 </button>
             </form>
             <form action='${pageContext.servletContext.contextPath}/ads/create' method="get">
@@ -95,8 +99,12 @@
                     <td><c:out value="${user.phone}"/></td>
                     <td><c:out value="${user.role}"/></td>
                     <c:if test="${user.login!='admin' && user.login!='guest'}">
-                        <td><form action='${pageContext.servletContext.contextPath}/users/updateUser' method='get'>
+                        <td><form action='${pageContext.servletContext.contextPath}/users/updateUser' method='post'>
                             <input type='hidden' name='id' value='${user.id}'/>
+                            <input type='hidden' name='login' value='${user.login}'/>
+                            <input type='hidden' name='password' value='${user.password}'/>
+                            <input type='hidden' name='phone' value='${user.phone}'/>
+                            <input type='hidden' name='role' value='${user.role}'/>
                             <button type="submit" class="btn-success">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
                             </button>

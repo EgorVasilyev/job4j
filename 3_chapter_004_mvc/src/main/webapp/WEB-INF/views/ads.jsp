@@ -49,8 +49,12 @@
                     </button>
                 </form>
             </c:if>
-            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="get">
+            <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="post">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
+                <input type='hidden' name='login' value='${activeUser.login}'/>
+                <input type='hidden' name='password' value='${activeUser.password}'/>
+                <input type='hidden' name='phone' value='${activeUser.phone}'/>
+                <input type='hidden' name='role' value='${activeUser.role}'/>
                 <button type="submit" class="btn-primary">
                     <span class="glyphicon glyphicon-edit"></span> Edit my profile
                 </button>

@@ -60,6 +60,7 @@
     <div class="container">
         <form class="form-horizontal" action='${pageContext.servletContext.contextPath}/users/update' method='post'>
             <input type='hidden' name='id' value='${user.id}'/>
+            <input type='hidden' name='login' value='${user.login}'/>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Password:</label>
                 <div class="col-sm-4">
