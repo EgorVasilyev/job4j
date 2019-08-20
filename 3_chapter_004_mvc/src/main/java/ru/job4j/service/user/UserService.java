@@ -50,4 +50,8 @@ public class UserService {
     public User getUserById(int id) {
         return userDataRepository.findUserById(id);
     }
+
+    public User getUserByLogin(String login) {
+        return userDataRepository.findUserByLogin(login);
+    }
 }

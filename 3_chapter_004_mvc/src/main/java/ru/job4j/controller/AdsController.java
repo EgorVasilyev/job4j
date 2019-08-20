@@ -2,6 +2,7 @@ package ru.job4j.controller;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +35,7 @@ public class AdsController {
     private final CarService CAR_SERVICE;
     private final UserService USER_SERVICE;
 
-
-    User activeUser;//=======================================================================
+    private User activeUser;
 
     @Autowired
     public AdsController(AdService AD_SERVICE,
@@ -60,9 +60,8 @@ public class AdsController {
             @RequestParam(value = "withPhoto", required = false, defaultValue = "") String withPhoto,
             ModelMap modelMap) {
 
-        activeUser = USER_SERVICE.getUserById(2);//=======================================================================
-       // activeUser = new User(2, "admin", "ngasu2015", "0000000000", "admin");
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        activeUser = USER_SERVICE.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        modelMap.addAttribute("activeUser", activeUser);
 
         Map<String, String> filter = new HashMap<>();
         if (!actual.equals("")) {
@@ -99,7 +98,7 @@ public class AdsController {
             @RequestParam(value = "id") String adId,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelMap.addAttribute("activeUser", activeUser);
 
         int id = Integer.valueOf(adId);
         Ad ad = AD_SERVICE.getAdById(id);
@@ -115,7 +114,7 @@ public class AdsController {
     @GetMapping("/create")
     public String createAd(ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelMap.addAttribute("activeUser", activeUser);
 
         modelMap.addAttribute("bodies", BODY_SERVICE.getBodies());
         modelMap.addAttribute("colors", COLOR_SERVICE.getColors());
@@ -128,7 +127,7 @@ public class AdsController {
             @RequestParam(value = "id") String userId,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelMap.addAttribute("activeUser", activeUser);
 
         int id = Integer.valueOf(userId);
         List<Ad> ads = AD_SERVICE.getAdsByUserId(id);
@@ -157,8 +156,7 @@ public class AdsController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
-
+        modelMap.addAttribute("activeUser", activeUser);
 
         int userId = Integer.valueOf(id);
         User user = USER_SERVICE.getUserById(userId);
@@ -221,6 +219,7 @@ public class AdsController {
             car.setEngine(currentEngine);
             car.setYear(currentYear);
             car.setUser(user);
+            CAR_SERVICE.update(car);
 
             ad.setCar(car);
             if (picture.length != 0) {
@@ -276,7 +275,7 @@ public class AdsController {
             @RequestParam(value = "id") String adId,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=======================================================================
+        modelMap.addAttribute("activeUser", activeUser);
 
         int id = Integer.valueOf(adId);
         Ad ad = AD_SERVICE.getAdById(id);

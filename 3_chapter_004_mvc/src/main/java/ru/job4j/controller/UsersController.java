@@ -1,6 +1,7 @@
 package ru.job4j.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class UsersController {
     private final UserService USER_SERVICE;
     private final AdService AD_SERVICE;
 
-    User activeUser;//=====временно, заменю в задании security===========
+    private User activeUser;
 
     @Autowired
     public UsersController(UserService USER_SERVICE, AdService AD_SERVICE) {
@@ -29,9 +30,8 @@ public class UsersController {
     @GetMapping("/show")
     public String show(ModelMap modelMap) {
 
-        activeUser = USER_SERVICE.getUserById(2);//=====временно, заменю в задании security===========
-        modelMap.addAttribute("activeUser", activeUser);//=====временно, заменю в задании security===========
-
+        activeUser = USER_SERVICE.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        modelMap.addAttribute("activeUser", activeUser);
         modelMap.addAttribute("users", USER_SERVICE.getUsers());
 
         return "users";
@@ -40,7 +40,8 @@ public class UsersController {
     public ModelAndView updateUser(@ModelAttribute User user) {
         ModelAndView modelAndView = new ModelAndView("updateUser");
 
-        modelAndView.addObject("activeUser", activeUser);//=====временно, заменю в задании security===========
+        activeUser = USER_SERVICE.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        modelAndView.addObject("activeUser", activeUser);
 
         return modelAndView;
     }
@@ -50,7 +51,8 @@ public class UsersController {
             @RequestParam(value = "id") String userId,
             ModelMap modelMap) {
 
-        modelMap.addAttribute("activeUser", activeUser);//=====временно, заменю в задании security===========
+        activeUser = USER_SERVICE.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        modelMap.addAttribute("activeUser", activeUser);
 
         int id = Integer.valueOf(userId);
         List<Ad> userAds = AD_SERVICE.getAdsByUserId(id);
@@ -65,6 +67,7 @@ public class UsersController {
         }
 
         if (action.equals("deleteFromProfile")) {
+            modelMap.addAttribute("logout");
             return "login";
         }
         return "";
@@ -74,7 +77,8 @@ public class UsersController {
         USER_SERVICE.update(user);
         ModelAndView model = new ModelAndView("updateUser");
 
-        model.addObject("activeUser", activeUser);//=====временно, заменю в задании security===========
+        activeUser = USER_SERVICE.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+        model.addObject("activeUser", activeUser);
 
         return model;
     }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
+<html><%@ taglib prefix="sec"
+                 uri="http://www.springframework.org/security/tags"%>
 <head>
     <title>Show users</title>
     <meta charset="utf-8">
@@ -17,7 +18,7 @@
     <h6 align="right">
         <c:if test="${activeUser.role=='admin'}">
             <form>
-                <span class="glyphicon glyphicon-user"></span>&ensp;Hello, <c:out value="${activeUser.login}"></c:out>
+                <span class="glyphicon glyphicon-user"></span>&ensp;Hello, <sec:authentication property="principal.username" />
             </form>
             <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="post">
                 <input type='hidden' name='id' value='${activeUser.id}'/>
@@ -46,7 +47,10 @@
                     <span class="glyphicon glyphicon-list"></span> Show all ads
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+            <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <button type="submit" class="btn-danger">
                     <span class="glyphicon glyphicon-log-out"></span> Exit
                 </button>
@@ -65,7 +69,10 @@
                         <span class="glyphicon glyphicon-list"></span> Show all ads
                     </button>
                 </form>
-                <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+                <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <button type="submit" class="btn-danger">
                         <c:if test="${activeUser.role=='user'}">
                             <span class="glyphicon glyphicon-log-out"></span> Exit

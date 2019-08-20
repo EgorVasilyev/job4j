@@ -14,13 +14,24 @@
 </head>
 <body>
 ${activeUser=null}
-<c:if test="${error!=''}">
-    <div style="background-color: red" >
-        <c:out value="${error}">
-        </c:out>
-    </div>
-</c:if>
 <div class="jumbotron text-center">
+    <strong>
+        <c:if test="${param.msg != null}">
+        <p style='color:red'>
+                ${param.msg}
+        </p>
+    </c:if>
+    <c:if test="${param.error != null}">
+        <p style='color:red'>
+            Invalid username and password.
+        </p>
+    </c:if>
+    <c:if test="${param.logout != null}">
+        <p style='color:blue'>
+            You have been logged out.
+        </p>
+    </c:if>
+    </strong>
     <h2><strong>Welcome to car sale platform!</strong></h2><br/>
     <h4>Choose your way:</h4>
 </div>
@@ -41,10 +52,12 @@ ${activeUser=null}
                 </form>
             </td>
             <td width="33%" align="center">
-                <form action='${pageContext.servletContext.contextPath}/signIn' method='post'>
-                    <input type='hidden' name='action' value="signIn">
-                    <input type='hidden' name='login' value="guest">
-                    <input type='hidden' name='password' value="guest">
+                <form action='${pageContext.servletContext.contextPath}/login' method='post'>
+                    <input type='hidden' name='myLogin' value="guest">
+                    <input type='hidden' name='myPassword' value="guest">
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <button type="submit" class="btn btn-info">
                         <span class="glyphicon glyphicon-user"></span> Visiting the site as a guest
                     </button>
@@ -56,17 +69,19 @@ ${activeUser=null}
         <tbody>
         <tr>
             <td align="center">
-                <form id="singIn" class="collapse" action='${pageContext.servletContext.contextPath}/signIn' method='post'>
-                    <input type='hidden' name='action' value="signIn">
+                <form id="singIn" class="collapse" action='${pageContext.servletContext.contextPath}/login' method='post'>
                     <div class="form-group">
                         Login&ensp;<span class="glyphicon glyphicon-user"></span>
-                        <input class="form-control" type='text' placeholder='input login' name='login' id="login"><br/>
+                        <input class="form-control" type='text' placeholder='input login' name='myLogin' id="myLogin"><br/>
                     </div>
                     <div class="form-group">
                         Password&ensp;<span class="glyphicon glyphicon-eye-close"></span>
-                        <input class="form-control" type='password' placeholder='input password' name='password' id="password"><br/>
+                        <input class="form-control" type='password' placeholder='input password' name='myPassword' id="myPassword"><br/>
                     </div>
                     <div class="form-group" align="center">
+                        <input type="hidden"
+                               name="${_csrf.parameterName}"
+                               value="${_csrf.token}"/>
                         <button type="submit" class="btn btn-primary" onclick='return checkAuthentication();' >
                             <span class="glyphicon glyphicon-log-in"></span> Enter
                         </button>
@@ -75,19 +90,21 @@ ${activeUser=null}
             </td>
             <td align="center">
                 <form id="singUp" class="collapse"
-                      action='${pageContext.servletContext.contextPath}/signIn' method='post'>
-                    <input type='hidden' name='action' value="signUp">
+                      action='${pageContext.servletContext.contextPath}/registration' method='post'>
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <div class="form-group">
                         Login&ensp;<span class="glyphicon glyphicon-user"></span>
-                        <input class="form-control" type='text' placeholder='input login' name='newLogin' id="newLogin"><br/>
+                        <input class="form-control" type='text' placeholder='input login' name='login' id="login"><br/>
                     </div>
                     <div class="form-group">
                         Password&ensp;<span class="glyphicon glyphicon-eye-close"></span>
-                        <input class="form-control" type='password' placeholder='input password' name='newPassword' id="newPassword"><br/>
+                        <input class="form-control" type='password' placeholder='input password' name='password' id="password"><br/>
                     </div>
                     <div class="form-group">
                         Phone&ensp;<span class="glyphicon glyphicon-earphone"></span>
-                        <input class="form-control" type='text' placeholder='input phone' name='newPhone' id="newPhone"><br/>
+                        <input class="form-control" type='text' placeholder='input phone' name='phone' id="phone"><br/>
                     </div>
                     <div class="form-group" align="center">
                         <button type="submit" class="btn btn-success" onclick='return checkNewUser();' >

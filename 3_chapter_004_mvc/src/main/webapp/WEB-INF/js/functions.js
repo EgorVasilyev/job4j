@@ -22,13 +22,13 @@ function validatePair(id1, id2) {
     return result;
 }
 function checkAuthentication() {
-    return validate($('#login'))
-        && validate($('#password'));
+    return validate($('#myLogin'))
+        && validate($('#myPassword'));
 }
 function checkNewUser() {
-    return validate($('#newLogin'))
-        && validate($('#newPassword'))
-        && validate($('#newPhone'));
+    return validate($('#login'))
+        && validate($('#password'))
+        && validate($('#phone'));
 }
 function checkUser() {
     return validate($('#password'))

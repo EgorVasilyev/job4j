@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%--<%@ page session="false"%>--%>
 <html>
 <head>
     <title>Show ads</title>
@@ -39,14 +41,14 @@
 <blockquote>
     <h6 align="right">
         <form>
-            <h5><span class="glyphicon glyphicon-user"></span>&ensp;<strong>Hello, ${activeUser.login}</strong></h5>
+            <h5><span class="glyphicon glyphicon-user"></span>&ensp;<strong>Hello, <sec:authentication property="principal.username"/></strong></h5>
         </form>
-        <c:if test="${activeUser.role=='admin' || activeUser.role=='user'}">
+        <c:if test="${activeUser.role=='admin'|| activeUser.role=='user'}">
             <c:if test="${activeUser.role=='admin'}">
                 <form action='${pageContext.servletContext.contextPath}/users/show' method="get">
-                    <button type="submit" class="btn-primary">
-                        <span class="glyphicon glyphicon-align-justify"></span> Show all users
-                    </button>
+                <button type="submit" class="btn-primary">
+                    <span class="glyphicon glyphicon-align-justify"></span> Show all users
+                </button>
                 </form>
             </c:if>
             <form action='${pageContext.servletContext.contextPath}/users/updateUser' method="post">
@@ -71,20 +73,30 @@
                     <span class="glyphicon glyphicon-list"></span> My ads
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+            <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <button type="submit" class="btn-danger">
                     <span class="glyphicon glyphicon-log-out"></span> Exit
                 </button>
             </form>
         </c:if>
-        <c:if test="${activeUser.role=='guest'}">
-            <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
-                <button type="submit" class="btn-info">
-                    <span class="glyphicon glyphicon-log-in"></span> Sign in / Sign up
-                </button>
-            </form>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+
+        <c:if test="${activeUser.role== 'guest'}">
+        <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+            <input type="hidden"
+                   name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
+            <button type="submit" class="btn-info">
+                <span class="glyphicon glyphicon-log-in"></span> Sign in / Sign up
+            </button>
+        </form>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
         </c:if>
+
     </h6>
 </blockquote>
 
@@ -193,7 +205,7 @@
                     "/>
                 </td>
                 <td align="center">
-                    <c:if test="${activeUser.role=='admin' || (activeUser.role=='user' && activeUser.id==ad.user.id)}">
+                    <c:if test="${activeUser.role=='admin'|| (activeUser.role=='user'&& activeUser.login==ad.user.login)}">
                         <form action='${pageContext.servletContext.contextPath}/ads/update' method='get'>
                             <input type='hidden' name='id' value='${ad.id}'/>
                             <button type="submit" class="btn btn-success">

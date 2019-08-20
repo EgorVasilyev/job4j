@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec"
+           uri="http://www.springframework.org/security/tags"%>
 <html>
 <head>
     <title>Update ad</title>
@@ -31,7 +33,7 @@
     <blockquote>
         <h6 align="right">
             <form>
-                <span class="glyphicon glyphicon-user"></span>&ensp;<c:out value="${activeUser.login} "></c:out>
+                <span class="glyphicon glyphicon-user"></span>&ensp;<sec:authentication property="principal.username" />
                 , you are on the page of ad updating
             </form>
             <form action='${pageContext.servletContext.contextPath}/ads/show' method="get">
@@ -45,7 +47,10 @@
                     <span class="glyphicon glyphicon-list"></span> Show my ads
                 </button>
             </form>
-            <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+            <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <button type="submit" class="btn-danger">
                     <span class="glyphicon glyphicon-log-out"></span> Exit
                 </button>
@@ -203,7 +208,10 @@
         <h2><strong>The guest can not update ad! Please, sign in or sing up.</strong></h2><br/>
         <blockquote>
             <h5>
-                <form action='${pageContext.servletContext.contextPath}/signIn' method="get">
+                <form action='${pageContext.servletContext.contextPath}/logout' method="post">
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <button type="submit" class="btn-info">
                         <span class="glyphicon glyphicon-log-in"></span> Sign in / Sign up
                     </button>
