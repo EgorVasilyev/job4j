@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        td {
+            word-wrap:break-word;
+        }
+        blockquote {
+            background: url(https://www.axa.de/site/axa-de/get/params_E-35817624/8222246/geparkte-autos-in-reihe.jpg.pagespeed.ce.7CTHh14teL.jpg); /* Фоновый цвет и фоновый рисунок*/
+            background-repeat: no-repeat;
+            background-size: 100%;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+        function validate(id) {
+            var result = true;
+            var value = $(id);
+            if (value.val() === '' || value.val() ==="other...") {
+                alert('Field "' + value.attr('name').concat('" mustn\'t be empty.'));
+                result = false;
+            }
+            return result;
+        }
+        function validatePair(id1, id2) {
+            var result = true;
+            var value1 = $(id1);
+            var value2 = $(id2);
+            if (value1.val() === '' || (value1.val() ==="other..." && value2.val() === '' )) {
+                alert('Field "' + value1.attr('name').concat('" mustn\'t be empty.'));
+                result = false;
+            }
+            if ((value1.attr('name')==="year") && (value2.val()) && (!Date.parse(value2.val())))  {
+                alert('Field "' + value1.attr('name').concat('" must be in the year format. For example: 2007'));
+                result = false;
+            }
+            return result;
+        }
+        function checkAuthentication() {
+            return validate($('#myLogin'))
+                && validate($('#myPassword'));
+        }
+        function checkNewUser() {
+            return validate($('#login'))
+                && validate($('#password'))
+                && validate($('#phone'));
+        }
+        function checkUser() {
+            return validate($('#password'))
+                && validate($('#phone'));
+        }
+        function checkAd() {
+            var result = validate($('#model'))
+                && validatePair($('#year'), $('#yearAddit'))
+                && validatePair($('#body'), $('#bodyAddit'))
+                && validatePair($('#color'), $('#colorAddit'))
+                && validatePair($('#engine'), $('#engineAddit'))
+                && validate($('#description'));
+            if(result) {
+                alert("Successfully!")
+            }
+            return result;
+        }
+        function showAdditionalField(select) {
+            var value = $(select).val();
+            var id = $(select).attr('id');
+            if(value === "other...") {
+                if(document.getElementById(id + "Addit") == null) {
+                    (document.getElementById(id + "Field")).innerHTML =
+                        "<input class=\"form-control\" type='text' placeholder='input your value' name='" +
+                        id + "Addit' id='" + id + "Addit'>";
+                }
+            } else {
+                if(document.getElementById(id + "Addit") != null) {
+                    document.getElementById(id + "Addit").remove();
+                }
+            }
+        }
+        function setValueYesNo(checkbox, param) {
+            if ($(checkbox).is(':checked')) {
+                $(param).val("yes");
+            } else {
+                $(param).val("");
+            }
+        }
+        function clearFilters() {
+            document.getElementById('checkboxActual').checked = false;
+            document.getElementById('checkboxCurrentDay').checked = false;
+            document.getElementById('checkboxWithPhoto').checked = false;
+            document.getElementById('byName').value = '';
+
+            setValueYesNo($('#checkboxActual'), $('#actual'));
+            setValueYesNo($('#checkboxCurrentDay'), $('#currentDay'));
+            setValueYesNo($('#checkboxWithPhoto'), $('#withPhoto'));
+        }
+    </script>
+</head>
+<body>
+<div class="jumbotron text-center">
+    <div th:if="${param.exists != null}">
+        <p style='color:red'>
+            This user already exists!
+        </p>
+    </div>
+    <div th:if="${param.error != null}">
+        <p style='color:red'>
+            Invalid username and password.
+        </p>
+    </div>
+    <div th:if="${param.logout != null}">
+        <p style='color:blue'>
+            You have been logged out.
+        </p>
+    </div>
+    <h2><strong>Welcome to car sale platform!</strong></h2><br/>
+    <h4>Choose your way:</h4>
+</div>
+<div class="container">
+    <table width="100%" align="center">
+        <thead>
+        <td width="33%" align="center">
+            <div>
+                <form>
+                    <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#singIn">
+                        <span class="glyphicon glyphicon-log-in"></span> Sign in, if you are registered</button>
+                </form>
+            </div>
+        </td>
+        <td width="33%" align="center">
+            <form>
+                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#singUp">
+                    <span class="glyphicon glyphicon-new-window"></span> Sign up, if you are not registered</button>
+            </form>
+        </td>
+        <td width="33%" align="center">
+            <button type="submit" class="btn btn-danger" data-toggle="collapse" data-target="#demo">
+                <span class="glyphicon glyphicon-user"></span> Demonstration. Visiting as:
+            </button>
+        </td>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td style="text-align:center; vertical-align:top;">
+                <form th:action="@{/login}" id="singIn" class="collapse" method='post'>
+                    <br/>
+                    <div class="form-group">
+                        Login&ensp;<span class="glyphicon glyphicon-user"></span>
+                        <input class="form-control" type='text' placeholder='input login' name='myLogin' id="myLogin"><br/>
+                    </div>
+                    <div class="form-group">
+                        Password&ensp;<span class="glyphicon glyphicon-eye-close"></span>
+                        <input class="form-control" type='password' placeholder='input password' name='myPassword' id="myPassword"><br/>
+                    </div>
+                    <div class="form-group" align="center">
+                        <!--<input type="hidden"
+                               name="${_csrf.parameterName}"
+                               value="${_csrf.token}"/>-->
+                        <button type="submit" class="btn btn-success" onclick='return checkAuthentication();' >
+                            <span class="glyphicon glyphicon-log-in"></span> Enter
+                        </button>
+                    </div>
+                </form>
+            </td>
+            <td style="text-align:center; vertical-align:top;">
+                <form th:action="@{/registration}" id="singUp" class="collapse" method='post'>
+                    <br/>
+                    <!--<input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>-->
+                    <div class="form-group">
+                        Login&ensp;<span class="glyphicon glyphicon-user"></span>
+                        <input class="form-control" type='text' placeholder='input login' name='login' id="login"><br/>
+                    </div>
+                    <div class="form-group">
+                        Password&ensp;<span class="glyphicon glyphicon-eye-close"></span>
+                        <input class="form-control" type='password' placeholder='input password' name='password' id="password"><br/>
+                    </div>
+                    <div class="form-group">
+                        Phone&ensp;<span class="glyphicon glyphicon-earphone"></span>
+                        <input class="form-control" type='text' placeholder='input phone' name='phone' id="phone"><br/>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="submit" class="btn btn-primary" onclick='return checkNewUser();' >
+                            <span class="glyphicon glyphicon-new-window"></span> Create
+                        </button>
+                    </div>
+                </form>
+            </td>
+            <td align="center" style="vertical-align:top;" id="demo" class="collapse">
+                <br/><br/>
+                <table>
+                    <tbody>
+                    <td>
+                        <form th:action="@{/login}" method="post">
+                            <input type='hidden' name='myLogin' value="guest">
+                            <input type='hidden' name='myPassword' value="guest">
+                            <!--<input type="hidden"
+                                   name="${_csrf.parameterName}"
+                                   value="${_csrf.token}"/>-->
+                            <button type="submit" class="btn btn-danger">
+                                a guest
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/login}" method="post">
+                            <input type='hidden' name='myLogin' value="user">
+                            <input type='hidden' name='myPassword' value="user">
+                            <!--<input type="hidden"
+                                   name="${_csrf.parameterName}"
+                                   value="${_csrf.token}"/>-->
+                            <button type="submit" class="btn btn-success">
+                                an user
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/login}" method="post">
+                            <input type='hidden' name='myLogin' value="admin">
+                            <input type='hidden' name='myPassword' value="admin">
+                            <!--<input type="hidden"
+                                   name="${_csrf.parameterName}"
+                                   value="${_csrf.token}"/>-->
+                            <button type="submit" class="btn btn-primary">
+                                an admin
+                            </button>
+                        </form>
+                    </td>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

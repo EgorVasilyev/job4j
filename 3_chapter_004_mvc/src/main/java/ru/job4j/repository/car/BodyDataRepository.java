@@ -1,7 +1,7 @@
 package ru.job4j.repository.car;
 
         import org.springframework.data.repository.CrudRepository;
-import ru.job4j.entity.car.Body;
+import ru.job4j.domain.car.Body;
 
 import java.util.List;
 

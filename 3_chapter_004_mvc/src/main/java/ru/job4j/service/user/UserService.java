@@ -2,7 +2,7 @@ package ru.job4j.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.entity.user.User;
+import ru.job4j.domain.user.User;
 import ru.job4j.repository.user.UserDataRepository;
 
 import java.util.List;

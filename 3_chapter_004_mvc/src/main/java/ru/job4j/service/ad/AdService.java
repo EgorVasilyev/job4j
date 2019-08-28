@@ -3,9 +3,9 @@ package ru.job4j.service.ad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.job4j.entity.ad.Ad;
+import ru.job4j.domain.ad.Ad;
 import ru.job4j.repository.ad.AdDataRepository;
-import ru.job4j.specification.AdSpecification;
+import ru.job4j.service.specification.AdSpecification;
 
 import java.util.List;
 import java.util.Map;

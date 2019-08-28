@@ -2,7 +2,7 @@ package ru.job4j.service.car;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.job4j.entity.car.Body;
+import ru.job4j.domain.car.Body;
 import ru.job4j.repository.car.BodyDataRepository;
 
 import java.util.List;

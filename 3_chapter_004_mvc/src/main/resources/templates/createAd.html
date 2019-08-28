@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create ad</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        td {
+            word-wrap:break-word;
+        }
+        blockquote {
+            background: url(https://www.axa.de/site/axa-de/get/params_E-35817624/8222246/geparkte-autos-in-reihe.jpg.pagespeed.ce.7CTHh14teL.jpg); /* Фоновый цвет и фоновый рисунок*/
+            background-repeat: no-repeat;
+            background-size: 100%;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+        function validate(id) {
+            var result = true;
+            var value = $(id);
+            if (value.val() === '' || value.val() ==="other...") {
+                alert('Field "' + value.attr('name').concat('" mustn\'t be empty.'));
+                result = false;
+            }
+            return result;
+        }
+        function validatePair(id1, id2) {
+            var result = true;
+            var value1 = $(id1);
+            var value2 = $(id2);
+            if (value1.val() === '' || (value1.val() ==="other..." && value2.val() === '' )) {
+                alert('Field "' + value1.attr('name').concat('" mustn\'t be empty.'));
+                result = false;
+            }
+            if ((value1.attr('name')==="year") && (value2.val()) && (!Date.parse(value2.val())))  {
+                alert('Field "' + value1.attr('name').concat('" must be in the year format. For example: 2007'));
+                result = false;
+            }
+            return result;
+        }
+        function checkAuthentication() {
+            return validate($('#myLogin'))
+                && validate($('#myPassword'));
+        }
+        function checkNewUser() {
+            return validate($('#login'))
+                && validate($('#password'))
+                && validate($('#phone'));
+        }
+        function checkUser() {
+            return validate($('#password'))
+                && validate($('#phone'));
+        }
+        function checkAd() {
+            var result = validate($('#model'))
+                && validatePair($('#year'), $('#yearAddit'))
+                && validatePair($('#body'), $('#bodyAddit'))
+                && validatePair($('#color'), $('#colorAddit'))
+                && validatePair($('#engine'), $('#engineAddit'))
+                && validate($('#description'));
+            if(result) {
+                alert("Successfully!")
+            }
+            return result;
+        }
+        function showAdditionalField(select) {
+            var value = $(select).val();
+            var id = $(select).attr('id');
+            if(value === "other...") {
+                if(document.getElementById(id + "Addit") == null) {
+                    (document.getElementById(id + "Field")).innerHTML =
+                        "<input class=\"form-control\" type='text' placeholder='input your value' name='" +
+                        id + "Addit' id='" + id + "Addit'>";
+                }
+            } else {
+                if(document.getElementById(id + "Addit") != null) {
+                    document.getElementById(id + "Addit").remove();
+                }
+            }
+        }
+        function setValueYesNo(checkbox, param) {
+            if ($(checkbox).is(':checked')) {
+                $(param).val("yes");
+            } else {
+                $(param).val("");
+            }
+        }
+        function clearFilters() {
+            document.getElementById('checkboxActual').checked = false;
+            document.getElementById('checkboxCurrentDay').checked = false;
+            document.getElementById('checkboxWithPhoto').checked = false;
+            document.getElementById('byName').value = '';
+
+            setValueYesNo($('#checkboxActual'), $('#actual'));
+            setValueYesNo($('#checkboxCurrentDay'), $('#currentDay'));
+            setValueYesNo($('#checkboxWithPhoto'), $('#withPhoto'));
+        }
+    </script>
+</head>
+<body>
+<div th:if="${activeUser.role=='admin' || activeUser.role=='user'}">
+    <blockquote>
+        <h6 align="right">
+            <form>
+                <h5>
+                    <span class="glyphicon glyphicon-user"></span>
+                    <strong><td th:utext="${activeUser.login}"/>, you are on the page of new ad creating</strong>
+                </h5>
+            </form>
+            <form th:action="@{/ads/show}" method="get">
+                <button type="submit" class="btn-info">
+                    <span class="glyphicon glyphicon-list"></span> Show all ads
+                </button>
+            </form><br/>
+            <form th:action="@{/ads/userAds}" method="get">
+                <input type='hidden' name='id' th:value='${activeUser.id}'/>
+                <button type="submit" class="btn-info">
+                    <span class="glyphicon glyphicon-list"></span> Show my ads
+                </button>
+            </form><br/>
+            <form th:action="@{/logout}" method="post">
+                <!--<input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>-->
+                <button type="submit" class="btn-danger">
+                    <span class="glyphicon glyphicon-log-out"></span> Exit
+                </button>
+            </form>
+            <br/><br/><br/><br/><br/>
+        </h6>
+    </blockquote>
+    <div class="container">
+        <form th:action="@{/ads/saveOrUpdate}" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <input type='hidden' name='action' value='save'/>
+            <input type='hidden' name='id' th:value='${activeUser.id}'/>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Model:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type='text' placeholder='input model' name='model' id='model'>
+                </div>
+            </div>
+            <div class="form-group">
+                <td>
+                    <label class="col-sm-2 control-label">Year of car:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" id="year" name="year" onchange="showAdditionalField(this)">
+                            <option value=""/>
+                            <option th:each="year : ${years}" th:value="${year.value}" th:text="${year.value}"/>
+                            <option value="other...">other...</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div id="yearField" class="col-sm-2">
+                    </div>
+                </td>
+            </div>
+            <div class="form-group">
+                <td>
+                    <label class="col-sm-2 control-label">Color of car:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" id="color" name="color" onchange="showAdditionalField(this)">
+                            <option value=""/>
+                            <option th:each="color : ${colors}" th:value="${color.name}" th:text="${color.name}"/>
+                            <option value="other...">other...</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div id="colorField" class="col-sm-2">
+                    </div>
+                </td>
+            </div>
+            <div class="form-group">
+                <td>
+                    <label class="col-sm-2 control-label">Engine of car:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" id="engine" name="engine" onchange="showAdditionalField(this)">
+                            <option value=""></option>
+                            <option th:each="engine : ${engines}" th:value="${engine.name}" th:text="${engine.name}"/>
+                            <option value="other...">other...</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div id="engineField" class="col-sm-2">
+                    </div>
+                </td>
+            </div>
+            <div class="form-group">
+                <td>
+                    <label class="col-sm-2 control-label">Body of car:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control" id="body" name="body" onchange="showAdditionalField(this)">
+                            <option value=""></option>
+                            <option th:each="body : ${bodies}" th:value="${body.name}" th:text="${body.name}"/>
+                            <option value="other...">other...</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div id="bodyField" class="col-sm-2">
+
+                    </div>
+                </td>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Description:</label>
+                <div class="col-sm-6">
+                    <textarea id="description" name="description"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Load new photo:</label>
+                <div class="col-sm-6">
+                    <input name="file" type="file">
+                </div>
+            </div>
+            <div class="form-group">
+                <h5 align="center">
+                    <button onclick='return checkAd();' type="submit" class="btn-primary">
+                        <span class="glyphicon glyphicon-check"></span> Create
+                    </button><br/>
+                </h5>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:if="${activeUser.role=='guest'}">
+    <div class="jumbotron text-center">
+        <h2><strong>The guest can not create ad! Please, sign in or sing up.</strong></h2><br/>
+        <blockquote>
+            <h5>
+                <br/><br/><br/><br/><br/>
+                <form th:action="@{/logout}" method="post">
+                    <!--<input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>-->
+                    <button type="submit" class="btn-info">
+                        <span class="glyphicon glyphicon-log-in"></span> Sign in / Sign up
+                    </button>
+                </form>
+                <br/><br/><br/>><br/>
+            </h5>
+        </blockquote>
+    </div>
+</div>
+</body>
+</html>
