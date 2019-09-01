@@ -1,3 +1,4 @@
+/*
 package ru.job4j.service;
 
 import org.hibernate.SessionFactory;
@@ -80,3 +81,4 @@ public class ServiceTest {
         DbProvider.getInstance().close();
     }
 }
+*/
