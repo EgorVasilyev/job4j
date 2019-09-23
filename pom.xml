@@ -6,7 +6,7 @@
     <version>2.0</version>
     <modules>
         <module>1_chapter_001</module>
-        <module>1_chapter_002</module>
+        <!--<module>1_chapter_002</module>
         <module>1_chapter_003</module>
         <module>1_chapter_004</module>
         <module>2_chapter_001</module>
@@ -22,7 +22,7 @@
         <module>3_chapter_003_car_storage</module>
         <module>3_chapter_003_sale_car</module>
         <module>3_chapter_004_IoC</module>
-        <module>3_chapter_004_mvc</module>
+        <module>3_chapter_004_mvc</module>-->
 
     </modules>
     <name>junior</name>
